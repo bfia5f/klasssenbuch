@@ -3,3 +3,5 @@ fireangular*
 public/build/*
 firebase-debug.log
 .firebaserc
+database.rules.json
+firebase.json
