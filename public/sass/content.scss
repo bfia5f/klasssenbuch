@@ -1,0 +1,33 @@
+.content{
+  background-color: $dark-blue;
+  color: $light-gray;
+  margin-bottom: 0;
+  height: 100vh;
+}
+#start{
+  display: none;
+  &.active{
+    display: block;
+  }
+}
+
+#stundenplan{
+  display: none;
+  &.active{
+    display: block;
+  }
+}
+
+#einstellungen{
+  display: none;
+  &.active{
+    display: block;
+  }
+}
+
+#fehlzeiten{
+  display: none;
+  &.active{
+    display: block;
+  }
+}

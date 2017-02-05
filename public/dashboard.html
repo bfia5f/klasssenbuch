@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+    <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
+    <script src="build/done_dashboard.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="build/main.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 navbar-wrapper">
+                <div class="user-info">
+                    <img src="http://placehold.it/75x75" class="user-image">
+                    <div class="user-text">
+                        <p>Name: <span class="placeholder">#name#</span></p>
+                        <p>EMail: <span class="placeholder">#email#</span></p>
+                    </div>
+                </div>
+                <nav class="navbar navbar-default navbar-fixed-side">
+                    <ul>
+                        <li class="active" id="link_start">Home</li>
+                        <li id="link_stundenplan">Stundenplan</li>
+                        <li id="link_fehlzeiten">Fehlzeiten</li>
+                        <li id="link_einstellungen">Einstellungen</li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-sm-9 content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-5 col-sm-offset-4">
+                            <h1>Welcome to the Dashboard</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid dashboard-container active" id="start">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h1>Übersicht</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid dashboard-container" id="stundenplan">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h1>Stundenplan</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid dashboard-container" id="fehlzeiten">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h1>Fehlzeiten</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid dashboard-container" id="einstellungen">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h1>einstellungen</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

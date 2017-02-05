@@ -1,0 +1,32 @@
+{
+  "name": "angularfire",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "firebase": "^3.6.8",
+    "firebase-admin": "^4.1.0",
+    "firebaseui": "^1.0.0",
+    "font-awesome": "^4.7.0"
+  },
+  "devDependencies": {
+    "browserify": "^14.0.0",
+    "clean-css": "^4.0.3",
+    "nodemon": "^1.11.0",
+    "uglifyjs": "^2.4.10"
+  },
+  "scripts": {
+    "build-js": "browserify public/js/app.js -o public/build/done_app.js && browserify public/js/dashboard.js -o public/build/done_dashboard.js",
+    "build-sass": "node-sass public/sass/main.scss public/build/main.css",
+    "build-min-js": "browserify public/js/app.js | uglifyjs -o public/build/app.min.js",
+    "build-min-sass": "node-sass public/sass/main.scss | cleancss -o public/build/main.min.css",
+    "watch-js": "nodemon -e js -w public/js -x 'npm run build-js'",
+    "watch-sass": "nodemon -e scss -w public/sass -x 'npm run build-sass'",
+    "watch": "npm run watch-js & npm run watch-sass",
+    "build": "npm run build-js & npm run build-sass",
+    "test": "nodemon public/js/app.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
