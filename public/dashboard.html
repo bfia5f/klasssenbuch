@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-sm-3 navbar-wrapper">
                 <div class="user-info">
-                    <img src="http://placehold.it/75x75" class="user-image">
+                    <img src="http://placehold.it/75x75" id="user-image">
                     <div class="user-text">
                         <p>Name: <span class="placeholder">#name#</span></p>
                         <p>EMail: <span class="placeholder">#email#</span></p>
@@ -27,6 +27,7 @@
                         <li id="link_fehlzeiten">Fehlzeiten</li>
                         <li id="link_einstellungen">Einstellungen</li>
                     </ul>
+                    <button type="button" name="logout" id="btn-logout">Logout</button>
                 </nav>
             </div>
             <div class="col-sm-9 content">
@@ -61,8 +62,20 @@
                 <div class="container-fluid dashboard-container" id="einstellungen">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h1>einstellungen</h1>
+                            <h1>Einstellungen</h1>
                         </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <h2>Profilbild ändern</h2>
+                        <p>Gib hier die URL zu deinem Bild ein:</p>
+                        <input type="text" name="profile_url" value="" placeholder="URL" id="profile-picture-url" class="profile-input">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <button type="button" name="btn-save-changes" class="btn btn-primary" id="save-profile-changes">Speichern</button>
+                      </div>
                     </div>
                 </div>
             </div>

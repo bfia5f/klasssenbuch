@@ -4,12 +4,12 @@ var firebaseui = require('firebaseui');
 
 
 var config = {
-    apiKey: "AIzaSyDcJQEmoQ9a-ZvCj8RnSWaMUs4OxaMz5wM",
-    authDomain: "fireangular-b0f52.firebaseapp.com",
-    databaseURL: "https://fireangular-b0f52.firebaseio.com",
-    storageBucket: "fireangular-b0f52.appspot.com",
-    messagingSenderId: "1040473595630"
-};
+    apiKey: "AIzaSyDtQiCxcoTg6C4sk_rDwutRtfCXeSQMSHA",
+    authDomain: "klassenbuch-92827.firebaseapp.com",
+    databaseURL: "https://klassenbuch-92827.firebaseio.com",
+    storageBucket: "klassenbuch-92827.appspot.com",
+    messagingSenderId: "924031502781"
+  };
 firebase.initializeApp(config);
 
 var uiConfig = {
