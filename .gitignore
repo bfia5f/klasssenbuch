@@ -1,2 +1,5 @@
 node_modules
 fireangular*
+public/build/*
+firebase-debug.log
+.firebaserc
