@@ -8,28 +8,39 @@ var config = {
     messagingSenderId: "924031502781"
 };
 firebase.initializeApp(config);
-var ref = firebase.database().ref('users');
+var database = firebase.database();
 var cUser = null;
+/**
+ * CONSTANTS
+ */
+const refUsers = "user";
+const refStudent = refUsers + "/student/";
+const refTeacher = refUsers + "/teacher/";
+
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         cUser = user;
-        updateLoginDate(user.uid);
         updateHTML(user.email, user.displayName, user.photoURL);
     } else {
         window.location.href = "/unauthorized.html";
     }
 });
 
-
-function updateLoginDate(userUID) {
-    var userRef = ref.child(userUID + "/loginTimes/");
-    userRef.push({
-        lastLogin: Date()
+/**
+ * Read once from DB
+ */
+function getStudentPromise() {
+  var ref = database.ref(refStudent);
+    return ref.once("value").then(function(data) {
+        return data.val();
     });
 }
 
+
 function updateHTML(userEmail, userName, userProfileImageURL) {
-    console.log("update");
+    getStudentPromise().then(function(student){
+      console.log(student);
+    });
     $('#user-image')[0].src = userProfileImageURL;
     $('.placeholder').each(function() {
         switch ($(this)[0].innerText) {
@@ -88,6 +99,17 @@ $(document).ready(function() {
             window.location.href = "/logout-success.html"
         }, function(error) {
             // An error happened.
+        });
+    });
+
+
+    /**
+     * DEBUG OPTIONS
+     */
+
+    $('#debug_sendToDb').on('click', function() {
+        database.ref(refStudent + "/" + cUser.uid).set({
+            isFirst: "true"
         });
     });
 })
