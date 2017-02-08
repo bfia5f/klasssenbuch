@@ -30,7 +30,8 @@ firebase.auth().onAuthStateChanged(function(user) {
  * Read once from DB
  */
 function getStudentPromise() {
-  var ref = database.ref(refStudent);
+  var ref = database.ref(refStudent+"/"+cUser.uid);
+  // TODO: Error handling
     return ref.once("value").then(function(data) {
         return data.val();
     });
@@ -38,8 +39,9 @@ function getStudentPromise() {
 
 
 function updateHTML(userEmail, userName, userProfileImageURL) {
+  // TODO: Error handling
     getStudentPromise().then(function(student){
-      console.log(student);
+      console.log(student.isFirst);
     });
     $('#user-image')[0].src = userProfileImageURL;
     $('.placeholder').each(function() {
