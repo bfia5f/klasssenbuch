@@ -37,6 +37,10 @@
                             <h1>Welcome to the Dashboard</h1>
                         </div>
                     </div>
+                    <div class="row">
+                      <div class="col-sm-12" id="setStudentClass">
+                      </div>
+                    </div>
                 </div>
                 <div class="container-fluid dashboard-container active" id="start">
                     <div class="row">
@@ -45,15 +49,22 @@
                         </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-12">
-                        <button type="button" name="debug_sendToDB" id="debug_sendToDb" class="btn btn-primary">Send</button>
-                      </div>
+                        <div class="col-sm-3 dashboard-item dashboard-item-times">
+                            <h3>Fehlzeiten</h3>
+                            <span class="placeholder">2 Stunden</span>
+                        </div>
+                        <div class="col-sm-3 dashboard-item dashboard-item-event">
+                            <ul class="dashboard-event-list">
+                                <li class="dashboard-event-item">Klausur am 24.12.2000</li>
+                                <li class="dashboard-event-item">Klausur am 24.12.2000</li>
+                                <li class="dashboard-event-item">Klausur am 24.12.2000</li>
+                                <li class="dashboard-event-item">Klausur am 24.12.2000</li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="container-fluid dashboard-container" id="stundenplan">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h1>Stundenplan</h1>
+                            <button type="button" name="debug_sendToDB" id="debug_sendToDb" class="btn btn-primary">Send</button>
                         </div>
                     </div>
                 </div>
@@ -64,6 +75,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="container-fluid dashboard-container" id="stundenplan">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h1>Stundenplan</h1>
+                        </div>
+                    </div>
+                    <div id="stundenplan-placeholder"></div>
+                </div>
                 <div class="container-fluid dashboard-container" id="einstellungen">
                     <div class="row">
                         <div class="col-sm-12">
@@ -71,21 +90,24 @@
                         </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-3">
-                        <h2>Profilbild ändern</h2>
-                        <p>Gib hier die URL zu deinem Bild ein:</p>
-                        <input type="text" name="profile_url" value="" placeholder="URL" id="profile-picture-url" class="profile-input">
-                      </div>
+                        <div class="col-sm-3">
+                            <h2>Profilbild ändern</h2>
+                            <p>Gib hier die URL zu deinem Bild ein:</p>
+                            <input type="text" name="profile_url" value="" placeholder="URL" id="profile-picture-url" class="profile-input">
+                        </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-12">
-                        <button type="button" name="btn-save-changes" class="btn btn-primary" id="save-profile-changes">Speichern</button>
-                      </div>
+                        <div class="col-sm-12">
+                            <button type="button" name="btn-save-changes" class="btn btn-primary" id="save-profile-changes">Speichern</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
+
+
 
 </html>
