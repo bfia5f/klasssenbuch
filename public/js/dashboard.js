@@ -66,11 +66,11 @@ function filterStudentsByClass(className) {
     return getAllStudentsPromise().then(function(data) {
         var studentsInClass = [];
         $.each(data, function(studentUID, studentSettings) {
+          // console.log("Student Settings: ", studentSettings);
             if (studentSettings.class === className) {
-                studentsInClass.push(data);
+                studentsInClass.push(this);
             }
         });
-        console.log(studentsInClass);
         return studentsInClass;
     });
 }
@@ -85,17 +85,19 @@ function createClassDropdown(name, id, classList) {
 
 
 function updateHTML(userEmail, userName, userProfileImageURL) {
-    getClasslistPromise().then(function(data) {
-        var keyList = [];
-        $.each(data, function(key, val) {
-            keyList.push(key);
-        });
-        console.log(keyList);
-        createClassDropdown("classdropdown", "classdropdown", keyList);
-        $.each(keyList, function(key, val) {
-            createClassDropdown("studentdropdown", "studentdropdown", filterStudentsByClass(val));
-        });
+
+    getClasslistPromise().then(function(data){
+      $.each(Object.keys(data), function(counter){
+        $("#select_class_list").append("<option>" + Object.keys(data)[counter] + "</option>");
+      });
     });
+
+    filterStudentsByClass("11FI5FFFFF").then(function(data){
+      console.log("Filtered studs",data);
+    });
+
+    // Update Dropdown elements
+
 
     // // TODO: Error handling
     // getTimetablePromise().then(function(timetable) {
@@ -150,6 +152,17 @@ $(document).ready(function() {
 
             }
         });
+    });
+
+    $("#select_class_list").on('change',function(event){
+      console.log("clear list");
+      $('#select_student_list').empty();
+      filterStudentsByClass(event.target.value).then(function(data){
+          $.each(data,function(index){
+            console.log(data[index].name);
+            $('#select_student_list').append('<option>'+data[index].name+'</option>')
+          });
+      });
     });
 
     // Logout
