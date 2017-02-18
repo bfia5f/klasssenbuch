@@ -96,17 +96,6 @@ function updateHTML(userEmail, userName, userProfileImageURL) {
       console.log("Filtered studs",data);
     });
 
-    // Update Dropdown elements
-
-
-    // // TODO: Error handling
-    // getTimetablePromise().then(function(timetable) {
-    //     var ele = $.parseHTML(timetable.teacher1);
-    //     console.log($($(timetable.teacher1)));
-    //     $('#stundenplan-placeholder').append($($(timetable.teacher1)));
-    // });
-
-
     $('#user-image')[0].src = userProfileImageURL;
     $('.placeholder').each(function() {
         switch ($(this)[0].innerText) {
