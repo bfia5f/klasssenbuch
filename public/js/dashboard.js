@@ -167,7 +167,7 @@ function switchNavigationTab(eventInfo) {
 }
 
 $(document).ready(function() {
-  // toggleLoading();
+  toggleLoading();
 
     $('.navbar-fixed-side ul').on('click', function(eventInfo){
       switchNavigationTab(eventInfo)

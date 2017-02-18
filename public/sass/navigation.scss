@@ -3,6 +3,7 @@
     padding-right: 0;
     background-color: $navi-background-color;
     color: $text-color;
+    height: 100vh;
 
     .user-info {
         display: flex;
@@ -25,7 +26,6 @@
     .navbar-fixed-side {
         border: none;
         border-radius: 0;
-        height: 100vh;
         margin-bottom: 0;
         background-color: $navi-background-color;
 
@@ -45,7 +45,7 @@
                     color: $active-item;
 
                     &:after {
-                        font-family: "font-awesome";
+                        font-family: "FontAwesome";
                         content: "\f104";
                         position: absolute;
                         bottom: 5px;
