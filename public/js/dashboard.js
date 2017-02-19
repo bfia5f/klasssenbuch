@@ -42,6 +42,15 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 /**
+ * Show/Hide loading screen
+ * @return {null} Nothing gets returned
+ */
+function toggleLoading() {
+    $('#loadingCircle').toggleClass('loading');
+    $('#contentWrapper').toggleClass('loading');
+}
+
+/**
  * Lookup certain student
  * @return {promise} Student object as promise
  */
@@ -52,6 +61,7 @@ function getStudentPromise() {
         return data.val();
     });
 }
+
 /**
  * Lookup all Students
  * @return {promise} All Students in the DB
@@ -63,6 +73,7 @@ function getAllStudentsPromise() {
         return data.val();
     });
 }
+
 /**
  * Retrive the timetable
  * @return {promise} A certain timetable as promise
@@ -73,6 +84,7 @@ function getTimetablePromise() {
         return data.val();
     });
 }
+
 /**
  * Retrive all classes
  * @return {promise} A list of all classes
@@ -93,7 +105,7 @@ function filterStudentsByClass(className) {
     return getAllStudentsPromise().then(function(data) {
         var studentsInClass = [];
         $.each(data, function(studentUID, studentSettings) {
-          // console.log("Student Settings: ", studentSettings);
+            // console.log("Student Settings: ", studentSettings);
             if (studentSettings.class === className) {
                 studentsInClass.push(this);
             }
@@ -117,22 +129,18 @@ function createClassDropdown(name, id, classList) {
     $("#setStudentClass").append(dropdown_classList);
 }
 
-function toggleLoading() {
-  $('#loadingCircle').toggleClass('loading');
-  $('#contentWrapper').toggleClass('loading');
-}
+
 
 
 function updateHTML(userEmail, userName, userProfileImageURL) {
-
-    getClasslistPromise().then(function(data){
-      $.each(Object.keys(data), function(counter){
-        $("#select_class_list").append("<option>" + Object.keys(data)[counter] + "</option>");
-      });
+    getClasslistPromise().then(function(data) {
+        $.each(Object.keys(data), function(counter) {
+            $("#select_class_list").append("<option>" + Object.keys(data)[counter] + "</option>");
+        });
     });
 
-    filterStudentsByClass("11FI5FFFFF").then(function(data){
-      console.log("Filtered studs",data);
+    filterStudentsByClass("11FI5FFFFF").then(function(data) {
+        console.log("Filtered studs", data);
     });
 
     $('#user-image')[0].src = userProfileImageURL;
@@ -149,68 +157,72 @@ function updateHTML(userEmail, userName, userProfileImageURL) {
     });
 }
 
+/**
+ * Update user info
+ * @param  {string} key   what is beeing set
+ * @param  {string} value The new value
+ * @return {null}       Nothing gets returned
+ */
 function updateProfileInfo(key, value) {
-    cUser.updateProfile({
-        photoURL: value
-    }).then(function() {
-        // console.log("Updated Profile Info");
-    }, function(error) {
-        // console.log("Something went wrong");
+    $('.profile-input').each(function(index) {
+        switch ($(this)[0].id) {
+            case 'profile-picture-url':
+                cUser.updateProfile({
+                    photoURL: $(this)[0].value
+                }).then(function() {
+                    // console.log("Updated Profile Info");
+                }, function(error) {
+                    // console.log("Something went wrong");
+                });
+                break;
+            default:
+        }
+    });
+}
+
+
+function updateClassList(eventInfo) {
+    $('#select_student_list').empty();
+    filterStudentsByClass(eventInfo.target.value).then(function(data) {
+        $.each(data, function(index) {
+            console.log(data[index].name);
+            $('#select_student_list').append('<option>' + data[index].name + '</option>')
+        });
     });
 }
 
 function switchNavigationTab(eventInfo) {
-  $('.navbar-fixed-side ul .active').removeClass('active');
-  $(clickedElement.target).addClass('active');
-  $('.dashboard-container').removeClass('active');
-  clickedElement.target.id.split("_")[1].addClass('active');
+    $('.navbar-fixed-side ul .active').removeClass('active');
+    $(clickedElement.target).addClass('active');
+    $('.dashboard-container').removeClass('active');
+    clickedElement.target.id.split("_")[1].addClass('active');
+}
+
+
+function logout() {
+    firebase.auth().signOut().then(function() {
+        window.location.href = "/logout-success.html"
+    }, function(error) {
+        // An error happened.
+    });
 }
 
 $(document).ready(function() {
-  toggleLoading();
+    toggleLoading();
 
-    $('.navbar-fixed-side ul').on('click', function(eventInfo){
-      switchNavigationTab(eventInfo)
+    $('.navbar-fixed-side ul').on('click', function(eventInfo) {
+        switchNavigationTab(eventInfo)
     });
 
-    // // Profile changes
-    // $('#save-profile-changes').on('click', function(eventInfo) {
-    //     $('.profile-input').each(function(index) {
-    //         switch ($(this)[0].id) {
-    //             case 'profile-picture-url':
-    //                 updateProfileInfo('photoURL', $(this)[0].value);
-    //                 break;
-    //             default:
-    //
-    //         }
-    //     });
-    // });
+    // $('#save-profile-changes').on('click', updateProfileInfo());
 
-    // $("#select_class_list").on('change',function(event){
-    //   console.log("clear list");
-    //   $('#select_student_list').empty();
-    //   filterStudentsByClass(event.target.value).then(function(data){
-    //       $.each(data,function(index){
-    //         console.log(data[index].name);
-    //         $('#select_student_list').append('<option>'+data[index].name+'</option>')
-    //       });
-    //   });
-    // });
-
-    // Logout
-    $('#btn-logout').on('click', function() {
-        firebase.auth().signOut().then(function() {
-            window.location.href = "/logout-success.html"
-        }, function(error) {
-            // An error happened.
-        });
+    $("#select_class_list").on('change', function(eventInfo) {
+        updateClassList(eventInfo);
     });
 
+    // $('#btn-logout').on('click', logout());
 
-    /**
-     * DEBUG OPTIONS
-     */
     $('#debug_sendToDb').on('click', function() {
-      toggleLoading();
+        toggleLoading();
     });
 })
