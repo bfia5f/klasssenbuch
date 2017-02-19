@@ -1,67 +1,12 @@
-.navbar-wrapper {
-    padding-left: 0;
-    padding-right: 0;
-    background-color: $navi-background-color;
-    color: $text-color;
-    height: 100vh;
-
-    .user-info {
-        display: flex;
-        align-items: center;
-        border-bottom: 3px solid $navi-border-color;
-        padding-bottom: 10px;
-        padding-top: 10px;
-
-        #user-image {
-            max-width: 75px;
-        }
-
-        .user-text {
-            p {
-                margin: 0 0 0 10px;
-            }
-        }
+.col-nav{
+  padding-left: 0;
+  padding-right: 30px;
+  .nav-left{
+    background-color: $dark-blue;
+    .nav-item{
+      float: none;
     }
-
-    .navbar-fixed-side {
-        border: none;
-        border-radius: 0;
-        margin-bottom: 0;
-        background-color: $navi-background-color;
-
-        ul {
-            list-style: none;
-            margin-left: 0;
-            padding-left: 0;
-
-            li {
-                padding-bottom: 15px;
-                padding-top: 15px;
-                padding-left: 20px;
-                border-bottom: 3px solid $navi-border-color;
-                position: relative;
-
-                &.active {
-                    color: $active-item;
-
-                    &:after {
-                        font-family: "FontAwesome";
-                        content: "\f104";
-                        position: absolute;
-                        bottom: 5px;
-                        right: 0;
-                        font-size: 25px;
-                    }
-                }
-
-                &:hover {
-                    text-decoration: none;
-                    color: $link-hover;
-                    cursor: pointer;
-                }
-            }
-        }
-    }
+  }
 }
 
 .sk-circle {

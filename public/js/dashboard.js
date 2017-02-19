@@ -1,7 +1,8 @@
 /*
   Require external code
  */
-const $ = require('jquery');
+var $ = global.jQuery = require('jquery');
+var bootstrap = require('bootstrap-sass');
 var firebase = require('firebase');
 /*
   Init Firebase
@@ -191,13 +192,6 @@ function updateClassList(eventInfo) {
     });
 }
 
-function switchNavigationTab(eventInfo) {
-    $('.navbar-fixed-side ul .active').removeClass('active');
-    $(clickedElement.target).addClass('active');
-    $('.dashboard-container').removeClass('active');
-    clickedElement.target.id.split("_")[1].addClass('active');
-}
-
 
 function logout() {
     firebase.auth().signOut().then(function() {
@@ -210,19 +204,15 @@ function logout() {
 $(document).ready(function() {
     toggleLoading();
 
-    $('.navbar-fixed-side ul').on('click', function(eventInfo) {
-        switchNavigationTab(eventInfo)
-    });
-
     // $('#save-profile-changes').on('click', updateProfileInfo());
 
-    $("#select_class_list").on('change', function(eventInfo) {
-        updateClassList(eventInfo);
-    });
+    // $("#select_class_list").on('change', function(eventInfo) {
+    //     updateClassList(eventInfo);
+    // });
 
     // $('#btn-logout').on('click', logout());
 
-    $('#debug_sendToDb').on('click', function() {
-        toggleLoading();
-    });
+    // $('#debug_sendToDb').on('click', function() {
+    //     toggleLoading();
+    // });
 })

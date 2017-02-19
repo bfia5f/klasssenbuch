@@ -1,3 +1,6 @@
+body{
+  background-color: $dark-gray;
+}
 .container-floating {
     display: none;
 
@@ -16,41 +19,10 @@
     filter: blur(3px);
 }
 
-.content {
-    background-color: $dark-blue;
-    color: $light-gray;
-    margin-bottom: 0;
-    height: 100vh;
-}
-
-#start {
-    display: none;
-
-    &.active {
-        display: block;
-    }
-}
-
-#stundenplan {
-    display: none;
-
-    &.active {
-        display: block;
-    }
-}
-
-#einstellungen {
-    display: none;
-
-    &.active {
-        display: block;
-    }
-}
-
-#fehlzeiten {
-    display: none;
-
-    &.active {
-        display: block;
-    }
+.page-wrapper{
+  display: inline-flex;
+  .content-wrapper{
+    width: 91vw;
+    background-color: $blue;
+  }
 }

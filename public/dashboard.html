@@ -35,108 +35,53 @@
             </div>
         </div>
     </div>
+    <!-- END Loading -->
 
-    <div class="container-fluid container-blurred loading" id="contentWrapper">
-        <div class="row">
-            <div class="col-sm-3 navbar-wrapper">
-                <div class="user-info">
-                    <img src="http://placehold.it/75x75" id="user-image">
-                    <div class="user-text">
-                        <p>Name: <span class="placeholder">#name#</span></p>
-                        <p>EMail: <span class="placeholder">#email#</span></p>
-                    </div>
-                </div>
-                <nav class="navbar navbar-default navbar-fixed-side">
-                    <ul>
-                        <li class="active" id="link_start">Home</li>
-                        <li id="link_stundenplan">Stundenplan</li>
-                        <li id="link_fehlzeiten">Fehlzeiten</li>
-                        <li id="link_einstellungen">Einstellungen</li>
-                    </ul>
-                    <button type="button" name="logout" id="btn-logout">Logout</button>
-                </nav>
-            </div>
-            <div class="col-sm-9 content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-5 col-sm-offset-4">
-                            <h1>Welcome to the Dashboard</h1>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12" id="setStudentClass">
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid dashboard-container active" id="start">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h1>Übersicht</h1>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3 dashboard-item dashboard-item-times">
-                            <h3>Fehlzeiten</h3>
-                            <span class="placeholder">2 Stunden</span>
-                        </div>
-                        <div class="col-sm-3 dashboard-item dashboard-item-event">
-                            <ul class="dashboard-event-list">
-                                <li class="dashboard-event-item">Klausur am 24.12.2000</li>
-                                <li class="dashboard-event-item">Klausur am 24.12.2000</li>
-                                <li class="dashboard-event-item">Klausur am 24.12.2000</li>
-                                <li class="dashboard-event-item">Klausur am 24.12.2000</li>
-                            </ul>
-                        </div>
-                        <div class="row">
-                            <select class="classList" name="classlist" id="select_class_list">
-                              <option value="default">Klasse auswählen</option>
-                          </select>
-                            <select class="studentList" name="studentlist" id="select_student_list">
-
-                          </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <button type="button" name="debug_sendToDB" id="debug_sendToDb" class="btn btn-primary">Send</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid dashboard-container" id="fehlzeiten">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h1>Fehlzeiten</h1>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid dashboard-container" id="stundenplan">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h1>Stundenplan</h1>
-                        </div>
-                    </div>
-                    <div id="stundenplan-placeholder"></div>
-                </div>
-                <div class="container-fluid dashboard-container" id="einstellungen">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h1>Einstellungen</h1>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <h2>Profilbild ändern</h2>
-                            <p>Gib hier die URL zu deinem Bild ein:</p>
-                            <input type="text" name="profile_url" value="" placeholder="URL" id="profile-picture-url" class="profile-input">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <button type="button" name="btn-save-changes" class="btn btn-primary" id="save-profile-changes">Speichern</button>
-                        </div>
+    <div class="container-fluid">
+        <div class="row page-wrapper">
+            <!-- START NAVIGATION -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 col-nav">
+                        <ul class="nav nav-pills nav-left">
+                            <li class="active nav-item">
+                                <a href="#start" data-toggle="tab">Start</a>
+                            </li>
+                            <li class="nav-item"><a href="#stundenplan" data-toggle="tab">Stundenplan</a>
+                            </li>
+                            <li class="nav-item"><a href="#fehlzeiten" data-toggle="tab">Fehlzeiten</a>
+                            </li>
+                            <li class="nav-item"><a href="#einstellungen" data-toggle="tab">Einstellungen</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
+            <!-- END NAVIGATION -->
+
+            <!-- START CONTENT  -->
+            <div class="container content-wrapper">
+                <div class="row">
+                    <div class="col-xs-8">
+                        <h1>Test</h1>
+                    </div>
+                </div>
+                <div class="row tab-content clearfix">
+                    <div class="tab-pane active" id="start">
+                        <h3>START</h3>
+                    </div>
+                    <div class="tab-pane" id="fehlzeiten">
+                        <h3>FEHLZEITEN</h3>
+                    </div>
+                    <div class="tab-pane" id="stundenplan">
+                        <h3>STUNDENPLAN</h3>
+                    </div>
+                    <div class="tab-pane" id="einstellungen">
+                        <h3>EINSTELLUNGEN</h3>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT  -->
         </div>
     </div>
 </body>

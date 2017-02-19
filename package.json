@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
+    "bootstrap-sass-loader": "^1.0.10",
     "firebase": "^3.6.8",
     "firebase-admin": "^4.1.0",
     "firebaseui": "^1.0.0",
