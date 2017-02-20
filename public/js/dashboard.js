@@ -36,7 +36,11 @@ const refTimetable = "Timetable/teachers/";
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         cUser = user;
-        updateHTML(user.email, user.displayName, user.photoURL);
+        console.log("User has been set");
+        displayProfileImage(cUser.photoURL)
+        displayProfileName(cUser.displayName);
+        displayProfileEmail(cUser.email);
+        displayProfileClass();
     } else {
         window.location.href = "/unauthorized.html";
     }
@@ -56,11 +60,16 @@ function toggleLoading() {
  * @return {promise} Student object as promise
  */
 function getStudentPromise() {
-    var ref = database.ref(refStudent + "/" + cUser.uid);
+  console.log('Find student with UID: ' + cUser.uid);
+    var ref = database.ref  + "/" + cUser.uid);
     // TODO: Error handling
-    return ref.once("value").then(function(data) {
-        return data.val();
-    });
+    var userPromise =  ref.once("value");
+    userPromise.then(dataSnapshot){
+      console.log('Success',dataSnapshot.val());
+    };
+    userPromise.catch(){
+      console.log('Failure');
+    }
 }
 
 /**
@@ -130,6 +139,37 @@ function createClassDropdown(name, id, classList) {
     $("#setStudentClass").append(dropdown_classList);
 }
 
+/**
+ * Update HTML placeholder with profile image
+ * @param  {string} userImageURL Profileimage URL
+ * @return {null}              Nothing
+ */
+function displayProfileImage(userImageURL) {
+  $('#profile-image-placeholder')[0].src = userImageURL;
+}
+/**
+ * Update HTML placeholder with profile name
+ * @param  {string} userName Name of the logged in user
+ * @return {null}          Nothing
+ */
+function displayProfileName(userName) {
+  $('#placeholder_usename')[0].innerText = userName;
+}
+/**
+ * Update HTML placeholder with profile email
+ * @param  {string} userEmail Email of the logged in user
+ * @return {null}           Nothing
+ */
+function displayProfileEmail(userEmail){
+  console.log("Set Email",userEmail);
+  $('#placeholder_email')[0].innerText = userEmail;
+}
+
+function displayProfileClass() {
+  getStudentPromise().then(function(data){
+    console.log(data);
+  })
+}
 
 
 
@@ -142,19 +182,6 @@ function updateHTML(userEmail, userName, userProfileImageURL) {
 
     filterStudentsByClass("11FI5FFFFF").then(function(data) {
         console.log("Filtered studs", data);
-    });
-
-    $('#user-image')[0].src = userProfileImageURL;
-    $('.placeholder').each(function() {
-        switch ($(this)[0].innerText) {
-            case "#email#":
-                $(this)[0].innerText = userEmail;
-                break;
-            case "#name#":
-                $(this)[0].innerText = userName;
-                break;
-            default:
-        }
     });
 }
 
@@ -202,8 +229,15 @@ function logout() {
 }
 
 $(document).ready(function() {
+  console.log(cUser);
     toggleLoading();
-
+    // displayProfileImage(cUser.photoURL)
+    // displayProfileName(cUser.displayName);
+    // displayProfileEmail(cUser.email);
+    $('#btn-debug').on('click',function(){
+      console.log('clicked');
+      displayUserProfileImage(cUser.photoURL);
+    });
     // $('#save-profile-changes').on('click', updateProfileInfo());
 
     // $("#select_class_list").on('change', function(eventInfo) {
