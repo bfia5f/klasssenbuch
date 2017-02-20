@@ -41,8 +41,15 @@
         <div class="row page-wrapper">
             <!-- START NAVIGATION -->
             <div class="container-fluid">
+              <div class="row">
+                <div class="col-xs-12 user-info remove-padding-left">
+                  <img src="" alt="">
+                  <p class="user-info-constant">Username: <br><span class="user-info-variable placeholder">Max Mustermann</span></p>
+                  <p class="user-info-constant">EMail: <br><span class="user-info-variable placeholder">max@mustermail.de</span></p>
+                </div>
+              </div>
                 <div class="row">
-                    <div class="col-xs-12 col-nav">
+                    <div class="col-xs-12 col-nav remove-padding-left">
                         <ul class="nav nav-pills nav-left">
                             <li class="active nav-item">
                                 <a href="#start" data-toggle="tab">Start</a>
@@ -62,13 +69,57 @@
             <!-- START CONTENT  -->
             <div class="container content-wrapper">
                 <div class="row">
-                    <div class="col-xs-8">
-                        <h1>Test</h1>
+                    <div class="col-xs-12 center-text">
+                        <h1>Digitales Klassenbuch 2017</h1>
                     </div>
                 </div>
                 <div class="row tab-content clearfix">
                     <div class="tab-pane active" id="start">
-                        <h3>START</h3>
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-xs-12 center-text">
+                              <h1>Übersicht</h1>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xs-4">
+                              <h3>Fehlzeiten: </h3>
+                              <ul class="max-height-list missing-times-list list-unstyled">
+                                <li class="missing-times-item approved">03.03.2000 | Stunde: 1 | 20min</li>
+                                <li class="missing-times-item pending">03.03.2000 | Stunde: 5 | 2min</li>
+                                <li class="missing-times-item pending">03.03.2000 | Stunde: 7 | 5min</li>
+                                <li class="missing-times-item">03.03.2000 | Stunde: 8 | 10min</li>
+                                <li class="missing-times-item">03.03.2000 | Stunde: 8 | 10min</li>
+                                <li class="missing-times-item">03.03.2000 | Stunde: 8 | 10min</li>
+                                <li class="missing-times-item">03.03.2000 | Stunde: 8 | 10min</li>
+                              </ul>
+                            </div>
+                            <div class="col-xs-4">
+                              <h3>Events:</h3>
+                              <ul class="max-height-list next-events-list list-unstyled remove-padding-left">
+                                <li class="next-event-item">LF 9: Klausur</li>
+                                <li class="next-event-item">LF 9: Klausur</li>
+                                <li class="next-event-item">LF 9: Klausur</li>
+                                <li class="next-event-item">LF 9: Klausur</li>
+                                <li class="next-event-item">LF 9: Klausur</li>
+                                <li class="next-event-item">LF 9: Klausur</li>
+                                <li class="next-event-item">LF 9: Klausur</li>
+                              </ul>
+                            </div>
+                            <div class="col-xs-4">
+                              <h3>Nächsten Stunden:</h3>
+                              <ul class="max-height-list next-lectures-list list-unstyled remove-padding-left">
+                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
                     </div>
                     <div class="tab-pane" id="fehlzeiten">
                         <h3>FEHLZEITEN</h3>
