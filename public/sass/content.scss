@@ -21,8 +21,26 @@ body{
 
 .page-wrapper{
   display: inline-flex;
+  &.loading{
+    filter: blur(2px);
+  }
   .content-wrapper{
-    width: 91vw;
     background-color: $blue;
+    .list-unstyled{
+      list-style: none;
+    }
+    .max-height-list{
+      max-height: 76px;
+      overflow-y: scroll;
+    }
+    .missing-times-list{
+      color: $red;
+      .approved{
+        color: $light-green;
+      }
+      .pending{
+        color: $yellow;
+      }
+    }
   }
 }

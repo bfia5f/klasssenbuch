@@ -1,5 +1,4 @@
 .col-nav{
-  padding-left: 0;
   padding-right: 30px;
   .nav-left{
     background-color: $dark-blue;
@@ -9,6 +8,22 @@
   }
 }
 
+.page-wrapper{
+  .user-info{
+    .user-info-constant{
+      color: $blue;
+    }
+    .user-info-variable{
+      color: $text-color;
+    }
+  }
+}
+.center-text{
+  text-align: center;
+}
+.remove-padding-left{
+  padding-left: 0;
+}
 .sk-circle {
     margin: 100px auto;
     width: 150px;

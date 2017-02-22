@@ -33,18 +33,59 @@ const refTimetable = "Timetable/teachers/";
  * Authentication state of a user changed (logged in/out)
  * @type {[type]}
  */
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        cUser = user;
-        console.log("User has been set");
-        displayProfileImage(cUser.photoURL)
-        displayProfileName(cUser.displayName);
-        displayProfileEmail(cUser.email);
-        displayProfileClass();
+ firebase.auth().onAuthStateChanged(function(currentUser) {
+    if (currentUser) {
+      /*
+      Code that sits in here will run when the user is
+      successfully logged in.
+      In This scope we will have the user object available
+      */
+
+      doJqueryStuff(currentUser);
     } else {
         window.location.href = "/unauthorized.html";
     }
 });
+
+function doJqueryStuff(currentUser){
+
+    $(document).ready(function() {
+
+        htmlUpdate_user_username(currentUser.displayName);
+        htmlUpdate_user_email(currentUser.email);
+        htmlUpdate_user_profilePicture(currentUser.photoURL);
+
+        // $('#save-profile-changes').on('click', updateProfileInfo());
+
+        // $("#select_class_list").on('change', function(eventInfo) {
+        //     updateClassList(eventInfo);
+        // });
+
+        // $('#btn-logout').on('click', logout());
+
+        toggleLoading();
+        $('#debug_sendToDb').on('click', forceWriteOfUserData(currentUser));
+    })
+}
+
+// ##### UPDATE HTML PLACEHOLDER #####
+function htmlUpdate_user_username(userName){
+  console.log("DEBUG: Update html username: ", userName);
+  $('#ph-username').innerText = userName;
+}
+function htmlUpdate_user_email(userEmail){
+  console.log("DEBUG: Update html email: ",userEmail);
+  $('#ph-email').innerText = userEmail;
+}
+function htmlUpdate_user_class(userClass){
+  console.log("DEBUG: Update html class");
+}
+function htmlUpdate_user_profilePicture(userProfileImageURL) {
+  console.log("DEBUG: Update html picture: ",userProfileImageURL);
+  console.log("ImageElement: " , $('#ph-profilepicture'));
+  $('#ph-profilepicture').get(0).src = userProfileImageURL;
+}
+
 
 /**
  * Show/Hide loading screen
@@ -52,7 +93,7 @@ firebase.auth().onAuthStateChanged(function(user) {
  */
 function toggleLoading() {
     $('#loadingCircle').toggleClass('loading');
-    $('#contentWrapper').toggleClass('loading');
+    $('.page-wrapper').toggleClass('loading');
 }
 
 /**
@@ -228,25 +269,17 @@ function logout() {
     });
 }
 
-$(document).ready(function() {
-  console.log(cUser);
-    toggleLoading();
-    // displayProfileImage(cUser.photoURL)
-    // displayProfileName(cUser.displayName);
-    // displayProfileEmail(cUser.email);
-    $('#btn-debug').on('click',function(){
-      console.log('clicked');
-      displayUserProfileImage(cUser.photoURL);
+/**
+ * Only use this for debug purposes
+ */
+function forceWriteOfUserData(currentUser) {
+    database.ref("debug/" + currentUser.uid).set({
+        name: "Tobias Stosius",
+        class: "bfia5f",
+        teacher: "Weng",
+        personalevent: {
+            SVSitzung: "20.2.2017-0800"
+        },
+        timestamp: Date()
     });
-    // $('#save-profile-changes').on('click', updateProfileInfo());
-
-    // $("#select_class_list").on('change', function(eventInfo) {
-    //     updateClassList(eventInfo);
-    // });
-
-    // $('#btn-logout').on('click', logout());
-
-    // $('#debug_sendToDb').on('click', function() {
-    //     toggleLoading();
-    // });
-})
+}
