@@ -33,10 +33,21 @@ const refTimetable = "Timetable/teachers/";
  * Authentication state of a user changed (logged in/out)
  * @type {[type]}
  */
-firebase.auth().onAuthStateChanged(function(user) {
+ firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-        cUser = user;
-        updateHTML(user.email, user.displayName, user.photoURL);
+        $(document).ready(function() {
+            toggleLoading();
+
+            // $('#save-profile-changes').on('click', updateProfileInfo());
+
+            // $("#select_class_list").on('change', function(eventInfo) {
+            //     updateClassList(eventInfo);
+            // });
+
+            // $('#btn-logout').on('click', logout());
+
+            $('#debug_sendToDb').on('click', forceWriteOfUserData());
+        })
     } else {
         window.location.href = "/unauthorized.html";
     }
@@ -48,7 +59,7 @@ firebase.auth().onAuthStateChanged(function(user) {
  */
 function toggleLoading() {
     $('#loadingCircle').toggleClass('loading');
-    $('#contentWrapper').toggleClass('loading');
+    $('.page-wrapper').toggleClass('loading');
 }
 
 /**
@@ -201,18 +212,17 @@ function logout() {
     });
 }
 
-$(document).ready(function() {
-    toggleLoading();
-
-    // $('#save-profile-changes').on('click', updateProfileInfo());
-
-    // $("#select_class_list").on('change', function(eventInfo) {
-    //     updateClassList(eventInfo);
-    // });
-
-    // $('#btn-logout').on('click', logout());
-
-    // $('#debug_sendToDb').on('click', function() {
-    //     toggleLoading();
-    // });
-})
+/**
+ * Only use this for debug purposes
+ */
+function forceWriteOfUserData() {
+    database.ref("debug/" + cUser.uid).set({
+        name: "Tobias Stosius",
+        class: "bfia5f",
+        teacher: "Weng",
+        personalevent: {
+            SVSitzung: "20.2.2017-0800"
+        },
+        timestamp: Date()
+    });
+}
