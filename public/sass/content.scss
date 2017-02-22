@@ -21,6 +21,9 @@ body{
 
 .page-wrapper{
   display: inline-flex;
+  &.loading{
+    filter: blur(2px);
+  }
   .content-wrapper{
     background-color: $blue;
     .list-unstyled{
