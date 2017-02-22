@@ -20,7 +20,11 @@ body{
 }
 
 .page-wrapper{
-  display: inline-flex;
+  .row{
+    padding-right: 0;
+    margin-right: 0;
+    width: 100%;
+  }
   &.loading{
     filter: blur(2px);
   }
