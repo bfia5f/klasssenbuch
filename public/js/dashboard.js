@@ -19,7 +19,7 @@ firebase.initializeApp(config);
   Variables
  */
 var database = firebase.database();
-var cUser = null;
+
 /*
   Paths to DB 'objects'
  */
@@ -29,61 +29,67 @@ const refStudent = refUsers + "/student/";
 const refTeacher = refUsers + "/teacher/";
 const refTimetable = "Timetable/teachers/";
 
-/**
- * Authentication state of a user changed (logged in/out)
- * @type {[type]}
- */
- firebase.auth().onAuthStateChanged(function(currentUser) {
-    if (currentUser) {
-      /*
-      Code that sits in here will run when the user is
-      successfully logged in.
-      In This scope we will have the user object available
-      */
 
-      doJqueryStuff(currentUser);
-    } else {
-        window.location.href = "/unauthorized.html";
-    }
-});
+$(document).ready(function() {
+    var cUser = null;
+    /**
+     * Authentication state of a user changed (logged in/out)
+     * @type {[type]}
+     */
+    firebase.auth().onAuthStateChanged(function(currentUser) {
+        if (currentUser) {
+            /*
+            Code that sits in here will run when the user is
+            successfully logged in.
+            In This scope we will have the user object available
+            */
+            toggleLoading();
+            htmlUpdate_user_username(currentUser.displayName);
+            htmlUpdate_user_email(currentUser.email);
+            htmlUpdate_user_profilePicture(currentUser.photoURL);
+            $('#debug_sendToDb').on('click', function() {
+                console.log(currentUser);
+                forceWriteOfUserData(currentUser);
+            });
+            console.log("HERERE");
+        } else {
+            window.location.href = "/unauthorized.html";
+        }
+    });
 
-function doJqueryStuff(currentUser){
 
-    $(document).ready(function() {
 
-        htmlUpdate_user_username(currentUser.displayName);
-        htmlUpdate_user_email(currentUser.email);
-        htmlUpdate_user_profilePicture(currentUser.photoURL);
+    // $('#save-profile-changes').on('click', updateProfileInfo());
 
-        // $('#save-profile-changes').on('click', updateProfileInfo());
+    // $("#select_class_list").on('change', function(eventInfo) {
+    //     updateClassList(eventInfo);
+    // });
 
-        // $("#select_class_list").on('change', function(eventInfo) {
-        //     updateClassList(eventInfo);
-        // });
+    // $('#btn-logout').on('click', logout());
 
-        // $('#btn-logout').on('click', logout());
+    console.log("DONE LOADING");
 
-        toggleLoading();
-        $('#debug_sendToDb').on('click', forceWriteOfUserData(currentUser));
-    })
-}
+})
 
 // ##### UPDATE HTML PLACEHOLDER #####
-function htmlUpdate_user_username(userName){
-  console.log("DEBUG: Update html username: ", userName);
-  $('#ph-username').innerText = userName;
+function htmlUpdate_user_username(userName) {
+    console.log("DEBUG: Update html username: ", userName);
+    $('#ph-username').innerText = userName;
 }
-function htmlUpdate_user_email(userEmail){
-  console.log("DEBUG: Update html email: ",userEmail);
-  $('#ph-email').innerText = userEmail;
+
+function htmlUpdate_user_email(userEmail) {
+    console.log("DEBUG: Update html email: ", userEmail);
+    $('#ph-email').innerText = userEmail;
 }
-function htmlUpdate_user_class(userClass){
-  console.log("DEBUG: Update html class");
+
+function htmlUpdate_user_class(userClass) {
+    console.log("DEBUG: Update html class");
 }
+
 function htmlUpdate_user_profilePicture(userProfileImageURL) {
-  console.log("DEBUG: Update html picture: ",userProfileImageURL);
-  console.log("ImageElement: " , $('#ph-profilepicture'));
-  $('#ph-profilepicture').get(0).src = userProfileImageURL;
+    console.log("DEBUG: Update html picture: ", userProfileImageURL);
+    console.log("ImageElement: ", $('#ph-profilepicture'));
+    $('#ph-profilepicture').get(0).src = userProfileImageURL;
 }
 
 
@@ -237,12 +243,22 @@ function logout() {
  * Only use this for debug purposes
  */
 function forceWriteOfUserData(currentUser) {
+    console.log("WRITING" + Date());
     database.ref("debug/" + currentUser.uid).set({
         name: "Tobias Stosius",
         class: "bfia5f",
         teacher: "Weng",
         personalevent: {
-            SVSitzung: "20.2.2017-0800"
+            SVSitzung: {
+                date: "20.05.2000",
+                time: "08:00",
+                info: "Raum D123"
+            }
+        },
+        fehlzeiten: {
+            date: "03.03.2000",
+            lesson: "1",
+            duration: "20"
         },
         timestamp: Date()
     });
