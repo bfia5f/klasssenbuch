@@ -109,8 +109,15 @@ function createListItems(objectList, itemClassName, appendToElementWithID) {
     $(newListItem).addClass(itemClassName);
     $.each(objectList, function(key, value) {
         var tempText = document.createElement('p');
-        tempText.innerText = value;
-        $(newListItem).append(tempText);
+
+        if (key == "status" && value == "pending") {
+            $(newListItem).addClass("pending");
+        } else if (key == "status" && value == "approved"){
+            $(newListItem).addClass("approved");
+        } else {
+            tempText.innerText = value;
+            $(newListItem).append(tempText);
+        }
     });
     $(appendToElementWithID).append(newListItem);
 }
@@ -316,22 +323,26 @@ function forceWriteOfUserData(currentUser) {
             UID_1: {
                 date: "03.03.2000",
                 lesson: "Stunde: 1",
-                duration: "20min"
+                duration: "20min",
+                status: "pending"
             },
             UID_2: {
                 date: "03.03.2000",
                 lesson: "Stunde: 3",
-                duration: "20min"
+                duration: "20min",
+                status: "approved"
             },
             UID_3: {
                 date: "03.03.2000",
                 lesson: "Stunde: 3",
-                duration: "20min"
+                duration: "20min",
+                status: "pending"
             },
             UID_4: {
                 date: "03.03.2000",
                 lesson: "Stunde: 7",
-                duration: "20min"
+                duration: "20min",
+                status: "pending"
             },
         },
         timestamp: Date()
