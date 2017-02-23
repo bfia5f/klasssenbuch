@@ -25,7 +25,7 @@ var database = firebase.database();
  */
 const refUsers = "user";
 const refClass = "class";
-const refDebug ="debug";
+const refDebug = "debug";
 const refStudent = refUsers + "/student/";
 const refTeacher = refUsers + "/teacher/";
 const refTimetable = "Timetable/teachers/";
@@ -48,10 +48,21 @@ $(document).ready(function() {
             htmlUpdate_user_username(currentUser.displayName);
             htmlUpdate_user_email(currentUser.email);
             htmlUpdate_user_profilePicture(currentUser.photoURL);
-
-            getDebugStudentPromise(currentUser.uid).then(function(studentObject){
-              console.log(studentObject.fehlzeiten);
+            $(function() {
+                getDebugStudentPromise(currentUser.uid).then(function(studentObject) {
+                    $.each(studentObject.fehlzeiten, function(key, value) {
+                        var newListItem = document.createElement('li');
+                        $(newListItem).addClass("missing-times-item");
+                        $.each(value, function(key_1, value_1) {
+                            var tempText = document.createElement('p');
+                            tempText.innerText = value_1;
+                            $(newListItem).append(tempText);
+                        });                   
+                        $('#missing-times-list').append(newListItem);
+                    });
+                });
             });
+
             $('#debug_sendToDb').on('click', function() {
                 console.log(currentUser);
                 forceWriteOfUserData(currentUser);
@@ -74,7 +85,7 @@ $(document).ready(function() {
 
     console.log("DONE LOADING");
 
-})
+});
 
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
@@ -273,9 +284,26 @@ function forceWriteOfUserData(currentUser) {
             }
         },
         fehlzeiten: {
-            date: "03.03.2000",
-            lesson: "1",
-            duration: "20"
+            UID_1: {
+                date: "03.03.2000",
+                lesson: "Stunde: 1",
+                duration: "20min"
+            },
+            UID_2: {
+                date: "03.03.2000",
+                lesson: "Stunde: 3",
+                duration: "20min"
+            },
+            UID_3: {
+                date: "03.03.2000",
+                lesson: "Stunde: 3",
+                duration: "20min"
+            },
+            UID_4: {
+                date: "03.03.2000",
+                lesson: "Stunde: 7",
+                duration: "20min"
+            },
         },
         timestamp: Date()
     });

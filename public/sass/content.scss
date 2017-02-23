@@ -1,0 +1,12 @@
+.missing-times-item {
+    p {
+        margin: 0;
+        width: auto;
+        display: inline;
+        &:nth-last-child(1n+2) {
+    		&:after{
+    			content: " | "
+    		}
+		}
+    }
+}
