@@ -10,3 +10,18 @@
 		}
     }
 }
+
+.missing-times-item{
+	&.approved{
+		color: $light-green;
+	}
+	&.pending{
+		color: $red;
+	}
+}
+
+.content-wrapper{
+    .center-text{
+        text-align: center;
+    }
+}
