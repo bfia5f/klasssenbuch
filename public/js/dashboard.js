@@ -19,74 +19,101 @@ firebase.initializeApp(config);
   Variables
  */
 var database = firebase.database();
-var cUser = null;
+
 /*
   Paths to DB 'objects'
  */
 const refUsers = "user";
 const refClass = "class";
+const refDebug = "debug";
 const refStudent = refUsers + "/student/";
 const refTeacher = refUsers + "/teacher/";
 const refTimetable = "Timetable/teachers/";
 
-/**
- * Authentication state of a user changed (logged in/out)
- * @type {[type]}
- */
- firebase.auth().onAuthStateChanged(function(currentUser) {
-    if (currentUser) {
-      /*
-      Code that sits in here will run when the user is
-      successfully logged in.
-      In This scope we will have the user object available
-      */
 
-      doJqueryStuff(currentUser);
-    } else {
-        window.location.href = "/unauthorized.html";
-    }
+$(document).ready(function() {
+    var cUser = null;
+    /**
+     * Authentication state of a user changed (logged in/out)
+     * @type {[type]}
+     */
+    firebase.auth().onAuthStateChanged(function(currentUser) {
+        if (currentUser) {
+            /*
+            Code that sits in here will run when the user is
+            successfully logged in.
+            In This scope we will have the user object available
+            */
+            htmlUpdate_user_username(currentUser.displayName);
+            htmlUpdate_user_email(currentUser.email);
+            htmlUpdate_user_profilePicture(currentUser.photoURL);
+            htmlUpdate_missingTimes(currentUser.uid);
+            htmlUpdate_events(currentUser.uid);
+
+
+            $('#debug_sendToDb').on('click', function() {
+                forceWriteOfUserData(currentUser);
+            });
+            toggleLoading();
+        } else {
+            window.location.href = "/unauthorized.html";
+        }
+    });
+
+
+
+    // $('#save-profile-changes').on('click', updateProfileInfo());
+
+    // $("#select_class_list").on('change', function(eventInfo) {
+    //     updateClassList(eventInfo);
+    // });
+
+    // $('#btn-logout').on('click', logout());
 });
 
-function doJqueryStuff(currentUser){
-
-    $(document).ready(function() {
-
-        htmlUpdate_user_username(currentUser.displayName);
-        htmlUpdate_user_email(currentUser.email);
-        htmlUpdate_user_profilePicture(currentUser.photoURL);
-
-        // $('#save-profile-changes').on('click', updateProfileInfo());
-
-        // $("#select_class_list").on('change', function(eventInfo) {
-        //     updateClassList(eventInfo);
-        // });
-
-        // $('#btn-logout').on('click', logout());
-
-        toggleLoading();
-        $('#debug_sendToDb').on('click', forceWriteOfUserData(currentUser));
-    })
-}
-
 // ##### UPDATE HTML PLACEHOLDER #####
-function htmlUpdate_user_username(userName){
-  console.log("DEBUG: Update html username: ", userName);
-  $('#ph-username').innerText = userName;
+function htmlUpdate_user_username(userName) {
+    $('#ph-username').innerText = userName;
 }
-function htmlUpdate_user_email(userEmail){
-  console.log("DEBUG: Update html email: ",userEmail);
-  $('#ph-email').innerText = userEmail;
+
+function htmlUpdate_user_email(userEmail) {
+    $('#ph-email').innerText = userEmail;
 }
-function htmlUpdate_user_class(userClass){
-  console.log("DEBUG: Update html class");
-}
+
+function htmlUpdate_user_class(userClass) {}
+
 function htmlUpdate_user_profilePicture(userProfileImageURL) {
-  console.log("DEBUG: Update html picture: ",userProfileImageURL);
-  console.log("ImageElement: " , $('#ph-profilepicture'));
-  $('#ph-profilepicture').get(0).src = userProfileImageURL;
+    $('#ph-profilepicture').get(0).src = userProfileImageURL;
+}
+// #### FILL DASHBOARD ELEMENTS ####
+function htmlUpdate_missingTimes(currentUserUID) {
+    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
+        $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
+            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list");
+        });
+    });
+}
+
+function htmlUpdate_events(currentUserUID) {
+    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
+        $.each(studentObject.personalevent, function(key, personalevent) {
+            createListItems(personalevent,"next-event-item","#next-events-list");
+        });        
+    });
 }
 
 
+function createListItems(objectList, itemClassName, appendToElementWithID) {
+    console.log(Object.keys(objectList));
+    var newListItem = document.createElement('li');
+    $(newListItem).addClass(itemClassName);
+    $.each(objectList, function(key, value) {
+        var tempText = document.createElement('p');
+        tempText.innerText = value;
+        $(newListItem).append(tempText);
+    });
+    $(appendToElementWithID).append(newListItem);
+}
 /**
  * Show/Hide loading screen
  * @return {null} Nothing gets returned
@@ -97,20 +124,27 @@ function toggleLoading() {
 }
 
 /**
- * Lookup certain student
- * @return {promise} Student object as promise
+ * Get certain user as prommise
+ @param {string} userUID UID of the user to lookup
  */
-function getStudentPromise() {
-  console.log('Find student with UID: ' + cUser.uid);
-    var ref = database.ref  + "/" + cUser.uid);
+function getStudentPromise(userUID) {
+    var ref = database.ref(refStudent + "/" + userUID);
     // TODO: Error handling
-    var userPromise =  ref.once("value");
-    userPromise.then(dataSnapshot){
-      console.log('Success',dataSnapshot.val());
-    };
-    userPromise.catch(){
-      console.log('Failure');
-    }
+    return ref.once("value").then(function(data) {
+        return data.val();
+    });
+}
+
+/**
+ * Get certain user as prommise from debug
+ @param {string} userUID UID of the user to lookup
+ */
+function getStudentPromise(userUID) {
+    var ref = database.ref(refDebug + "/" + userUID);
+    // TODO: Error handling
+    return ref.once("value").then(function(data) {
+        return data.val();
+    });
 }
 
 /**
@@ -156,7 +190,6 @@ function filterStudentsByClass(className) {
     return getAllStudentsPromise().then(function(data) {
         var studentsInClass = [];
         $.each(data, function(studentUID, studentSettings) {
-            // console.log("Student Settings: ", studentSettings);
             if (studentSettings.class === className) {
                 studentsInClass.push(this);
             }
@@ -221,9 +254,7 @@ function updateHTML(userEmail, userName, userProfileImageURL) {
         });
     });
 
-    filterStudentsByClass("11FI5FFFFF").then(function(data) {
-        console.log("Filtered studs", data);
-    });
+    filterStudentsByClass("11FI5FFFFF").then(function(data) {});
 }
 
 /**
@@ -238,11 +269,7 @@ function updateProfileInfo(key, value) {
             case 'profile-picture-url':
                 cUser.updateProfile({
                     photoURL: $(this)[0].value
-                }).then(function() {
-                    // console.log("Updated Profile Info");
-                }, function(error) {
-                    // console.log("Something went wrong");
-                });
+                }).then(function() {}, function(error) {});
                 break;
             default:
         }
@@ -254,7 +281,6 @@ function updateClassList(eventInfo) {
     $('#select_student_list').empty();
     filterStudentsByClass(eventInfo.target.value).then(function(data) {
         $.each(data, function(index) {
-            console.log(data[index].name);
             $('#select_student_list').append('<option>' + data[index].name + '</option>')
         });
     });
@@ -278,7 +304,34 @@ function forceWriteOfUserData(currentUser) {
         class: "bfia5f",
         teacher: "Weng",
         personalevent: {
-            SVSitzung: "20.2.2017-0800"
+            SVSitzung: {
+                date: "20.05.2000",
+                time: "08:00",
+                info: "Raum D123",
+                description: "SV-Sitzung"
+            }
+        },
+        fehlzeiten: {
+            UID_1: {
+                date: "03.03.2000",
+                lesson: "Stunde: 1",
+                duration: "20min"
+            },
+            UID_2: {
+                date: "03.03.2000",
+                lesson: "Stunde: 3",
+                duration: "20min"
+            },
+            UID_3: {
+                date: "03.03.2000",
+                lesson: "Stunde: 3",
+                duration: "20min"
+            },
+            UID_4: {
+                date: "03.03.2000",
+                lesson: "Stunde: 7",
+                duration: "20min"
+            },
         },
         timestamp: Date()
     });

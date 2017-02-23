@@ -36,111 +36,101 @@
         </div>
     </div>
     <!-- END Loading -->
-
-    <div class="container-fluid">
-        <div class="row page-wrapper loading">
-            <!-- START NAVIGATION -->
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-xs-12 user-info remove-padding-left">
-                  <img id="ph-profilepicture" alt="">
-                  <p class="user-info-constant">Username: <br><span class="user-info-variable placeholder" id="ph-username">Max Mustermann</span></p>
-                  <p class="user-info-constant">EMail: <br><span class="user-info-variable placeholder" id="ph-email">max@mustermail.de</span></p>
-                </div>
-              </div>
-                <div class="row">
-                    <div class="col-xs-12 col-nav remove-padding-left">
-                        <ul class="nav nav-pills nav-left">
-                            <li class="active nav-item">
-                                <a href="#start" data-toggle="tab">Start</a>
-                            </li>
-                            <li class="nav-item"><a href="#stundenplan" data-toggle="tab">Stundenplan</a>
-                            </li>
-                            <li class="nav-item"><a href="#fehlzeiten" data-toggle="tab">Fehlzeiten</a>
-                            </li>
-                            <li class="nav-item"><a href="#einstellungen" data-toggle="tab">Einstellungen</a>
-                            </li>
-                        </ul>
+    <div class="container-fluid page-wrapper loading">
+        <div class="row">
+            <div class="col-sm-3 col-lg-2">
+                <nav class="navbar navbar-default navbar-fixed-side">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#"><img id="ph-profilepicture" src=""></a>
+                        </div>                        
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <div class="user-info">
+                            <img id="ph-profilepicture" class="img-responsive" alt="">
+                            <p class="user-info-constant">Username:
+                                <br><span class="user-info-variable placeholder" id="ph-username">Max Mustermann</span></p>
+                            <p class="user-info-constant">EMail:
+                                <br><span class="user-info-variable placeholder" id="ph-email">max@mustermail.de</span></p>
+                        </div>
+                            <ul class="nav navbar-nav">
+                                <li class="active nav-item">
+                                    <a href="#start" data-toggle="tab">Start</a>
+                                </li>
+                                <li class="nav-item"><a href="#stundenplan" data-toggle="tab">Stundenplan</a>
+                                </li>
+                                <li class="nav-item"><a href="#fehlzeiten" data-toggle="tab">Fehlzeiten</a>
+                                </li>
+                                <li class="nav-item"><a href="#einstellungen" data-toggle="tab">Einstellungen</a>
+                                </li>
+                            </ul>
+                        </div>                        
                     </div>
-                </div>
+                </nav>
             </div>
-            <!-- END NAVIGATION -->
-
-            <!-- START CONTENT  -->
-            <div class="container content-wrapper">
-                <div class="row">
-                    <div class="col-xs-12 center-text">
-                        <h1>Digitales Klassenbuch 2017</h1>
-                    </div>
-                </div>
-                <div class="row tab-content clearfix">
-                    <div class="tab-pane active" id="start">
-                        <div class="container">
-                          <div class="row">
-                            <div class="col-xs-12 center-text">
-                              <h1>Übersicht</h1>
-                              <button type="button" id="debug_sendToDb" class="btn btn-default">
-                                SEND
-                              </button>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xs-4">
-                              <h3>Fehlzeiten: </h3>
-                              <ul class="max-height-list missing-times-list list-unstyled">
-                                <li class="missing-times-item approved">03.03.2000 | Stunde: 1 | 20min</li>
-                                <li class="missing-times-item pending">03.03.2000 | Stunde: 5 | 2min</li>
-                                <li class="missing-times-item pending">03.03.2000 | Stunde: 7 | 5min</li>
-                                <li class="missing-times-item">03.03.2000 | Stunde: 8 | 10min</li>
-                                <li class="missing-times-item">03.03.2000 | Stunde: 8 | 10min</li>
-                                <li class="missing-times-item">03.03.2000 | Stunde: 8 | 10min</li>
-                                <li class="missing-times-item">03.03.2000 | Stunde: 8 | 10min</li>
-                              </ul>
-                            </div>
-                            <div class="col-xs-4">
-                              <h3>Events:</h3>
-                              <ul class="max-height-list next-events-list list-unstyled remove-padding-left">
-                                <li class="next-event-item">LF 9: Klausur</li>
-                                <li class="next-event-item">LF 9: Klausur</li>
-                                <li class="next-event-item">LF 9: Klausur</li>
-                                <li class="next-event-item">LF 9: Klausur</li>
-                                <li class="next-event-item">LF 9: Klausur</li>
-                                <li class="next-event-item">LF 9: Klausur</li>
-                                <li class="next-event-item">LF 9: Klausur</li>
-                              </ul>
-                            </div>
-                            <div class="col-xs-4">
-                              <h3>Nächsten Stunden:</h3>
-                              <ul class="max-height-list next-lectures-list list-unstyled remove-padding-left">
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                              </ul>
-                            </div>
-                          </div>
+            <div class="col-sm-9 col-lg-10 content-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h1>Digitales Klassenbuch 2017</h1>
                         </div>
                     </div>
-                    <div class="tab-pane" id="fehlzeiten">
-                        <h3>FEHLZEITEN</h3>
-                    </div>
-                    <div class="tab-pane" id="stundenplan">
-                        <h3>STUNDENPLAN</h3>
-                    </div>
-                    <div class="tab-pane" id="einstellungen">
-                        <h3>EINSTELLUNGEN</h3>
+                    <div class="row tab-content clearfix">
+                        <div class="tab-pane active" id="start">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12 center-text">
+                                        <h1>Übersicht</h1>
+                                        <button type="button" id="debug_sendToDb" class="btn btn-default">
+                                            SEND
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-4">
+                                        <h3>Fehlzeiten: </h3>
+                                        <ul class="max-height-list list-unstyled" id="missing-times-list">
+                                        </ul>
+                                    </div>
+                                    <div class="col-xs-12 col-md-4">
+                                        <h3>Events:</h3>
+                                        <ul class="max-height-list list-unstyled" id="next-events-list">
+                                        </ul>
+                                    </div>
+                                    <div class="col-xs-12 col-md-4">
+                                        <h3>Nächsten Stunden:</h3>
+                                        <ul class="max-height-list next-lectures-list list-unstyled">
+                                            <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                            <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                            <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                            <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                            <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                            <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                            <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="fehlzeiten">
+                            <h3>FEHLZEITEN</h3>
+                        </div>
+                        <div class="tab-pane" id="stundenplan">
+                            <h3>STUNDENPLAN</h3>
+                        </div>
+                        <div class="tab-pane" id="einstellungen">
+                            <h3>EINSTELLUNGEN</h3>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- END CONTENT  -->
         </div>
     </div>
 </body>
-
-
-
 
 </html>
