@@ -49,7 +49,7 @@ $(document).ready(function() {
             htmlUpdate_user_profilePicture(currentUser.photoURL);
             htmlUpdate_missingTimes(currentUser.uid);
             htmlUpdate_events(currentUser.uid);
-
+            htmlUpdate_timetable();
 
             $('#debug_sendToDb').on('click', function() {
                 forceWriteOfUserData(currentUser);
@@ -97,11 +97,16 @@ function htmlUpdate_missingTimes(currentUserUID) {
 function htmlUpdate_events(currentUserUID) {
     getDebugStudentPromise(currentUserUID).then(function(studentObject) {
         $.each(studentObject.personalevent, function(key, personalevent) {
-            createListItems(personalevent,"next-event-item","#next-events-list");
-        });        
+            createListItems(personalevent, "next-event-item", "#next-events-list");
+        });
     });
 }
 
+function htmlUpdate_timetable() {
+    getTimetablePromise().then(function(timetable) {
+        $('#timetable-wrapper').html(timetable);
+    });
+}
 
 function createListItems(objectList, itemClassName, appendToElementWithID) {
     console.log(Object.keys(objectList));
@@ -112,7 +117,7 @@ function createListItems(objectList, itemClassName, appendToElementWithID) {
 
         if (key == "status" && value == "pending") {
             $(newListItem).addClass("pending");
-        } else if (key == "status" && value == "approved"){
+        } else if (key == "status" && value == "approved") {
             $(newListItem).addClass("approved");
         } else {
             tempText.innerText = value;
@@ -135,7 +140,7 @@ function toggleLoading() {
  @param {string} userUID UID of the user to lookup
  */
 function getStudentPromise(userUID) {
-    
+
     var ref = database.ref(refStudent + "/" + userUID);
     // TODO: Error handling
     return ref.once("value").then(function(data) {
@@ -172,7 +177,7 @@ function getAllStudentsPromise() {
  * @return {promise} A certain timetable as promise
  */
 function getTimetablePromise() {
-    var ref = database.ref(refTimetable);
+    var ref = database.ref(refDebug + "/stundenplan");
     return ref.once("value").then(function(data) {
         return data.val();
     });
