@@ -128,6 +128,7 @@ function toggleLoading() {
  @param {string} userUID UID of the user to lookup
  */
 function getStudentPromise(userUID) {
+    
     var ref = database.ref(refStudent + "/" + userUID);
     // TODO: Error handling
     return ref.once("value").then(function(data) {
