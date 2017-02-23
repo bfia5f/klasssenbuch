@@ -44,30 +44,17 @@ $(document).ready(function() {
             successfully logged in.
             In This scope we will have the user object available
             */
-            toggleLoading();
             htmlUpdate_user_username(currentUser.displayName);
             htmlUpdate_user_email(currentUser.email);
             htmlUpdate_user_profilePicture(currentUser.photoURL);
-            $(function() {
-                getDebugStudentPromise(currentUser.uid).then(function(studentObject) {
-                    $.each(studentObject.fehlzeiten, function(key, value) {
-                        var newListItem = document.createElement('li');
-                        $(newListItem).addClass("missing-times-item");
-                        $.each(value, function(key_1, value_1) {
-                            var tempText = document.createElement('p');
-                            tempText.innerText = value_1;
-                            $(newListItem).append(tempText);
-                        });                   
-                        $('#missing-times-list').append(newListItem);
-                    });
-                });
-            });
+            htmlUpdate_missingTimes(currentUser.uid);
+            htmlUpdate_events(currentUser.uid);
+
 
             $('#debug_sendToDb').on('click', function() {
-                console.log(currentUser);
                 forceWriteOfUserData(currentUser);
             });
-            console.log("HERERE");
+            toggleLoading();
         } else {
             window.location.href = "/unauthorized.html";
         }
@@ -82,33 +69,51 @@ $(document).ready(function() {
     // });
 
     // $('#btn-logout').on('click', logout());
-
-    console.log("DONE LOADING");
-
 });
 
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
-    console.log("DEBUG: Update html username: ", userName);
     $('#ph-username').innerText = userName;
 }
 
 function htmlUpdate_user_email(userEmail) {
-    console.log("DEBUG: Update html email: ", userEmail);
     $('#ph-email').innerText = userEmail;
 }
 
-function htmlUpdate_user_class(userClass) {
-    console.log("DEBUG: Update html class");
-}
+function htmlUpdate_user_class(userClass) {}
 
 function htmlUpdate_user_profilePicture(userProfileImageURL) {
-    console.log("DEBUG: Update html picture: ", userProfileImageURL);
-    console.log("ImageElement: ", $('#ph-profilepicture'));
     $('#ph-profilepicture').get(0).src = userProfileImageURL;
+}
+// #### FILL DASHBOARD ELEMENTS ####
+function htmlUpdate_missingTimes(currentUserUID) {
+    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
+        $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
+            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list");
+        });
+    });
+}
+
+function htmlUpdate_events(currentUserUID) {
+    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
+        $.each(studentObject.personalevent, function(key, personalevent) {
+            createListItems(personalevent,"next-event-item","#next-events-list");
+        });        
+    });
 }
 
 
+function createListItems(objectList, itemClassName, appendToElementWithID) {
+    console.log(Object.keys(objectList));
+    var newListItem = document.createElement('li');
+    $(newListItem).addClass(itemClassName);
+    $.each(objectList, function(key, value) {
+        var tempText = document.createElement('p');
+        tempText.innerText = value;
+        $(newListItem).append(tempText);
+    });
+    $(appendToElementWithID).append(newListItem);
+}
 /**
  * Show/Hide loading screen
  * @return {null} Nothing gets returned
@@ -185,7 +190,6 @@ function filterStudentsByClass(className) {
     return getAllStudentsPromise().then(function(data) {
         var studentsInClass = [];
         $.each(data, function(studentUID, studentSettings) {
-            // console.log("Student Settings: ", studentSettings);
             if (studentSettings.class === className) {
                 studentsInClass.push(this);
             }
@@ -219,9 +223,7 @@ function updateHTML(userEmail, userName, userProfileImageURL) {
         });
     });
 
-    filterStudentsByClass("11FI5FFFFF").then(function(data) {
-        console.log("Filtered studs", data);
-    });
+    filterStudentsByClass("11FI5FFFFF").then(function(data) {});
 }
 
 /**
@@ -236,11 +238,7 @@ function updateProfileInfo(key, value) {
             case 'profile-picture-url':
                 cUser.updateProfile({
                     photoURL: $(this)[0].value
-                }).then(function() {
-                    // console.log("Updated Profile Info");
-                }, function(error) {
-                    // console.log("Something went wrong");
-                });
+                }).then(function() {}, function(error) {});
                 break;
             default:
         }
@@ -252,7 +250,6 @@ function updateClassList(eventInfo) {
     $('#select_student_list').empty();
     filterStudentsByClass(eventInfo.target.value).then(function(data) {
         $.each(data, function(index) {
-            console.log(data[index].name);
             $('#select_student_list').append('<option>' + data[index].name + '</option>')
         });
     });
@@ -271,7 +268,6 @@ function logout() {
  * Only use this for debug purposes
  */
 function forceWriteOfUserData(currentUser) {
-    console.log("WRITING" + Date());
     database.ref("debug/" + currentUser.uid).set({
         name: "Tobias Stosius",
         class: "bfia5f",
@@ -280,7 +276,8 @@ function forceWriteOfUserData(currentUser) {
             SVSitzung: {
                 date: "20.05.2000",
                 time: "08:00",
-                info: "Raum D123"
+                info: "Raum D123",
+                description: "SV-Sitzung"
             }
         },
         fehlzeiten: {

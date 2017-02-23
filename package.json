@@ -1,8 +1,9 @@
 {
   "name": "angularfire",
   "version": "1.0.0",
-  "description": "",
+  "description": "Digitales Klassenbuch Schulprojekt",
   "main": "index.js",
+  "repository": "git@github.com:bfia5f/klasssenbuch.git",
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
     "bootstrap-sass-loader": "^1.0.10",
@@ -28,6 +29,6 @@
     "build": "npm run build-js & npm run build-sass",
     "test": "nodemon public/js/app.js"
   },
-  "author": "",
+  "author": "BFIA5F",
   "license": "ISC"
 }
