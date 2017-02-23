@@ -90,6 +90,7 @@ function htmlUpdate_missingTimes(currentUserUID) {
     getDebugStudentPromise(currentUserUID).then(function(studentObject) {
         $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
             createListItems(fehlzeiten, "missing-times-item", "#missing-times-list");
+            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large");
         });
     });
 }
