@@ -49,15 +49,15 @@
                                 <span class="icon-bar"></span>
                             </button>
                             <a class="navbar-brand" href="#"><img id="ph-profilepicture" src=""></a>
-                        </div>                        
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <div class="user-info">
-                            <img id="ph-profilepicture" class="img-responsive" alt="">
-                            <p class="user-info-constant">Username:
-                                <br><span class="user-info-variable placeholder" id="ph-username">Max Mustermann</span></p>
-                            <p class="user-info-constant">EMail:
-                                <br><span class="user-info-variable placeholder" id="ph-email">max@mustermail.de</span></p>
                         </div>
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <div class="user-info">
+                                <img id="ph-profilepicture" class="img-responsive" alt="">
+                                <p class="user-info-constant">Username:
+                                    <br><span class="user-info-variable placeholder" id="ph-username">Max Mustermann</span></p>
+                                <p class="user-info-constant">EMail:
+                                    <br><span class="user-info-variable placeholder" id="ph-email">max@mustermail.de</span></p>
+                            </div>
                             <ul class="nav navbar-nav">
                                 <li class="active nav-item">
                                     <a href="#start" data-toggle="tab">Start</a>
@@ -69,7 +69,7 @@
                                 <li class="nav-item"><a href="#einstellungen" data-toggle="tab">Einstellungen</a>
                                 </li>
                             </ul>
-                        </div>                        
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div class="row tab-content clearfix">
-                        <div class="tab-pane active" id="start">
+                        <div class="tab-pane" id="start">
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-xs-12 center-text">
@@ -123,13 +123,38 @@
                                 <p>dasdasd</p>
                             </div>
                         </div>
-                        <div class="tab-pane" id="fehlzeiten">
-                            <h3>FEHLZEITEN</h3>
+                        <div class="tab-pane active" id="fehlzeiten">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-xs-12">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <h2>Fehlstunden</h2>
                                         <ul class="max-height-list list-unstyled" id="missing-times-list-large">
                                         </ul>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <h2>Fehlstunden Verwaltung</h2>
+                                        <div class="excuses-wrapper">
+                                            <h3>Wähle eine Entschuldigung</h3>
+                                            <select class="select-excuses full-width hidden-sm hidden-md hidden-lg" name="excuses-selction">
+                                              <option value="1">Wecker nicht geklingelt</option>
+                                              <option value="2">Bahn hat verspätung</option>
+                                              <option value="3">Bus der Hurensohn</option>
+                                              <option value="4">Metoritenschauer am Wohnort</option>
+                                              <option value="5">Piraten haben Schwester geklaut</option>
+                                            </select>
+                                            <div class="radio-excuses-wrapper hidden-xs">
+                                                <div class="radio-excuses">
+                                                    <label><input type="radio" name="optradio">Verschlafen</label>
+                                                </div>
+                                                <div class="radio-excuses">
+                                                    <label><input type="radio" name="optradio">Bahn</label>
+                                                </div>
+                                                <div class="radio-excuses">
+                                                    <label><input type="radio" name="optradio">Bus</label>
+                                                </div>
+                                            </div>
+                                            <button type="button" name="button-excuses" class="btn btn-primary full-width">Senden</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

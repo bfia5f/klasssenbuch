@@ -89,8 +89,8 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
 function htmlUpdate_missingTimes(currentUserUID) {
     getDebugStudentPromise(currentUserUID).then(function(studentObject) {
         $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list");
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large");
+            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list",false);
+            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large", true);
         });
     });
 }
@@ -109,22 +109,37 @@ function htmlUpdate_timetable() {
     });
 }
 
-function createListItems(objectList, itemClassName, appendToElementWithID) {
+function createListItems(objectList, itemClassName, appendToElementWithID, showReason) {
     console.log(Object.keys(objectList));
+
     var newListItem = document.createElement('li');
     $(newListItem).addClass(itemClassName);
-    $.each(objectList, function(key, value) {
-        var tempText = document.createElement('p');
 
-        if (key == "status" && value == "pending") {
-            $(newListItem).addClass("pending");
-        } else if (key == "status" && value == "approved") {
-            $(newListItem).addClass("approved");
-        } else {
-            tempText.innerText = value;
-            $(newListItem).append(tempText);
+    $.each(objectList, function(key, value) {
+        switch (key) {
+            case "status":
+                if (value == "pending") {
+                    $(newListItem).addClass("pending");
+                } else if (value == "approved") {
+                    $(newListItem).addClass("approved");
+                }
+                break;
+            case "reason":
+                if (showReason) {
+                    var tempText = document.createElement('p');
+                    tempText.innerText = value;
+                }
+                break;
+            default:
+                var tempText = document.createElement('p');
+                tempText.innerText = value;
+                break;
         }
+        $(newListItem).append(tempText);
     });
+
+
+
     $(appendToElementWithID).append(newListItem);
 }
 /**
@@ -336,7 +351,8 @@ function forceWriteOfUserData(currentUser) {
                 date: "03.03.2000",
                 lesson: "Stunde: 3",
                 duration: "20min",
-                status: "approved"
+                status: "approved",
+                reason: "Wecker nicht geklingelt"
             },
             UID_3: {
                 date: "03.03.2000",
