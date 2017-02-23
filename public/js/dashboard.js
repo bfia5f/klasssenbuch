@@ -25,6 +25,7 @@ var database = firebase.database();
  */
 const refUsers = "user";
 const refClass = "class";
+const refDebug ="debug";
 const refStudent = refUsers + "/student/";
 const refTeacher = refUsers + "/teacher/";
 const refTimetable = "Timetable/teachers/";
@@ -47,6 +48,10 @@ $(document).ready(function() {
             htmlUpdate_user_username(currentUser.displayName);
             htmlUpdate_user_email(currentUser.email);
             htmlUpdate_user_profilePicture(currentUser.photoURL);
+
+            getDebugStudentPromise(currentUser.uid).then(function(studentObject){
+              console.log(studentObject.fehlzeiten);
+            });
             $('#debug_sendToDb').on('click', function() {
                 console.log(currentUser);
                 forceWriteOfUserData(currentUser);
@@ -103,11 +108,23 @@ function toggleLoading() {
 }
 
 /**
- * Lookup certain student
- * @return {promise} Student object as promise
+ * Get certain user as prommise
+ @param {string} userUID UID of the user to lookup
  */
-function getStudentPromise() {
-    var ref = database.ref(refStudent + "/" + cUser.uid);
+function getStudentPromise(userUID) {
+    var ref = database.ref(refStudent + "/" + userUID);
+    // TODO: Error handling
+    return ref.once("value").then(function(data) {
+        return data.val();
+    });
+}
+
+/**
+ * Get certain user as prommise from debug
+ @param {string} userUID UID of the user to lookup
+ */
+function getDebugStudentPromise(userUID) {
+    var ref = database.ref(refDebug + "/" + userUID);
     // TODO: Error handling
     return ref.once("value").then(function(data) {
         return data.val();
