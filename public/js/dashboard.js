@@ -90,18 +90,24 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
 function htmlUpdate_missingTimes(currentUserUID) {
     getDebugStudentPromise(currentUserUID).then(function(studentObject) {
         $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list", false);
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large", true);
+            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list", {
+              showReason: false,
+              addEventlistener: false
+            });
+            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large", {
+              showReason: true,
+              addEventlistener: true
+            });
         });
     });
 }
 
 function htmlUpdate_events(currentUserUID) {
-    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
-        $.each(studentObject.personalevent, function(key, personalevent) {
-            createListItems(personalevent, "next-event-item", "#next-events-list");
-        });
-    });
+    // getDebugStudentPromise(currentUserUID).then(function(studentObject) {
+    //     $.each(studentObject.personalevent, function(key, personalevent) {
+    //         createListItems(personalevent, "next-event-item", "#next-events-list");
+    //     });
+    // });
 }
 
 function htmlUpdate_timetable() {
@@ -132,31 +138,27 @@ function appendEventListenerToListitem(item, listener) {
 }
 
 function createListItems(objectList, itemClassName, appendToElementWithID, options) {
-    console.log(Object.keys(objectList));
-
+    console.log(objectList);
     var newListItem = document.createElement('li');
     $(newListItem).addClass(itemClassName);
 
-    if (options.showReason) {
-        showReasonOnListItem(newListItem);
-    }
-    if (options.addEventlistener) {
-        addEventlistenerOnListItem(newListItem);
-    }
-
     $.each(objectList, function(key, value) {
-        if (key.status && value == "pending") {
+        if (value == "pending") {
             $(newListItem).addClass("pending");
-        } else if (key.status && value == "approved") {
+        } else if (value == "approved") {
             $(newListItem).addClass("approved");
         }
-        var tempText = document.createElement('p');
-        tempText.innerText = value;
-        $(newListItem).append(tempText);
+        if(options.showReason && key == "reason" || key != "reason" && key != "status"){
+          var tempText = document.createElement('p');
+          tempText.innerText = value;
+          $(newListItem).append(tempText);
+        }
     });
     $(appendToElementWithID).append(newListItem);
-    appendEventListenerToListitem(newListItem, 'click');
-    appendEventListenerToListitem(newListItem, 'mouse');
+    if(options.addEventlistener){
+      appendEventListenerToListitem(newListItem, 'click');
+      appendEventListenerToListitem(newListItem, 'mouse');
+    }
 }
 
 /**
