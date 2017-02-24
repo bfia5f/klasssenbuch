@@ -51,6 +51,7 @@ $(document).ready(function() {
             htmlUpdate_events(currentUser.uid);
             htmlUpdate_timetable();
 
+
             $('#debug_sendToDb').on('click', function() {
                 forceWriteOfUserData(currentUser);
             });
@@ -89,7 +90,7 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
 function htmlUpdate_missingTimes(currentUserUID) {
     getDebugStudentPromise(currentUserUID).then(function(studentObject) {
         $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list",false);
+            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list", false);
             createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large", true);
         });
     });
@@ -109,39 +110,55 @@ function htmlUpdate_timetable() {
     });
 }
 
-function createListItems(objectList, itemClassName, appendToElementWithID, showReason) {
+function appendEventListenerToListitem(item, listener) {
+    switch (listener) {
+        case "mouse":
+            $(item)
+                .mouseenter(function() {
+                    $(item).addClass("hover");
+                }).mouseleave(function() {
+                    $(item).removeClass("hover");
+                });
+            break;
+        case "click":
+            $(item).on('click', function() {
+                $(item).toggleClass('selected');
+            })
+            break;
+
+        default:
+
+    }
+}
+
+function createListItems(objectList, itemClassName, appendToElementWithID, options) {
     console.log(Object.keys(objectList));
 
     var newListItem = document.createElement('li');
     $(newListItem).addClass(itemClassName);
 
+    if (options.showReason) {
+        showReasonOnListItem(newListItem);
+    }
+    if (options.addEventlistener) {
+        addEventlistenerOnListItem(newListItem);
+    }
+
     $.each(objectList, function(key, value) {
-        switch (key) {
-            case "status":
-                if (value == "pending") {
-                    $(newListItem).addClass("pending");
-                } else if (value == "approved") {
-                    $(newListItem).addClass("approved");
-                }
-                break;
-            case "reason":
-                if (showReason) {
-                    var tempText = document.createElement('p');
-                    tempText.innerText = value;
-                }
-                break;
-            default:
-                var tempText = document.createElement('p');
-                tempText.innerText = value;
-                break;
+        if (key.status && value == "pending") {
+            $(newListItem).addClass("pending");
+        } else if (key.status && value == "approved") {
+            $(newListItem).addClass("approved");
         }
+        var tempText = document.createElement('p');
+        tempText.innerText = value;
         $(newListItem).append(tempText);
     });
-
-
-
     $(appendToElementWithID).append(newListItem);
+    appendEventListenerToListitem(newListItem, 'click');
+    appendEventListenerToListitem(newListItem, 'mouse');
 }
+
 /**
  * Show/Hide loading screen
  * @return {null} Nothing gets returned
