@@ -18,6 +18,14 @@
 	&.pending{
 		color: $red;
 	}
+  &.hover{
+    color: black;
+    background-color: $light-gray;
+  }
+  &.selected{
+    color: $text-color;
+    background-color: $light-orange
+  }
 }
 
 .content-wrapper{
