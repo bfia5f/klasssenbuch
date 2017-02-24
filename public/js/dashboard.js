@@ -103,11 +103,14 @@ function htmlUpdate_missingTimes(currentUserUID) {
 }
 
 function htmlUpdate_events(currentUserUID) {
-    // getDebugStudentPromise(currentUserUID).then(function(studentObject) {
-    //     $.each(studentObject.personalevent, function(key, personalevent) {
-    //         createListItems(personalevent, "next-event-item", "#next-events-list");
-    //     });
-    // });
+    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
+        $.each(studentObject.personalevent, function(key, personalevent) {
+            createListItems(personalevent, "next-event-item", "#next-events-list",{
+              showReason: false,
+              addEventlistener: false
+            });
+        });
+    });
 }
 
 function htmlUpdate_timetable() {
