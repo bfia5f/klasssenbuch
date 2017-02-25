@@ -55,6 +55,11 @@ $(document).ready(function() {
             $('#debug_sendToDb').on('click', function() {
                 forceWriteOfUserData(currentUser);
             });
+            $('#btn-excuses').on('click', function(eventInfo) {
+                $.each($('.selected'),function(element){                 
+                    setExcuse(currentUser.uid,$(this).get(0).id,$('#radio-excuses-wrapper input:checked').get(0).value);
+                });
+            })
             toggleLoading();
         } else {
             window.location.href = "/unauthorized.html";
@@ -89,14 +94,16 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
 // #### FILL DASHBOARD ELEMENTS ####
 function htmlUpdate_missingTimes(currentUserUID) {
     getDebugStudentPromise(currentUserUID).then(function(studentObject) {
+        console.log(studentObject.fehlzeiten);
         $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
             createListItems(fehlzeiten, "missing-times-item", "#missing-times-list", {
-              showReason: false,
-              addEventlistener: false
+                showReason: false,
+                addEventlistener: false,
             });
             createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large", {
-              showReason: true,
-              addEventlistener: true
+                showReason: true,
+                addEventlistener: true,
+                appendID: key
             });
         });
     });
@@ -105,9 +112,9 @@ function htmlUpdate_missingTimes(currentUserUID) {
 function htmlUpdate_events(currentUserUID) {
     getDebugStudentPromise(currentUserUID).then(function(studentObject) {
         $.each(studentObject.personalevent, function(key, personalevent) {
-            createListItems(personalevent, "next-event-item", "#next-events-list",{
-              showReason: false,
-              addEventlistener: false
+            createListItems(personalevent, "next-event-item", "#next-events-list", {
+                showReason: false,
+                addEventlistener: false
             });
         });
     });
@@ -116,6 +123,12 @@ function htmlUpdate_events(currentUserUID) {
 function htmlUpdate_timetable() {
     getTimetablePromise().then(function(timetable) {
         $('#timetable-wrapper').html(timetable);
+    });
+}
+
+function setExcuse(userUID,elementID,reason) {
+    database.ref(refDebug+'/'+userUID+'/fehlzeiten/'+elementID).update({
+        reason: reason
     });
 }
 
@@ -141,8 +154,10 @@ function appendEventListenerToListitem(item, listener) {
 }
 
 function createListItems(objectList, itemClassName, appendToElementWithID, options) {
-    console.log(objectList);
     var newListItem = document.createElement('li');
+    if (options.appendID) {
+        $(newListItem).attr('id', options.appendID);
+    }
     $(newListItem).addClass(itemClassName);
 
     $.each(objectList, function(key, value) {
@@ -151,16 +166,16 @@ function createListItems(objectList, itemClassName, appendToElementWithID, optio
         } else if (value == "approved") {
             $(newListItem).addClass("approved");
         }
-        if(options.showReason && key == "reason" || key != "reason" && key != "status"){
-          var tempText = document.createElement('p');
-          tempText.innerText = value;
-          $(newListItem).append(tempText);
+        if (options.showReason && key == "reason" || key != "reason" && key != "status") {
+            var tempText = document.createElement('p');
+            tempText.innerText = value;
+            $(newListItem).append(tempText);
         }
     });
     $(appendToElementWithID).append(newListItem);
-    if(options.addEventlistener){
-      appendEventListenerToListitem(newListItem, 'click');
-      appendEventListenerToListitem(newListItem, 'mouse');
+    if (options.addEventlistener) {
+        appendEventListenerToListitem(newListItem, 'click');
+        appendEventListenerToListitem(newListItem, 'mouse');
     }
 }
 
