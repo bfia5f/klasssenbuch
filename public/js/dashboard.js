@@ -23,20 +23,16 @@ var database = firebase.database();
 /*
   Paths to DB 'objects'
  */
-const refUsers = "user";
-const refClass = "class";
-const refDebug = "debug";
-const refStudent = refUsers + "/student/";
-const refTeacher = refUsers + "/teacher/";
-const refTimetable = "Timetable/teachers/";
+var refUsers = "user";
+var refClass = "class";
+var refDebug = "debug";
+var refStudent = refUsers + "/student/";
+var refTeacher = refUsers + "/teacher/";
+var refTimetable = "Timetable/teachers/";
 
+var cUser = null;
 
 $(document).ready(function() {
-    var cUser = null;
-    /**
-     * Authentication state of a user changed (logged in/out)
-     * @type {[type]}
-     */
     firebase.auth().onAuthStateChanged(function(currentUser) {
         if (currentUser) {
             /*
@@ -51,13 +47,20 @@ $(document).ready(function() {
             htmlUpdate_events(currentUser.uid);
             htmlUpdate_timetable();
 
+            var snap = database.ref(refDebug).on('value', function(snapshotValue) {
+                // console.log("snapshotValue: ", snapshotValue.val().currentUser.uid);
+                return snapshotValue
+            });
+            if (snap) {
+              console.log(snap);
+            }
 
             $('#debug_sendToDb').on('click', function() {
                 forceWriteOfUserData(currentUser);
             });
             $('#btn-excuses').on('click', function(eventInfo) {
-                $.each($('.selected'),function(element){                 
-                    setExcuse(currentUser.uid,$(this).get(0).id,$('#radio-excuses-wrapper input:checked').get(0).value);
+                $.each($('.selected'), function(element) {
+                    setExcuse(currentUser.uid, $(this).get(0).id, $('#radio-excuses-wrapper input:checked').get(0).value);
                 });
             })
             toggleLoading();
@@ -66,17 +69,8 @@ $(document).ready(function() {
         }
     });
 
-
-
-    // $('#save-profile-changes').on('click', updateProfileInfo());
-
-    // $("#select_class_list").on('change', function(eventInfo) {
-    //     updateClassList(eventInfo);
-    // });
-
-    // $('#btn-logout').on('click', logout());
+    console.log("DONe");
 });
-
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
     $('#ph-username').innerText = userName;
@@ -126,9 +120,10 @@ function htmlUpdate_timetable() {
     });
 }
 
-function setExcuse(userUID,elementID,reason) {
-    database.ref(refDebug+'/'+userUID+'/fehlzeiten/'+elementID).update({
-        reason: reason
+function setExcuse(userUID, elementID, reason) {
+    database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
+        reason: reason,
+        status: "approved"
     });
 }
 
