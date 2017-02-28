@@ -33,44 +33,73 @@ var refTimetable = "Timetable/teachers/";
 var cUser = null;
 
 $(document).ready(function() {
+
+    var DISPLAYNAME = getCookieValue('userdisplayname');
+    var EMAIL = getCookieValue('useremail');
+    var UID = getCookieValue('useruid');
+    var PHOTOURL = getCookieValue('userphotourl');
+
+    htmlUpdate_user_username(DISPLAYNAME);
+    htmlUpdate_user_email(EMAIL);
+    htmlUpdate_user_profilePicture(PHOTOURL);
+    htmlUpdate_missingTimes(UID);
+    htmlUpdate_events(UID);
+    htmlUpdate_timetable();
+    console.log(UID);
+    database.ref(refDebug + '/' + UID + '/fehlzeiten').on('value', function(snapshot) {
+        console.log(snapshot.val());
+        $('#missing-times-list-large').children().remove();
+        $.each(snapshot.val(), function(key,value) {
+            createListItems(value, "missing-times-item", "#missing-times-list-large", {
+                showReason: true,
+                addEventlistener: true,
+                appendID: "myid"
+            });
+        });
+    });
+
+
     firebase.auth().onAuthStateChanged(function(currentUser) {
         if (currentUser) {
-            /*
-            Code that sits in here will run when the user is
-            successfully logged in.
-            In This scope we will have the user object available
-            */
-            htmlUpdate_user_username(currentUser.displayName);
-            htmlUpdate_user_email(currentUser.email);
-            htmlUpdate_user_profilePicture(currentUser.photoURL);
-            htmlUpdate_missingTimes(currentUser.uid);
-            htmlUpdate_events(currentUser.uid);
-            htmlUpdate_timetable();
-
-            var snap = database.ref(refDebug).on('value', function(snapshotValue) {
-                // console.log("snapshotValue: ", snapshotValue.val().currentUser.uid);
-                return snapshotValue
-            });
-            if (snap) {
-              console.log(snap);
-            }
-
+            document.cookie = "useruid=" + currentUser.uid;
+            document.cookie = "userphotourl=" + currentUser.photoURL;
+            document.cookie = "useremail=" + currentUser.email;
+            document.cookie = "userdisplayname=" + currentUser.displayName;
             $('#debug_sendToDb').on('click', function() {
                 forceWriteOfUserData(currentUser);
             });
-            $('#btn-excuses').on('click', function(eventInfo) {
-                $.each($('.selected'), function(element) {
-                    setExcuse(currentUser.uid, $(this).get(0).id, $('#radio-excuses-wrapper input:checked').get(0).value);
-                });
-            })
-            toggleLoading();
         } else {
+            document.cookie = "useruid=''";
+            document.cookie = "userphotourl=''";
+            document.cookie = "useremail=''";
+            document.cookie = "userdisplayname=''";
             window.location.href = "/unauthorized.html";
         }
     });
 
-    console.log("DONe");
+    $('#btn-excuses').on('click', function(eventInfo) {
+        $.each($('.selected'), function(element) {
+            setExcuse(UID, $(this).get(0).id, $('#radio-excuses-wrapper input:checked').get(0).value);
+        });
+    });
+    $('#logout').on('click', function() {
+        firebase.auth().signOut().then(function() {
+            window.location = "index.html";
+            document.cookie = "useruid=''";
+            document.cookie = "userphotourl=''";
+            document.cookie = "useremail=''";
+            document.cookie = "userdisplayname=''";
+        });
+    });
+    toggleLoading();
 });
+
+function getCookieValue(key) {
+    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+    return keyValue ? keyValue[2] : null;
+}
+
+
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
     $('#ph-username').innerText = userName;
@@ -140,7 +169,7 @@ function appendEventListenerToListitem(item, listener) {
         case "click":
             $(item).on('click', function() {
                 $(item).toggleClass('selected');
-            })
+            });
             break;
 
         default:

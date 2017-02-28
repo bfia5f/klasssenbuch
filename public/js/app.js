@@ -9,23 +9,29 @@ var config = {
     databaseURL: "https://klassenbuch-92827.firebaseio.com",
     storageBucket: "klassenbuch-92827.appspot.com",
     messagingSenderId: "924031502781"
-  };
-firebase.initializeApp(config);
-
-var uiConfig = {
-    signInSuccessUrl: 'dashboard.html',
-    signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
-    ],
-    // Terms of service url.
-    tosUrl: '<your-tos-url>'
 };
+firebase.initializeApp(config);
+document.cookie="useruid=''";
+$(document).ready(function() {
+    $('#login-google').on('click', function() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/plus.login');
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            var token = result.credential.accessToken;
+            console.log(result.user);
 
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
-// The start method will wait until the DOM is loaded.
-ui.start('#firebaseui-auth-container', uiConfig);
+            document.cookie="useruid="+result.user.uid;
+            document.cookie="userphotourl="+result.user.photoURL;
+            document.cookie="useremail="+result.user.email;
+            document.cookie="userdisplayname="+result.user.displayName;
+
+            window.location = "dashboard.html";
+        }).catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            var email = error.email;
+            var credential = error.credential;
+            console.log(error);
+        });
+    });
+});
