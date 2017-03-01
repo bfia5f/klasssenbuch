@@ -47,19 +47,24 @@ $(document).ready(function() {
             htmlUpdate_events(currentUser.uid);
             htmlUpdate_timetable();
 
-            var snap = database.ref(refDebug).on('value', function(snapshotValue) {
-                // console.log("snapshotValue: ", snapshotValue.val().currentUser.uid);
-                return snapshotValue
+            database.ref(refDebug + '/' + currentUser.uid + '/fehlzeiten').on('value', function(snapShot) {
+                $('#missing-times-list-large').children().remove();
+                $.each(snapShot.val(), function(key, value) {
+                    console.log('List item to append: ', value);
+                    createListItems(value, 'missing-times-item', '#missing-times-list-large', {
+                        showReason: true,
+                        addEventlistener: true,
+                        appendID: key
+                    });
+                })
             });
-            if (snap) {
-              console.log(snap);
-            }
 
             $('#debug_sendToDb').on('click', function() {
                 forceWriteOfUserData(currentUser);
             });
             $('#btn-excuses').on('click', function(eventInfo) {
                 $.each($('.selected'), function(element) {
+                    console.log('Element ID', $(this).get(0).id);
                     setExcuse(currentUser.uid, $(this).get(0).id, $('#radio-excuses-wrapper input:checked').get(0).value);
                 });
             })
@@ -69,7 +74,6 @@ $(document).ready(function() {
         }
     });
 
-    console.log("DONe");
 });
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
@@ -88,7 +92,6 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
 // #### FILL DASHBOARD ELEMENTS ####
 function htmlUpdate_missingTimes(currentUserUID) {
     getDebugStudentPromise(currentUserUID).then(function(studentObject) {
-        console.log(studentObject.fehlzeiten);
         $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
             createListItems(fehlzeiten, "missing-times-item", "#missing-times-list", {
                 showReason: false,
