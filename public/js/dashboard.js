@@ -50,7 +50,6 @@ $(document).ready(function() {
             database.ref(refDebug + '/' + currentUser.uid + '/fehlzeiten').on('value', function(snapShot) {
                 $('#missing-times-list-large').children().remove();
                 $.each(snapShot.val(), function(key, value) {
-                    console.log('List item to append: ', value);
                     createListItems(value, 'missing-times-item', '#missing-times-list-large', {
                         showReason: true,
                         addEventlistener: true,
@@ -62,12 +61,16 @@ $(document).ready(function() {
             $('#debug_sendToDb').on('click', function() {
                 forceWriteOfUserData(currentUser);
             });
-            $('#btn-excuses').on('click', function(eventInfo) {
-                $.each($('.selected'), function(element) {
-                    console.log('Element ID', $(this).get(0).id);
+            $('#btn-excuses').on('click', function() {
+                $.each($('.selected'), function() {
                     setExcuse(currentUser.uid, $(this).get(0).id, $('#radio-excuses-wrapper input:checked').get(0).value);
                 });
-            })
+            });
+            $('#btn-unsetexcuses').on('click', function(){
+              $.each($('.selected'), function(){
+                unsetExcuse(currentUser.uid, $(this).get(0).id);
+              });
+            });
             toggleLoading();
         } else {
             window.location.href = "/unauthorized.html";
@@ -128,6 +131,14 @@ function setExcuse(userUID, elementID, reason) {
         reason: reason,
         status: "approved"
     });
+}
+
+function unsetExcuse(userUID, elementID){
+  console.log("Unsetting: ", elementID);
+  database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
+    reason: "",
+    status: "pending"
+  });
 }
 
 function appendEventListenerToListitem(item, listener) {
