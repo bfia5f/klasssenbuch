@@ -43,17 +43,21 @@ $(document).ready(function() {
             htmlUpdate_user_username(currentUser.displayName);
             htmlUpdate_user_email(currentUser.email);
             htmlUpdate_user_profilePicture(currentUser.photoURL);
-            htmlUpdate_missingTimes(currentUser.uid);
             htmlUpdate_events(currentUser.uid);
             htmlUpdate_timetable();
 
             database.ref(refDebug + '/' + currentUser.uid + '/fehlzeiten').on('value', function(snapShot) {
                 $('#missing-times-list-large').children().remove();
+                $('#missing-times-list').children().remove();
                 $.each(snapShot.val(), function(key, value) {
                     createListItems(value, 'missing-times-item', '#missing-times-list-large', {
                         showReason: true,
                         addEventlistener: true,
                         appendID: key
+                    });
+                    createListItems(value, "missing-times-item", "#missing-times-list", {
+                        showReason: false,
+                        addEventlistener: false,
                     });
                 })
             });
