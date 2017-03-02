@@ -117,9 +117,9 @@ function htmlUpdate_timetable() {
     });
 }
 
-function setExcuse(userUID, elementID, reason) {
+function setExcuse(userUID, elementID, description) {
     database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
-        reason: reason,
+        description: description,
         status: "approved"
     });
 }
@@ -127,7 +127,7 @@ function setExcuse(userUID, elementID, reason) {
 function unsetExcuse(userUID, elementID){
   console.log("Unsetting: ", elementID);
   database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
-    reason: "",
+    description: "",
     status: "pending"
   });
 }
