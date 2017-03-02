@@ -43,23 +43,25 @@ $(document).ready(function() {
             htmlUpdate_user_username(currentUser.displayName);
             htmlUpdate_user_email(currentUser.email);
             htmlUpdate_user_profilePicture(currentUser.photoURL);
-            htmlUpdate_events(currentUser.uid);
+            // htmlUpdate_events(currentUser.uid);
             htmlUpdate_timetable();
 
-            database.ref(refDebug + '/' + currentUser.uid + '/fehlzeiten').on('value', function(snapShot) {
-                $('#missing-times-list-large').children().remove();
-                $('#missing-times-list').children().remove();
-                $.each(snapShot.val(), function(key, value) {
-                    createListItems(value, 'missing-times-item', '#missing-times-list-large', {
-                        showReason: true,
-                        addEventlistener: true,
-                        appendID: key
-                    });
-                    createListItems(value, "missing-times-item", "#missing-times-list", {
-                        showReason: false,
-                        addEventlistener: false,
-                    });
-                })
+            // Passed to function
+            // database Path, ID of list to update, options
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list-large',{
+                showReason: true,
+                addEventlistener: true,
+                className: 'missing-times-item'
+            });
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list',{
+              showReason: false,
+              addEventlistener: false,
+              className: 'missing-times-item'
+            });
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', '#next-events-list',{
+              showReason: false,
+              addEventlistener: false,
+              className: 'next-event-item'
             });
 
             $('#debug_sendToDb').on('click', function() {
@@ -82,6 +84,19 @@ $(document).ready(function() {
     });
 
 });
+
+function updateListOnValueChange(refPath, listID, options) {
+  database.ref(refPath).on('value', function(snapShot) {
+      $(listID).children().remove();
+      $.each(snapShot.val(), function(key, value) {
+          createListItems(value, options.className, listID, {
+              showReason: options.showReason,
+              addEventlistener: options.addEventlistener,
+              appendID: key
+          });
+      });
+  });
+}
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
     $('#ph-username').innerText = userName;
