@@ -90,7 +90,7 @@ function updateListOnValueChange(refPath, listID, options) {
       $(listID).children().remove();
       $.each(snapShot.val(), function(key, value) {
           createListItems(value, options.className, listID, {
-              showReason: options.showReason,
+              showReason: options.showDescription,
               addEventlistener: options.addEventlistener,
               appendID: key
           });
@@ -106,38 +106,10 @@ function htmlUpdate_user_email(userEmail) {
     $('#ph-email').innerText = userEmail;
 }
 
-function htmlUpdate_user_class(userClass) {}
-
 function htmlUpdate_user_profilePicture(userProfileImageURL) {
     $('#ph-profilepicture').get(0).src = userProfileImageURL;
 }
 // #### FILL DASHBOARD ELEMENTS ####
-function htmlUpdate_missingTimes(currentUserUID) {
-    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
-        $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list", {
-                showReason: false,
-                addEventlistener: false,
-            });
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large", {
-                showReason: true,
-                addEventlistener: true,
-                appendID: key
-            });
-        });
-    });
-}
-
-function htmlUpdate_events(currentUserUID) {
-    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
-        $.each(studentObject.personalevent, function(key, personalevent) {
-            createListItems(personalevent, "next-event-item", "#next-events-list", {
-                showReason: false,
-                addEventlistener: false
-            });
-        });
-    });
-}
 
 function htmlUpdate_timetable() {
     getTimetablePromise().then(function(timetable) {
@@ -194,7 +166,7 @@ function createListItems(objectList, itemClassName, appendToElementWithID, optio
         } else if (value == "approved") {
             $(newListItem).addClass("approved");
         }
-        if (options.showReason && key == "reason" || key != "reason" && key != "status") {
+        if (options.showDescription && key == "description" || key != "reason" && key != "status") {
             var tempText = document.createElement('p');
             tempText.innerText = value;
             $(newListItem).append(tempText);
@@ -372,6 +344,18 @@ function forceWriteOfUserData(currentUser) {
                 time: "08:00",
                 info: "Raum D123",
                 description: "SV-Sitzung"
+            },
+            SVSitzung2: {
+                date: "01.05.2001",
+                time: "10:30",
+                info: "Raum D122",
+                description: "SV-Sitzung-2"
+            },
+            SVSitzung3: {
+                date: "24.06.2023",
+                time: "09:45",
+                info: "Raum B123",
+                description: "SV-Sitzung-3"
             }
         },
         fehlzeiten: {
@@ -386,7 +370,7 @@ function forceWriteOfUserData(currentUser) {
                 lesson: "Stunde: 3",
                 duration: "20min",
                 status: "approved",
-                reason: "Wecker nicht geklingelt"
+                description: "Wecker nicht geklingelt"
             },
             UID_3: {
                 date: "03.03.2000",
