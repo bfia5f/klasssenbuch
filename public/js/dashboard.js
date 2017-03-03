@@ -48,20 +48,20 @@ $(document).ready(function() {
 
             // Passed to function
             // database Path, ID of list to update, options
-            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list-large',{
-                showReason: true,
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list', {
+                showDescription: false,
+                addEventlistener: false,
+                className: 'missing-times-item'
+            });
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list-large', {
+                showDescription: true,
                 addEventlistener: true,
                 className: 'missing-times-item'
             });
-            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list',{
-              showReason: false,
-              addEventlistener: false,
-              className: 'missing-times-item'
-            });
-            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', '#next-events-list',{
-              showReason: false,
-              addEventlistener: false,
-              className: 'next-event-item'
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', '#next-events-list', {
+                showDescription: false,
+                addEventlistener: false,
+                className: 'next-event-item'
             });
 
             $('#debug_sendToDb').on('click', function() {
@@ -72,30 +72,37 @@ $(document).ready(function() {
                     setExcuse(currentUser.uid, $(this).get(0).id, $('#radio-excuses-wrapper input:checked').get(0).value);
                 });
             });
-            $('#btn-unsetexcuses').on('click', function(){
-              $.each($('.selected'), function(){
-                unsetExcuse(currentUser.uid, $(this).get(0).id);
-              });
+            $('#btn-unsetexcuses').on('click', function() {
+                $.each($('.selected'), function() {
+                    unsetExcuse(currentUser.uid, $(this).get(0).id);
+                });
+            });
+            $('.color-item').on('click', function() {
+                var selectedColorClass = $(this).get(0).classList[1];
+                $('.navbar-fixed-side').attr('class',
+                    function(i, c) {
+                        return c.replace(/(^|\s)color-\S+/g, '');
+                    });
+                $('.navbar-fixed-side').addClass(selectedColorClass);
             });
             toggleLoading();
         } else {
             window.location.href = "/unauthorized.html";
         }
-    });
-
-});
+    }); // AUTH END
+}); // DOCUMENT READY END
 
 function updateListOnValueChange(refPath, listID, options) {
-  database.ref(refPath).on('value', function(snapShot) {
-      $(listID).children().remove();
-      $.each(snapShot.val(), function(key, value) {
-          createListItems(value, options.className, listID, {
-              showReason: options.showDescription,
-              addEventlistener: options.addEventlistener,
-              appendID: key
-          });
-      });
-  });
+    database.ref(refPath).on('value', function(snapShot) {
+        $(listID).children().remove();
+        $.each(snapShot.val(), function(key, value) {
+            createListItems(value, options.className, listID, {
+                showDescription: options.showDescription,
+                addEventlistener: options.addEventlistener,
+                appendID: key
+            });
+        });
+    });
 }
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
@@ -124,12 +131,12 @@ function setExcuse(userUID, elementID, description) {
     });
 }
 
-function unsetExcuse(userUID, elementID){
-  console.log("Unsetting: ", elementID);
-  database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
-    description: "",
-    status: "pending"
-  });
+function unsetExcuse(userUID, elementID) {
+    console.log("Unsetting: ", elementID);
+    database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
+        description: "",
+        status: "pending"
+    });
 }
 
 function appendEventListenerToListitem(item, listener) {
@@ -166,7 +173,7 @@ function createListItems(objectList, itemClassName, appendToElementWithID, optio
         } else if (value == "approved") {
             $(newListItem).addClass("approved");
         }
-        if (options.showDescription && key == "description" || key != "reason" && key != "status") {
+        if (options.showDescription && key == "description" || key != "description" && key != "status") {
             var tempText = document.createElement('p');
             tempText.innerText = value;
             $(newListItem).append(tempText);
