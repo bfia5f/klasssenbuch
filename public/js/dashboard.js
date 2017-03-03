@@ -46,6 +46,14 @@ $(document).ready(function() {
             // htmlUpdate_events(currentUser.uid);
             htmlUpdate_timetable();
 
+            // Restore set sidebar color
+            console.log(document.cookie);
+            var sidebarColorClass = checkCookieForKey("sidebarColor");
+            if (sidebarColorClass) {
+              console.log("Found sidebarcolor: ", sidebarColorClass);
+              updateHTML_sidebarColor(sidebarColorClass);
+            }
+
             // Passed to function
             // database Path, ID of list to update, options
             updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list', {
@@ -78,13 +86,11 @@ $(document).ready(function() {
                 });
             });
             $('.color-item').on('click', function() {
-                var selectedColorClass = $(this).get(0).classList[1];
-                $('.navbar-fixed-side').attr('class',
-                    function(i, c) {
-                        return c.replace(/(^|\s)color-\S+/g, '');
-                    });
-                $('.navbar-fixed-side').addClass(selectedColorClass);
+              sidebarColorClass = $(this).get(0).classList[1];
+                updateHTML_sidebarColor(sidebarColorClass);
             });
+
+
             toggleLoading();
         } else {
             window.location.href = "/unauthorized.html";
@@ -104,6 +110,24 @@ function updateListOnValueChange(refPath, listID, options) {
         });
     });
 }
+
+function checkCookieForKey(searchedValue) {
+  var cookieSplit = document.cookie.split(";");
+    $.each(cookieSplit, function(key, value) {
+        var cookieLineSplit = value.split("=");
+        console.log(cookieLineSplit);
+        $.each(cookieLineSplit, function(lineKey, lineValue){
+          console.log("Key: ",lineKey );
+          console.log("Value: ",lineValue );
+          console.log("Searched: ", searchedValue);
+          if (lineValue == searchedValue) {
+              console.log("Found searched key");
+              return cookieLineSplit[1];
+          }
+        });
+    });
+    return false;
+}
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
     $('#ph-username').innerText = userName;
@@ -117,6 +141,13 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
     $('#ph-profilepicture').get(0).src = userProfileImageURL;
 }
 // #### FILL DASHBOARD ELEMENTS ####
+function updateHTML_sidebarColor(colorclass){
+  $('.navbar-fixed-side').attr('class',
+      function(i, c) {
+          return c.replace(/(^|\s)color-\S+/g, colorclass);
+      });
+  document.cookie = "sidebarColor=" + colorclass;
+}
 
 function htmlUpdate_timetable() {
     getTimetablePromise().then(function(timetable) {
@@ -132,7 +163,6 @@ function setExcuse(userUID, elementID, description) {
 }
 
 function unsetExcuse(userUID, elementID) {
-    console.log("Unsetting: ", elementID);
     database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
         description: "",
         status: "pending"
