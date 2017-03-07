@@ -48,9 +48,13 @@ $(document).ready(function() {
 
             // Restore set sidebar color
             var sidebarColorClass = checkCookieForKey("sidebarColor");
-            console.log("Found sidebarcolor: ", sidebarColorClass);
             if (sidebarColorClass) {
               updateHTML_sidebarColor(sidebarColorClass);
+            }
+            // Restore content background color
+            var contentColorClass = checkCookieForKey("contentColor");
+            if (contentColorClass) {
+              updateHTML_contentColor(contentColorClass);
             }
 
             // Passed to function
@@ -84,9 +88,13 @@ $(document).ready(function() {
                     unsetExcuse(currentUser.uid, $(this).get(0).id);
                 });
             });
-            $('.color-item').on('click', function() {
+            $('.color-sidebar').on('click', function() {
               sidebarColorClass = $(this).get(0).classList[1];
                 updateHTML_sidebarColor(sidebarColorClass);
+            });
+            $('.color-content').on('click', function() {
+              contentColorClass = $(this).get(0).classList[1];
+                updateHTML_contentColor(contentColorClass);
             });
 
 
@@ -115,7 +123,6 @@ function checkCookieForKey(searchedValue) {
   var cookieSplit = document.cookie.split(";");
   $.each(cookieSplit, function(key, value){
     if (cookieSplit[key].indexOf(searchedValue) > 0) {
-      console.log("Found color: ", cookieSplit[key].split("=")[1]);
       foundValue =  cookieSplit[key].split("=")[1];
     }
   });
@@ -140,6 +147,14 @@ function updateHTML_sidebarColor(colorclass){
           return c.replace(/(^|\s)color-\S+/g, ' '+colorclass);
       });
   document.cookie = "sidebarColor=" + colorclass;
+}
+function updateHTML_contentColor(colorclass){
+  console.log("Updating content bg color");
+  $('.content-wrapper').attr('class',
+      function(i, c) {
+          return c.replace(/(^|\s)color-\S+/g, ' '+colorclass);
+      });
+  document.cookie = "contentColor=" + colorclass;
 }
 
 function htmlUpdate_timetable() {
