@@ -47,10 +47,9 @@ $(document).ready(function() {
             htmlUpdate_timetable();
 
             // Restore set sidebar color
-            console.log(document.cookie);
             var sidebarColorClass = checkCookieForKey("sidebarColor");
+            console.log("Found sidebarcolor: ", sidebarColorClass);
             if (sidebarColorClass) {
-              console.log("Found sidebarcolor: ", sidebarColorClass);
               updateHTML_sidebarColor(sidebarColorClass);
             }
 
@@ -112,21 +111,15 @@ function updateListOnValueChange(refPath, listID, options) {
 }
 
 function checkCookieForKey(searchedValue) {
+  var foundValue = null;
   var cookieSplit = document.cookie.split(";");
-    $.each(cookieSplit, function(key, value) {
-        var cookieLineSplit = value.split("=");
-        console.log(cookieLineSplit);
-        $.each(cookieLineSplit, function(lineKey, lineValue){
-          console.log("Key: ",lineKey );
-          console.log("Value: ",lineValue );
-          console.log("Searched: ", searchedValue);
-          if (lineValue == searchedValue) {
-              console.log("Found searched key");
-              return cookieLineSplit[1];
-          }
-        });
-    });
-    return false;
+  $.each(cookieSplit, function(key, value){
+    if (cookieSplit[key].indexOf(searchedValue) > 0) {
+      console.log("Found color: ", cookieSplit[key].split("=")[1]);
+      foundValue =  cookieSplit[key].split("=")[1];
+    }
+  });
+  return foundValue;
 }
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
@@ -144,7 +137,7 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
 function updateHTML_sidebarColor(colorclass){
   $('.navbar-fixed-side').attr('class',
       function(i, c) {
-          return c.replace(/(^|\s)color-\S+/g, colorclass);
+          return c.replace(/(^|\s)color-\S+/g, ' '+colorclass);
       });
   document.cookie = "sidebarColor=" + colorclass;
 }
