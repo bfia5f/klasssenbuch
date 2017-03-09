@@ -4,9 +4,15 @@
 var $ = global.jQuery = require('jquery');
 var bootstrap = require('bootstrap-sass');
 var firebase = require('firebase');
+var htmlHelper = require('./htmlHelper.js');
+// var eventLogik = require('./events.js');
+
 /*
   Init Firebase
  */
+
+// console.log(eventLogik.test());
+// console.log(htmlHelper.test());
 var config = {
     apiKey: "AIzaSyDtQiCxcoTg6C4sk_rDwutRtfCXeSQMSHA",
     authDomain: "klassenbuch-92827.firebaseapp.com",
@@ -43,7 +49,6 @@ $(document).ready(function() {
             htmlUpdate_user_username(currentUser.displayName);
             htmlUpdate_user_email(currentUser.email);
             htmlUpdate_user_profilePicture(currentUser.photoURL);
-            // htmlUpdate_events(currentUser.uid);
             htmlUpdate_timetable();
 
             // Restore set sidebar color
@@ -109,7 +114,7 @@ function updateListOnValueChange(refPath, listID, options) {
     database.ref(refPath).on('value', function(snapShot) {
         $(listID).children().remove();
         $.each(snapShot.val(), function(key, value) {
-            createListItems(value, options.className, listID, {
+            htmlHelper.updateList(value, options.className, listID, {
                 showDescription: options.showDescription,
                 addEventlistener: options.addEventlistener,
                 appendID: key
@@ -175,53 +180,6 @@ function unsetExcuse(userUID, elementID) {
         description: "",
         status: "pending"
     });
-}
-
-function appendEventListenerToListitem(item, listener) {
-    switch (listener) {
-        case "mouse":
-            $(item)
-                .mouseenter(function() {
-                    $(item).addClass("hover");
-                }).mouseleave(function() {
-                    $(item).removeClass("hover");
-                });
-            break;
-        case "click":
-            $(item).on('click', function() {
-                $(item).toggleClass('selected');
-            })
-            break;
-
-        default:
-
-    }
-}
-
-function createListItems(objectList, itemClassName, appendToElementWithID, options) {
-    var newListItem = document.createElement('li');
-    if (options.appendID) {
-        $(newListItem).attr('id', options.appendID);
-    }
-    $(newListItem).addClass(itemClassName);
-
-    $.each(objectList, function(key, value) {
-        if (value == "pending") {
-            $(newListItem).addClass("pending");
-        } else if (value == "approved") {
-            $(newListItem).addClass("approved");
-        }
-        if (options.showDescription && key == "description" || key != "description" && key != "status") {
-            var tempText = document.createElement('p');
-            tempText.innerText = value;
-            $(newListItem).append(tempText);
-        }
-    });
-    $(appendToElementWithID).append(newListItem);
-    if (options.addEventlistener) {
-        appendEventListenerToListitem(newListItem, 'click');
-        appendEventListenerToListitem(newListItem, 'mouse');
-    }
 }
 
 /**
