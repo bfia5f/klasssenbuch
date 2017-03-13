@@ -132,9 +132,9 @@
                                         </ul>
                                         <h2>Neue Fehlzeit anlegen</h2>
                                         <div class="input-wrapper">
-                                            <input id="missing-time-date" class="datepicker" data-provider="datepicker" name="">
+                                            <input type="date" id="missing-time-date" class="datepicker" data-provider="datepicker" name="">
                                             <input type="number" id="missing-time-duration" min="1" max="12" name="" placeholder="1">
-                                            <input type="button" class="btn btn-primary" id="create-new-missing-time" value="Anlegen" name="">
+                                            <input type="button" id="create-new-missing-time" class="btn btn-primary" value="Anlegen" name="">
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-6">
@@ -142,21 +142,24 @@
                                         <div class="excuses-wrapper">
                                             <h3>Wähle eine Entschuldigung</h3>
                                             <select class="select-excuses full-width hidden-sm hidden-md hidden-lg" name="excuses-selction">
-                                              <option value="1">Wecker nicht geklingelt</option>
-                                              <option value="2">Bahn hat verspätung</option>
-                                              <option value="3">Bus der Hurensohn</option>
-                                              <option value="4">Metoritenschauer am Wohnort</option>
-                                              <option value="5">Piraten haben Schwester geklaut</option>
+                                                <option value="1">Wecker nicht geklingelt</option>
+                                                <option value="2">Bahn hat verspätung</option>
+                                                <option value="3">Bus der Hurensohn</option>
+                                                <option value="4">Metoritenschauer am Wohnort</option>
+                                                <option value="5">Piraten haben Schwester geklaut</option>
                                             </select>
                                             <div class="hidden-xs" id="radio-excuses-wrapper">
                                                 <div class="radio-excuses">
-                                                    <label><input type="radio" name="optradio" value="verschlafen">Verschlafen</label>
+                                                    <label>
+                                                        <input type="radio" name="optradio" value="verschlafen">Verschlafen</label>
                                                 </div>
                                                 <div class="radio-excuses">
-                                                    <label><input type="radio" name="optradio" value="bahn">Bahn</label>
+                                                    <label>
+                                                        <input type="radio" name="optradio" value="bahn">Bahn</label>
                                                 </div>
                                                 <div class="radio-excuses">
-                                                    <label><input type="radio" name="optradio" value="bus">Bus</label>
+                                                    <label>
+                                                        <input type="radio" name="optradio" value="bus">Bus</label>
                                                 </div>
                                             </div>
                                             <button type="button" name="button-excuses" id="btn-excuses" class="btn btn-primary full-width">Senden</button>
@@ -169,23 +172,20 @@
                         <div class="tab-pane" id="einstellungen">
                             <h3>EINSTELLUNGEN</h3>
                             <div class="container-fluid color-selection-wrapper">
-                              <h3>Seitenleiste Hintergrundfarbe</h3>
+                                <h3>Seitenleiste Hintergrundfarbe</h3>
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <ul class="remove-left-padding">
                                             <li>
                                                 <div class="color-item color-red color-sidebar">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-blue color-sidebar">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-green color-sidebar">
-
                                                 </div>
                                             </li>
                                         </ul>
@@ -194,17 +194,14 @@
                                         <ul class="remove-left-padding">
                                             <li>
                                                 <div class="color-item color-yellow color-sidebar">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-gray color-sidebar">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-orange color-sidebar">
-
                                                 </div>
                                             </li>
                                         </ul>
@@ -213,17 +210,14 @@
                                         <ul class="remove-left-padding">
                                             <li>
                                                 <div class="color-item color-pink color-sidebar">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-lila color-sidebar">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-random color-sidebar">
-
                                                 </div>
                                             </li>
                                         </ul>
@@ -231,23 +225,20 @@
                                 </div>
                             </div>
                             <div class="container-fluid color-selection-wrapper">
-                              <h3>Inhalt Hintergrundfarbe</h3>
+                                <h3>Inhalt Hintergrundfarbe</h3>
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <ul class="remove-left-padding">
                                             <li>
                                                 <div class="color-item color-red color-content">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-blue color-content">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-green color-content">
-
                                                 </div>
                                             </li>
                                         </ul>
@@ -256,17 +247,14 @@
                                         <ul class="remove-left-padding">
                                             <li>
                                                 <div class="color-item color-yellow color-content">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-gray color-content">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-orange color-content">
-
                                                 </div>
                                             </li>
                                         </ul>
@@ -275,23 +263,38 @@
                                         <ul class="remove-left-padding">
                                             <li>
                                                 <div class="color-item color-pink color-content">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-lila color-content">
-
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="color-item color-random color-content">
-
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="universal-modal" class="container error">
+        <div class="row">
+            <div class="col-xs-12">
+                <i id="close-modal" class="fa fa-times fa-large pull-right" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h2>This is some output testing</h2>
                         </div>
                     </div>
                 </div>

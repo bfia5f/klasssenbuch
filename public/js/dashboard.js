@@ -104,10 +104,16 @@ $(document).ready(function() {
             $('#create-new-missing-time').on('click', function(){
                 var missingTimeDate = $('#missing-time-date').get(0).value;
                 var missingTimeDuration = $('#missing-time-duration').get(0).value;
-                console.log("Missing Time Date: ", missingTimeDate);
-                console.log("Missing Time Duration: ", missingTimeDuration);
+                if (missingTimeDate !== "" && missingTimeDuration !== "") {
+                    console.log("Missing Time Date: ", missingTimeDate);
+                    console.log("Missing Time Duration: ", missingTimeDuration);                    
+                } else {
+                    $('#universal-modal').fadeIn('fast');
+                }
             });
-
+            $('#close-modal').on('click', function(){
+                $('#universal-modal').fadeOut('fast');
+            });
 
             toggleLoading();
         } else {
@@ -324,7 +330,7 @@ function updateClassList(eventInfo) {
     $('#select_student_list').empty();
     filterStudentsByClass(eventInfo.target.value).then(function(data) {
         $.each(data, function(index) {
-            $('#select_student_list').append('<option>' + data[index].name + '</option>')
+            $('#select_student_list').append('<option>' + data[index].name + '</option>');
         });
     });
 }
@@ -332,7 +338,7 @@ function updateClassList(eventInfo) {
 
 function logout() {
     firebase.auth().signOut().then(function() {
-        window.location.href = "/logout-success.html"
+        window.location.href = "/logout-success.html";
     }, function(error) {
         // An error happened.
     });

@@ -38,6 +38,14 @@
 	padding-left: 0;
 }
 
-input{
+input[type="date"]{
 	color: $input-color;
+}
+
+.fa{
+	&.fa-times{
+		&.fa-large{
+			font-size: 65px;	
+		}
+	}
 }
