@@ -13,6 +13,9 @@
 .color-orange {
 		background-color: $dark-orange;
 }
+.color-light-orange {
+		background-color: $light-orange;
+}
 
 .color-yellow {
 		background-color: $yellow;
@@ -44,11 +47,12 @@ body{
 h1,h2,h3,h4,h5,h6,p,a{
 	color: $text-color;
 }
-
 input[type="date"]{
 	color: $input-color;
 }
-
+.center-text{
+	text-align: center;
+}
 .fa{
 	&.fa-times{
 		&.fa-large{
