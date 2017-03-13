@@ -1,7 +1,7 @@
 /*
   Require external code
  */
-var $ = global.jQuery = require('jquery'),  require("./jquery-ui");
+var $ = global.jQuery = require('jquery');
 var bootstrap = require('bootstrap-sass');
 var firebase = require('firebase');
 var htmlHelper = require('./htmlHelper.js');
@@ -40,7 +40,6 @@ var cUser = null;
 
 $(document).ready(function() {
     firebase.auth().onAuthStateChanged(function(currentUser) {
-        $('.datepicker').datepicker();
         if (currentUser) {
             /*
             Code that sits in here will run when the user is
@@ -107,7 +106,7 @@ $(document).ready(function() {
                 var missingTimeDuration = $('#missing-time-duration').get(0).value;
                 console.log("Missing Time Date: ", missingTimeDate);
                 console.log("Missing Time Duration: ", missingTimeDuration);
-            })
+            });
 
 
             toggleLoading();
