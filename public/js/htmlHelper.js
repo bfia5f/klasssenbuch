@@ -1,7 +1,7 @@
-var $ = global.jQuery = require('jquery');
+let $ = global.jQuery = require('jquery');
 module.exports = {
     test: function() {
-        console.log("HTML HELPER INIT");
+        console.log('HTML HELPER INIT');
     },
     updateText: function(elementSelector, value) {
         $(elementSelector).innerText = value;
@@ -10,11 +10,11 @@ module.exports = {
         $(elementSelector).get(0).src = value;
     },
     updateList: function(itemInformation, itemClass, parentElement, options) {
-        createItemlist(itemInformation, itemClass, parentElement, options)
+        createItemlist(itemInformation, itemClass, parentElement, options);
     },
     updateColor: function(elementSelector, value) {
 
-    }
+    },
 };
 
 
@@ -27,7 +27,7 @@ module.exports = {
  */
 function createItemlist(itemInformation, itemClass, parentElement, options) {
     console.log(itemInformation);
-    var newListItem = document.createElement('li');
+    let newListItem = document.createElement('li');
     $(newListItem).addClass(itemClass);
 
     if (options.appendID) {
@@ -37,15 +37,15 @@ function createItemlist(itemInformation, itemClass, parentElement, options) {
         appendEventListenerToListitem(newListItem, 'click');
         appendEventListenerToListitem(newListItem, 'mouse');
     }
-    
+
     $.each(itemInformation, function(key, value) {
-        if (value == "pending") {
-            $(newListItem).addClass("pending");
-        } else if (value == "approved") {
-            $(newListItem).addClass("approved");
+        if (value == 'pending') {
+            $(newListItem).addClass('pending');
+        } else if (value == 'approved') {
+            $(newListItem).addClass('approved');
         }
-        if (options.showDescription && key == "description" || key != "description" && key != "status") {
-            var tempText = document.createElement('p');
+        if (options.showDescription && key == 'description' || key != 'description' && key != 'status') {
+            let tempText = document.createElement('p');
             tempText.innerText = value;
             $(newListItem).append(tempText);
         }
@@ -60,18 +60,18 @@ function createItemlist(itemInformation, itemClass, parentElement, options) {
  */
 function appendEventListenerToListitem(item, listener) {
     switch (listener) {
-        case "mouse":
+        case 'mouse':
             $(item)
                 .mouseenter(function() {
-                    $(item).addClass("hover");
+                    $(item).addClass('hover');
                 }).mouseleave(function() {
-                    $(item).removeClass("hover");
+                    $(item).removeClass('hover');
                 });
             break;
-        case "click":
+        case 'click':
             $(item).on('click', function() {
                 $(item).toggleClass('selected');
-            })
+            });
             break;
 
         default:

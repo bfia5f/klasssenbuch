@@ -147,11 +147,11 @@ function checkCookieForKey(searchedValue) {
 }
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
-    $('#ph-username').innerText = userName;
+    $('#ph-username').get(0).innerText = userName;
 }
 
 function htmlUpdate_user_email(userEmail) {
-    $('#ph-email').innerText = userEmail;
+    $('#ph-email').get(0).innerText = userEmail;
 }
 
 function htmlUpdate_user_profilePicture(userProfileImageURL) {
