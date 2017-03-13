@@ -1,1 +1,51 @@
+.color-red {
+		background-color: $red;
+}
 
+.color-blue {
+		background-color: $dark-blue;
+}
+
+.color-green{
+	background-color: $green;
+}
+
+.color-orange {
+		background-color: $dark-orange;
+}
+
+.color-yellow {
+		background-color: $yellow;
+}
+
+.color-gray {
+		background-color: $light-gray;
+}
+
+.color-pink {
+		background-color: $pink;
+}
+
+.color-lila {
+		background-color: $purple;
+}
+
+.color-random {
+		background-color: $dark-blue;
+}
+
+.remove-left-padding{
+	padding-left: 0;
+}
+
+input[type="date"]{
+	color: $input-color;
+}
+
+.fa{
+	&.fa-times{
+		&.fa-large{
+			font-size: 65px;	
+		}
+	}
+}

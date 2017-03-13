@@ -1,12 +1,79 @@
-.missing-times-item, .next-event-item {
+.missing-times-item,
+.next-event-item {
     p {
         margin: 0;
         width: auto;
         display: inline;
         &:nth-last-child(1n+2) {
-    		&:after{
-    			content: " | "
-    		}
-		}
+            &:after {
+                content: " | ";
+            }
+        }
+    }
+}
+
+.missing-times-item {
+    &.approved {
+        color: $light-green;
+    }
+    &.pending {
+        color: $red;
+    }
+    &.hover {
+        color: black;
+        background-color: $light-gray;
+    }
+    &.selected {
+        color: $text-color;
+        background-color: $light-orange;
+    }
+}
+
+.content-wrapper {
+    min-height: 100vh;
+    .center-text {
+        text-align: center;
+    }
+    .select-excuses {}
+    .full-width {
+        width: 100%;
+    }
+}
+
+.input-wrapper {
+    display: flex;
+    input {
+        margin-right: 5px;
+    }
+}
+
+#einstellungen {
+    .color-selection-wrapper {
+        ul {
+            list-style: none;
+            .color-item {
+                height: 75px;
+                border: 2px solid black;
+            }
+        }
+    }
+}
+
+#universal-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    color: $text-color;
+    display: none;
+    &.error {
+        background-color: $dark-orange;
+    }
+    &.hint {
+        background-color: $light-blue;
+    }
+    &.success {
+        background-color: $green;
     }
 }
