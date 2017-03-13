@@ -1,7 +1,7 @@
 /*
   Require external code
  */
-var $ = global.jQuery = require('jquery');
+var $ = global.jQuery = require('jquery'),  require("./jquery-ui");
 var bootstrap = require('bootstrap-sass');
 var firebase = require('firebase');
 var htmlHelper = require('./htmlHelper.js');
@@ -40,6 +40,7 @@ var cUser = null;
 
 $(document).ready(function() {
     firebase.auth().onAuthStateChanged(function(currentUser) {
+        $('.datepicker').datepicker();
         if (currentUser) {
             /*
             Code that sits in here will run when the user is
@@ -101,6 +102,12 @@ $(document).ready(function() {
               contentColorClass = $(this).get(0).classList[1];
                 updateHTML_contentColor(contentColorClass);
             });
+            $('#create-new-missing-time').on('click', function(){
+                var missingTimeDate = $('#missing-time-date').get(0).value;
+                var missingTimeDuration = $('#missing-time-duration').get(0).value;
+                console.log("Missing Time Date: ", missingTimeDate);
+                console.log("Missing Time Duration: ", missingTimeDuration);
+            })
 
 
             toggleLoading();
@@ -154,7 +161,6 @@ function updateHTML_sidebarColor(colorclass){
   document.cookie = "sidebarColor=" + colorclass;
 }
 function updateHTML_contentColor(colorclass){
-  console.log("Updating content bg color");
   $('.content-wrapper').attr('class',
       function(i, c) {
           return c.replace(/(^|\s)color-\S+/g, ' '+colorclass);
