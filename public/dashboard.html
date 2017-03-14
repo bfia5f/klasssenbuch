@@ -36,17 +36,17 @@
         </div>
     </div>
     <!-- END Loading -->
+    <!-- START NAVI -->
     <nav class="navbar navbar-klassenbuch">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navi-main"
-                    aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">DKB</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navi-main" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">DKB</a>
             </div>
             <div class="collapse navbar-collapse" id="navi-main">
                 <ul class="nav navbar-nav">
@@ -62,14 +62,16 @@
                 </ul>
             </div>
     </nav>
+    <!-- END NAVI -->
+    <!-- START CONTENT -->
     <div class="container-fluid">
         <div class="row color-light-orange center-text">
             <div class="col-xs-12 center-text">
                 <h1>Digitales Klassenbuch 2017</h1>
                 <div class="user-info">
                     <img class="img-responsive" id="ph-profilepicture" src="">
-                    <p id="ph-username"></p>
-                    <p id="ph-email"></p>
+                    <p>Angemeldet als: <span id="ph-username"></span></p>
+                    <p>E-Mail: <span id="ph-email"></span></p>
                 </div>
             </div>
         </div>
@@ -217,63 +219,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="container-fluid color-selection-wrapper">
-                    <h3>Inhalt Hintergrundfarbe</h3>
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <ul class="remove-left-padding">
-                                <li>
-                                    <div class="color-item color-red color-content">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-blue color-content">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-green color-content">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-4">
-                            <ul class="remove-left-padding">
-                                <li>
-                                    <div class="color-item color-yellow color-content">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-gray color-content">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-orange color-content">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-4">
-                            <ul class="remove-left-padding">
-                                <li>
-                                    <div class="color-item color-pink color-content">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-lila color-content">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-random color-content">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-    <div id="universal-modal" class="container error">
+    <!-- END CONTENT -->
+    <!-- START MODAL -->
+    <div class="page-overlay error">
+        
+    </div>
+    <div id="universal-modal" class="container">
         <div class="row">
             <div class="col-xs-12">
                 <i id="close-modal" class="fa fa-times fa-large pull-right" aria-hidden="true"></i>
@@ -284,13 +238,15 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12">
-                            <h2>This is some output testing</h2>
+                            <h2 id="modal-headline"></h2>
+                            <p id="modal-text"></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- END MODAL -->
 </body>
 
 </html>

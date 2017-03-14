@@ -1,0 +1,26 @@
+.navbar-klassenbuch{
+  .navbar-collapse{
+    .navbar-nav{
+      .nav-item{
+        &.active{
+          a{
+            background-color: $light-orange;
+            color: $text-color;
+          }
+        }
+        &:hover{
+          a{
+            background-color: lighten($dark-orange, 20%);
+            color: $text-color;
+          }
+        }
+        &:focus{
+          a{
+            background-color: lighten($dark-orange, 20%);
+            color: $text-color;   
+          }
+        }
+      }
+    }
+  }
+}

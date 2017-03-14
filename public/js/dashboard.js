@@ -54,12 +54,12 @@ $(document).ready(function() {
             // Restore set sidebar color
             var sidebarColorClass = checkCookieForKey("sidebarColor");
             if (sidebarColorClass) {
-              updateHTML_sidebarColor(sidebarColorClass);
+                updateHTML_sidebarColor(sidebarColorClass);
             }
             // Restore content background color
             var contentColorClass = checkCookieForKey("contentColor");
             if (contentColorClass) {
-              updateHTML_contentColor(contentColorClass);
+                updateHTML_contentColor(contentColorClass);
             }
 
             // Passed to function
@@ -94,25 +94,34 @@ $(document).ready(function() {
                 });
             });
             $('.color-sidebar').on('click', function() {
-              sidebarColorClass = $(this).get(0).classList[1];
+                console.log("CLicked sidebar color");
+                sidebarColorClass = $(this).get(0).classList[1];
                 updateHTML_sidebarColor(sidebarColorClass);
             });
             $('.color-content').on('click', function() {
-              contentColorClass = $(this).get(0).classList[1];
+                contentColorClass = $(this).get(0).classList[1];
                 updateHTML_contentColor(contentColorClass);
             });
-            $('#create-new-missing-time').on('click', function(){
+            $('#create-new-missing-time').on('click', function() {
                 var missingTimeDate = $('#missing-time-date').get(0).value;
                 var missingTimeDuration = $('#missing-time-duration').get(0).value;
                 if (missingTimeDate !== "" && missingTimeDuration !== "") {
                     console.log("Missing Time Date: ", missingTimeDate);
-                    console.log("Missing Time Duration: ", missingTimeDuration);                    
+                    console.log("Missing Time Duration: ", missingTimeDuration);
                 } else {
+                    $('#modal-headline').get(0).innerText = "Ein Fehler ist aufgetreten!";
+                    $('#modal-text').get(0).innerText = "Es werden ein Datum und eine Zeitangabe benötigt";
+                    $('#universal-modal').removeClass('success');
+                    $('#universal-modal').removeClass('hint');
+                    $('#universal-modal').removeClass('error');
+                    $('#universal-modal').addClass('error');
                     $('#universal-modal').fadeIn('fast');
+                    $('.page-overlay').fadeIn('fast');
                 }
             });
-            $('#close-modal').on('click', function(){
+            $('#close-modal').on('click', function() {
                 $('#universal-modal').fadeOut('fast');
+                $('.page-overlay').fadeOut('fast');
             });
 
             toggleLoading();
@@ -136,14 +145,14 @@ function updateListOnValueChange(refPath, listID, options) {
 }
 
 function checkCookieForKey(searchedValue) {
-  var foundValue = null;
-  var cookieSplit = document.cookie.split(";");
-  $.each(cookieSplit, function(key, value){
-    if (cookieSplit[key].indexOf(searchedValue) > 0) {
-      foundValue =  cookieSplit[key].split("=")[1];
-    }
-  });
-  return foundValue;
+    var foundValue = null;
+    var cookieSplit = document.cookie.split(";");
+    $.each(cookieSplit, function(key, value) {
+        if (cookieSplit[key].indexOf(searchedValue) > 0) {
+            foundValue = cookieSplit[key].split("=")[1];
+        }
+    });
+    return foundValue;
 }
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
@@ -158,19 +167,20 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
     $('#ph-profilepicture').get(0).src = userProfileImageURL;
 }
 // #### FILL DASHBOARD ELEMENTS ####
-function updateHTML_sidebarColor(colorclass){
-  $('.navbar-fixed-side').attr('class',
-      function(i, c) {
-          return c.replace(/(^|\s)color-\S+/g, ' '+colorclass);
-      });
-  document.cookie = "sidebarColor=" + colorclass;
+function updateHTML_sidebarColor(colorclass) {
+    $('.tab-content').attr('class',
+        function(i, c) {
+            return c.replace(/(^|\s)color-\S+/g, ' ' + colorclass);
+        });
+    document.cookie = "sidebarColor=" + colorclass;
 }
-function updateHTML_contentColor(colorclass){
-  $('.content-wrapper').attr('class',
-      function(i, c) {
-          return c.replace(/(^|\s)color-\S+/g, ' '+colorclass);
-      });
-  document.cookie = "contentColor=" + colorclass;
+
+function updateHTML_contentColor(colorclass) {
+    $('.content-wrapper').attr('class',
+        function(i, c) {
+            return c.replace(/(^|\s)color-\S+/g, ' ' + colorclass);
+        });
+    document.cookie = "contentColor=" + colorclass;
 }
 
 function htmlUpdate_timetable() {
@@ -299,7 +309,7 @@ function createClassDropdown(name, id, classList) {
  * @return {null}              Nothing
  */
 function displayProfileImage(userImageURL) {
-  $('#profile-image-placeholder')[0].src = userImageURL;
+    $('#profile-image-placeholder')[0].src = userImageURL;
 }
 /**
  * Update HTML placeholder with profile name
@@ -307,22 +317,22 @@ function displayProfileImage(userImageURL) {
  * @return {null}          Nothing
  */
 function displayProfileName(userName) {
-  $('#placeholder_usename')[0].innerText = userName;
+    $('#placeholder_usename')[0].innerText = userName;
 }
 /**
  * Update HTML placeholder with profile email
  * @param  {string} userEmail Email of the logged in user
  * @return {null}           Nothing
  */
-function displayProfileEmail(userEmail){
-  console.log("Set Email",userEmail);
-  $('#placeholder_email')[0].innerText = userEmail;
+function displayProfileEmail(userEmail) {
+    console.log("Set Email", userEmail);
+    $('#placeholder_email')[0].innerText = userEmail;
 }
 
 function displayProfileClass() {
-  getStudentPromise().then(function(data){
-    console.log(data);
-  })
+    getStudentPromise().then(function(data) {
+        console.log(data);
+    })
 }
 
 

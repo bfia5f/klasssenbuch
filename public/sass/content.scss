@@ -14,29 +14,26 @@
 
 .missing-times-item {
     &.approved {
-        color: $light-green;
+        p {
+            color: $light-green;
+        }
     }
     &.pending {
-        color: $red;
+        p{
+            color: $red;
+        }
     }
     &.hover {
-        color: black;
+        p{
+            color: black;
+        }
         background-color: $light-gray;
     }
     &.selected {
-        color: $text-color;
+        p{
+            color: $text-color;
+        }
         background-color: $light-orange;
-    }
-}
-
-.content-wrapper {
-    min-height: 100vh;
-    .center-text {
-        text-align: center;
-    }
-    .select-excuses {}
-    .full-width {
-        width: 100%;
     }
 }
 
@@ -59,14 +56,25 @@
     }
 }
 
-#universal-modal {
+.page-overlay{
     position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: #ffffff;
+    opacity: .5;
+    background-color: $dark-gray;
+}
+#universal-modal {
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 300px;
     color: $text-color;
-    display: none;
+    display: block;
+    opacity: 1;
     &.error {
         background-color: $dark-orange;
     }
