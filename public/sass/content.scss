@@ -1,13 +1,88 @@
-.missing-times-item, .next-event-item {
+.missing-times-item,
+.next-event-item {
     p {
         margin: 0;
         width: auto;
         display: inline;
         &:nth-last-child(1n+2) {
-    		&:after{
-    			content: " | "
-    		}
-		}
+            &:after {
+                content: " | ";
+            }
+        }
+    }
+}
+
+.missing-times-item {
+    &.approved {
+        p {
+            color: $light-green;
+        }
+    }
+    &.pending {
+        p{
+            color: $red;
+        }
+    }
+    &.hover {
+        p{
+            color: black;
+        }
+        background-color: $light-gray;
+    }
+    &.selected {
+        p{
+            color: $text-color;
+        }
+        background-color: $light-orange;
+    }
+}
+
+.input-wrapper {
+    display: flex;
+    input {
+        margin-right: 5px;
+    }
+}
+
+#einstellungen {
+    .color-selection-wrapper {
+        ul {
+            list-style: none;
+            .color-item {
+                height: 75px;
+                border: 2px solid black;
+            }
+        }
+    }
+}
+
+.page-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: #ffffff;
+    opacity: .5;
+    background-color: $dark-gray;
+}
+#universal-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    color: $text-color;
+    display: block;
+    opacity: 1;
+    &.error {
+        background-color: $dark-orange;
+    }
+    &.hint {
+        background-color: $light-blue;
+    }
+    &.success {
+        background-color: $green;
     }
 }
 

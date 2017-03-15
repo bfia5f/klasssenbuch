@@ -4,9 +4,15 @@
 var $ = global.jQuery = require('jquery');
 var bootstrap = require('bootstrap-sass');
 var firebase = require('firebase');
+var htmlHelper = require('./htmlHelper.js');
+// var eventLogik = require('./events.js');
+
 /*
   Init Firebase
  */
+
+// console.log(eventLogik.test());
+// console.log(htmlHelper.test());
 var config = {
     apiKey: "AIzaSyDtQiCxcoTg6C4sk_rDwutRtfCXeSQMSHA",
     authDomain: "klassenbuch-92827.firebaseapp.com",
@@ -23,20 +29,16 @@ var database = firebase.database();
 /*
   Paths to DB 'objects'
  */
-const refUsers = "user";
-const refClass = "class";
-const refDebug = "debug";
-const refStudent = refUsers + "/student/";
-const refTeacher = refUsers + "/teacher/";
-const refTimetable = "Timetable/teachers/";
+var refUsers = "user";
+var refClass = "class";
+var refDebug = "debug";
+var refStudent = refUsers + "/student/";
+var refTeacher = refUsers + "/teacher/";
+var refTimetable = "Timetable/teachers/";
 
+var cUser = null;
 
 $(document).ready(function() {
-    var cUser = null;
-    /**
-     * Authentication state of a user changed (logged in/out)
-     * @type {[type]}
-     */
     firebase.auth().onAuthStateChanged(function(currentUser) {
         if (currentUser) {
             /*
@@ -47,70 +49,138 @@ $(document).ready(function() {
             htmlUpdate_user_username(currentUser.displayName);
             htmlUpdate_user_email(currentUser.email);
             htmlUpdate_user_profilePicture(currentUser.photoURL);
-            htmlUpdate_missingTimes(currentUser.uid);
-            htmlUpdate_events(currentUser.uid);
             htmlUpdate_timetable();
 
+            // Restore set sidebar color
+            var sidebarColorClass = checkCookieForKey("sidebarColor");
+            if (sidebarColorClass) {
+                updateHTML_sidebarColor(sidebarColorClass);
+            }
+            // Restore content background color
+            var contentColorClass = checkCookieForKey("contentColor");
+            if (contentColorClass) {
+                updateHTML_contentColor(contentColorClass);
+            }
+
+            // Passed to function
+            // database Path, ID of list to update, options
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list', {
+                showDescription: false,
+                addEventlistener: false,
+                className: 'missing-times-item'
+            });
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list-large', {
+                showDescription: true,
+                addEventlistener: true,
+                className: 'missing-times-item'
+            });
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', '#next-events-list', {
+                showDescription: false,
+                addEventlistener: false,
+                className: 'next-event-item'
+            });
 
             $('#debug_sendToDb').on('click', function() {
                 forceWriteOfUserData(currentUser);
             });
+            $('#btn-excuses').on('click', function() {
+                $.each($('.selected'), function() {
+                    setExcuse(currentUser.uid, $(this).get(0).id, $('#radio-excuses-wrapper input:checked').get(0).value);
+                });
+            });
+            $('#btn-unsetexcuses').on('click', function() {
+                $.each($('.selected'), function() {
+                    unsetExcuse(currentUser.uid, $(this).get(0).id);
+                });
+            });
+            $('.color-sidebar').on('click', function() {
+                console.log("CLicked sidebar color");
+                sidebarColorClass = $(this).get(0).classList[1];
+                updateHTML_sidebarColor(sidebarColorClass);
+            });
+            $('.color-content').on('click', function() {
+                contentColorClass = $(this).get(0).classList[1];
+                updateHTML_contentColor(contentColorClass);
+            });
+            $('#create-new-missing-time').on('click', function() {
+                var missingTimeDate = $('#missing-time-date').get(0).value;
+                var missingTimeDuration = $('#missing-time-duration').get(0).value;
+                if (missingTimeDate !== "" && missingTimeDuration !== "") {
+                    console.log("Missing Time Date: ", missingTimeDate);
+                    console.log("Missing Time Duration: ", missingTimeDuration);
+                } else {
+                    $('#modal-headline').get(0).innerText = "Ein Fehler ist aufgetreten!";
+                    $('#modal-text').get(0).innerText = "Es werden ein Datum und eine Zeitangabe benötigt";
+                    $('#universal-modal').removeClass('success');
+                    $('#universal-modal').removeClass('hint');
+                    $('#universal-modal').removeClass('error');
+                    $('#universal-modal').addClass('error');
+                    $('#universal-modal').fadeIn('fast');
+                    $('.page-overlay').fadeIn('fast');
+                }
+            });
+            $('#close-modal').on('click', function() {
+                $('#universal-modal').fadeOut('fast');
+                $('.page-overlay').fadeOut('fast');
+            });
+
             toggleLoading();
         } else {
             window.location.href = "/unauthorized.html";
         }
+    }); // AUTH END
+}); // DOCUMENT READY END
+
+function updateListOnValueChange(refPath, listID, options) {
+    database.ref(refPath).on('value', function(snapShot) {
+        $(listID).children().remove();
+        $.each(snapShot.val(), function(key, value) {
+            htmlHelper.updateList(value, options.className, listID, {
+                showDescription: options.showDescription,
+                addEventlistener: options.addEventlistener,
+                appendID: key
+            });
+        });
     });
+}
 
-
-
-    // $('#save-profile-changes').on('click', updateProfileInfo());
-
-    // $("#select_class_list").on('change', function(eventInfo) {
-    //     updateClassList(eventInfo);
-    // });
-
-    // $('#btn-logout').on('click', logout());
-});
-
+function checkCookieForKey(searchedValue) {
+    var foundValue = null;
+    var cookieSplit = document.cookie.split(";");
+    $.each(cookieSplit, function(key, value) {
+        if (cookieSplit[key].indexOf(searchedValue) > 0) {
+            foundValue = cookieSplit[key].split("=")[1];
+        }
+    });
+    return foundValue;
+}
 // ##### UPDATE HTML PLACEHOLDER #####
 function htmlUpdate_user_username(userName) {
-    $('#ph-username').innerText = userName;
+    $('#ph-username').get(0).innerText = userName;
 }
 
 function htmlUpdate_user_email(userEmail) {
-    $('#ph-email').innerText = userEmail;
+    $('#ph-email').get(0).innerText = userEmail;
 }
-
-function htmlUpdate_user_class(userClass) {}
 
 function htmlUpdate_user_profilePicture(userProfileImageURL) {
     $('#ph-profilepicture').get(0).src = userProfileImageURL;
 }
 // #### FILL DASHBOARD ELEMENTS ####
-function htmlUpdate_missingTimes(currentUserUID) {
-    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
-        $.each(studentObject.fehlzeiten, function(key, fehlzeiten) {
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list", {
-              showReason: false,
-              addEventlistener: false
-            });
-            createListItems(fehlzeiten, "missing-times-item", "#missing-times-list-large", {
-              showReason: true,
-              addEventlistener: true
-            });
+function updateHTML_sidebarColor(colorclass) {
+    $('.tab-content').attr('class',
+        function(i, c) {
+            return c.replace(/(^|\s)color-\S+/g, ' ' + colorclass);
         });
-    });
+    document.cookie = "sidebarColor=" + colorclass;
 }
 
-function htmlUpdate_events(currentUserUID) {
-    getDebugStudentPromise(currentUserUID).then(function(studentObject) {
-        $.each(studentObject.personalevent, function(key, personalevent) {
-            createListItems(personalevent, "next-event-item", "#next-events-list",{
-              showReason: false,
-              addEventlistener: false
-            });
+function updateHTML_contentColor(colorclass) {
+    $('.content-wrapper').attr('class',
+        function(i, c) {
+            return c.replace(/(^|\s)color-\S+/g, ' ' + colorclass);
         });
-    });
+    document.cookie = "contentColor=" + colorclass;
 }
 
 function htmlUpdate_timetable() {
@@ -119,49 +189,18 @@ function htmlUpdate_timetable() {
     });
 }
 
-function appendEventListenerToListitem(item, listener) {
-    switch (listener) {
-        case "mouse":
-            $(item)
-                .mouseenter(function() {
-                    $(item).addClass("hover");
-                }).mouseleave(function() {
-                    $(item).removeClass("hover");
-                });
-            break;
-        case "click":
-            $(item).on('click', function() {
-                $(item).toggleClass('selected');
-            })
-            break;
-
-        default:
-
-    }
+function setExcuse(userUID, elementID, description) {
+    database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
+        description: description,
+        status: "approved"
+    });
 }
 
-function createListItems(objectList, itemClassName, appendToElementWithID, options) {
-    console.log(objectList);
-    var newListItem = document.createElement('li');
-    $(newListItem).addClass(itemClassName);
-
-    $.each(objectList, function(key, value) {
-        if (value == "pending") {
-            $(newListItem).addClass("pending");
-        } else if (value == "approved") {
-            $(newListItem).addClass("approved");
-        }
-        if(options.showReason && key == "reason" || key != "reason" && key != "status"){
-          var tempText = document.createElement('p');
-          tempText.innerText = value;
-          $(newListItem).append(tempText);
-        }
+function unsetExcuse(userUID, elementID) {
+    database.ref(refDebug + '/' + userUID + '/fehlzeiten/' + elementID).update({
+        description: "",
+        status: "pending"
     });
-    $(appendToElementWithID).append(newListItem);
-    if(options.addEventlistener){
-      appendEventListenerToListitem(newListItem, 'click');
-      appendEventListenerToListitem(newListItem, 'mouse');
-    }
 }
 
 /**
@@ -270,7 +309,7 @@ function createClassDropdown(name, id, classList) {
  * @return {null}              Nothing
  */
 function displayProfileImage(userImageURL) {
-  $('#profile-image-placeholder')[0].src = userImageURL;
+    $('#profile-image-placeholder')[0].src = userImageURL;
 }
 /**
  * Update HTML placeholder with profile name
@@ -278,22 +317,22 @@ function displayProfileImage(userImageURL) {
  * @return {null}          Nothing
  */
 function displayProfileName(userName) {
-  $('#placeholder_usename')[0].innerText = userName;
+    $('#placeholder_usename')[0].innerText = userName;
 }
 /**
  * Update HTML placeholder with profile email
  * @param  {string} userEmail Email of the logged in user
  * @return {null}           Nothing
  */
-function displayProfileEmail(userEmail){
-  console.log("Set Email",userEmail);
-  $('#placeholder_email')[0].innerText = userEmail;
+function displayProfileEmail(userEmail) {
+    console.log("Set Email", userEmail);
+    $('#placeholder_email')[0].innerText = userEmail;
 }
 
 function displayProfileClass() {
-  getStudentPromise().then(function(data){
-    console.log(data);
-  })
+    getStudentPromise().then(function(data) {
+        console.log(data);
+    })
 }
 
 
@@ -332,7 +371,7 @@ function updateClassList(eventInfo) {
     $('#select_student_list').empty();
     filterStudentsByClass(eventInfo.target.value).then(function(data) {
         $.each(data, function(index) {
-            $('#select_student_list').append('<option>' + data[index].name + '</option>')
+            $('#select_student_list').append('<option>' + data[index].name + '</option>');
         });
     });
 }
@@ -340,7 +379,7 @@ function updateClassList(eventInfo) {
 
 function logout() {
     firebase.auth().signOut().then(function() {
-        window.location.href = "/logout-success.html"
+        window.location.href = "/logout-success.html";
     }, function(error) {
         // An error happened.
     });
@@ -360,6 +399,18 @@ function forceWriteOfUserData(currentUser) {
                 time: "08:00",
                 info: "Raum D123",
                 description: "SV-Sitzung"
+            },
+            SVSitzung2: {
+                date: "01.05.2001",
+                time: "10:30",
+                info: "Raum D122",
+                description: "SV-Sitzung-2"
+            },
+            SVSitzung3: {
+                date: "24.06.2023",
+                time: "09:45",
+                info: "Raum B123",
+                description: "SV-Sitzung-3"
             }
         },
         fehlzeiten: {
@@ -374,7 +425,7 @@ function forceWriteOfUserData(currentUser) {
                 lesson: "Stunde: 3",
                 duration: "20min",
                 status: "approved",
-                reason: "Wecker nicht geklingelt"
+                description: "Wecker nicht geklingelt"
             },
             UID_3: {
                 date: "03.03.2000",
