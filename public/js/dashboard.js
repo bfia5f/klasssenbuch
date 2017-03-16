@@ -190,7 +190,7 @@ function updateHTML_contentColor(colorclass) {
 }
 
 function htmlUpdate_timetable() {
-    getTimetablePromise().then(function(timetable) {
+    databaseHelper.getTimetablePromise(database, refTimetable).then(function(timetable) {        
         $('#timetable-wrapper').html(timetable);
     });
 }
@@ -338,7 +338,7 @@ function displayProfileEmail(userEmail) {
 function displayProfileClass() {
     getStudentPromise().then(function(data) {
         console.log(data);
-    })
+    });
 }
 
 
@@ -411,7 +411,7 @@ function displayModal(state, title, text) {
 function generateHash(s) {
     return s.split("").reduce(function(a, b) {
         a = ((a << 5) - a) + b.charCodeAt(0);
-        return a & a
+        return a & a;
     }, 0);
 }
 

@@ -125,31 +125,27 @@
               <h2>Fehlstunden</h2>
               <ul class="max-height-list list-unstyled" id="missing-times-list-large">
               </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6">
               <h2>Neue Fehlzeit anlegen</h2>
               <div class="form-group">
                 <label for="missing-time-date">Datum</label>
-                <input type="date" id="missing-time-date" class="form-control" data-provider="datepicker">
+                <input type="date" id="missing-time-date" class="can-disable form-control" data-provider="datepicker" placeholder="01.01.1990">
                 <label for="missing-time-duration">Dauer</label>
-                <input type="number" id="missing-time-duration" class="form-control" min="1" max="12" placeholder="1">
-                <label for="fehlzeit-einheit">Stunden/Minuten</label>
-                <select class="form-control">
-                  <option>Stunden</option>
-                  <option>Minuten</option>
-                </select>
-                <input type="button" id="create-new-missing-time" class="btn btn-primary" value="Anlegen" name="">
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <h2>Fehlstunden Verwaltung</h2>
-              <div class="excuses-wrapper form-group">
-                <h3>Wähle eine Entschuldigung</h3>
+                <div class="missing-time-wrapper">
+                  <input type="number" id="missing-time-duration" class="can-disable form-control" min="1" max="12" value="1">
+                  <select class="can-disable form-control">
+                    <option>Stunden</option>
+                    <option>Minuten</option>
+                  </select>
+                </div>
+                <label for="excuse-selection">Wähle eine Entschuldigung</label>
                 <select id="excuse-selection" class="form-control">
                   <option>Bus</option>
                   <option>Bahn</option>
                   <option>Auto</option>
                 </select>
-                <button type="button" name="button-excuses" id="btn-excuses" class="btn btn-primary full-width">Senden</button>
-                <button type="button" name="button-unsetexcuses" id="btn-unsetexcuses" class="btn btn-primary full-width">Unentschuldigen</button>
+                <input type="button" id="create-new-missing-time" class="btn btn-primary" value="Anlegen" name="">
               </div>
             </div>
           </div>

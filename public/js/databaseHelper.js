@@ -6,7 +6,7 @@ module.exports = {
     return databaseObject.ref(refStudentUID).once("value").then(function(data) {
       return data.val();
     });
-  }
+  },
   getAllStudentsPromise: function(databaseObject, refStudent) {
     return databaseObject.ref(refStudent).once("value").then(function(data) {
       return data.val();
