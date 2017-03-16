@@ -23,4 +23,12 @@
       }
     }
   }
+  .navbar-header{
+    .navbar-toggle{
+      background-color: $light-orange;
+      .icon-bar{
+        background-color: $dark-gray;
+      }
+    }
+  }
 }
