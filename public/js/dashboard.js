@@ -106,18 +106,14 @@ $(document).ready(function() {
             $('#create-new-missing-time').on('click', function() {
                 var missingTimeDate = $('#missing-time-date').get(0).value;
                 var missingTimeDuration = $('#missing-time-duration').get(0).value;
-                var missingTimeDescription = $('#missing-time-excuse').value;
+                var missingTimeDescription = $('#missing-time-excuse').get(0).value;
+                var missingTimeLesson = $('#missing-time-lesson').get(0).value;
                 if (missingTimeDate !== "" && missingTimeDuration !== "") {
-                    console.log("Missing Time Date: ", missingTimeDate);
-                    console.log("Missing Time Duration: ", missingTimeDuration);
-                    console.log("Missing Time Description: ", missingTimeDescription);
-                    var timeHash = generateHash(missingTimeDate);
-                    var durationHash = generateHash(missingTimeDuration);
-                    var UID = timeHash + durationHash;
-                    console.log(UID);
-                    var __tmp = databaseHelper.write(database,refDebug + '/' + currentUser.uid + '/fehlzeiten/' + UID + '/',{
+                    var UID = new Date.now();
+                    var tmpRef = refDebug + '/' + currentUser.uid + '/fehlzeiten/' + UID + '/'
+                    databaseHelper.write(database,tmpRef,{
                         date: missingTimeDate,
-                        lesson: 'Gibt noch kein Auswahlfeld',
+                        lesson: missingTimeLesson,
                         duration: missingTimeDuration,
                         status: 'pending',
                         description: missingTimeDescription
@@ -403,18 +399,6 @@ function displayModal(state, title, text) {
     // Display modal and background
     $('#universal-modal').fadeIn('fast');
     $('.page-overlay').fadeIn('fast');
-}
-
-/**
- * Used to define ID's for missing times entries
- * @param  {string} s Input
- * @return {string}   Output
- */
-function generateHash(s) {
-    return s.split("").reduce(function(a, b) {
-        a = ((a << 5) - a) + b.charCodeAt(0);
-        return a & a;
-    }, 0);
 }
 
 
