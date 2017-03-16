@@ -71,9 +71,13 @@ function appendEventListenerToListitem(item, listener) {
         case 'click':
             $(item).on('click', function() {
                 $(item).toggleClass('selected');
-            });
+                $.each($('.can-disable'), function(key, element){
+                    $(element).attr('disabled', function(key, attribute){
+                        return attribute ? false : true;
+                    });
+                });
+            });            
             break;
-
         default:
 
     }
