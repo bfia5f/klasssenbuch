@@ -132,15 +132,28 @@
                 <label for="missing-time-date">Datum</label>
                 <input type="date" id="missing-time-date" class="can-disable form-control" data-provider="datepicker" placeholder="01.01.1990">
                 <label for="missing-time-duration">Dauer</label>
-                <div class="missing-time-wrapper">
-                  <input type="number" id="missing-time-duration" class="can-disable form-control" min="1" max="12" value="1">
-                  <select class="can-disable form-control">
-                    <option>Stunden</option>
-                    <option>Minuten</option>
-                  </select>
-                </div>
-                <label for="excuse-selection">Wähle eine Entschuldigung</label>
-                <select id="excuse-selection" class="form-control">
+                <input type="number" id="missing-time-duration" class="can-disable form-control" min="1" max="12" value="1">
+                <select id="missing-time-duration-format" class="can-disable form-control">
+                  <option>Minuten</option>
+                  <option>Stunden</option>
+                </select>
+                <label for="missing-time-lesson">Unterrichtsstunde</label>
+                <select id="missing-time-lesson" class="can-disable form-control">
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                </select>
+                <label for="missing-time-excuse">Wähle eine Entschuldigung</label>
+                <select id="missing-time-excuse" class="form-control">
                   <option>Bus</option>
                   <option>Bahn</option>
                   <option>Auto</option>

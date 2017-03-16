@@ -85,8 +85,8 @@ $(document).ready(function() {
             });
             $('#btn-excuses').on('click', function() {
                 $.each($('.selected'), function() {
-                    console.log($('#excuse-selection').get(0).value);
-                    setExcuse(currentUser.uid, $(this).get(0).id, $('#excuse-selection').get(0).value);
+                    console.log($('#missing-time-excuse').get(0).value);
+                    setExcuse(currentUser.uid, $(this).get(0).id, $('#missing-time-excuse').get(0).value);
                 });
             });
             $('#btn-unsetexcuses').on('click', function() {
@@ -106,9 +106,11 @@ $(document).ready(function() {
             $('#create-new-missing-time').on('click', function() {
                 var missingTimeDate = $('#missing-time-date').get(0).value;
                 var missingTimeDuration = $('#missing-time-duration').get(0).value;
+                var missingTimeDescription = $('#missing-time-excuse').value;
                 if (missingTimeDate !== "" && missingTimeDuration !== "") {
                     console.log("Missing Time Date: ", missingTimeDate);
                     console.log("Missing Time Duration: ", missingTimeDuration);
+                    console.log("Missing Time Description: ", missingTimeDescription);
                     var timeHash = generateHash(missingTimeDate);
                     var durationHash = generateHash(missingTimeDuration);
                     var UID = timeHash + durationHash;
@@ -117,9 +119,9 @@ $(document).ready(function() {
                         date: missingTimeDate,
                         lesson: 'Gibt noch kein Auswahlfeld',
                         duration: missingTimeDuration,
-                        status: 'pending'
+                        status: 'pending',
+                        description: missingTimeDescription
                     });
-                    console.log(__tmp);
                 } else {
                     displayModal('error', 'Ein Fehler ist aufgetreten', 'Es werden ein Datum und eine Zeitangabe benötigt');
                 }
