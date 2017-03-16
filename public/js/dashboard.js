@@ -5,7 +5,7 @@ var $ = global.jQuery = require('jquery');
 var bootstrap = require('bootstrap-sass');
 var firebase = require('firebase');
 var htmlHelper = require('./htmlHelper.js');
-// var eventLogik = require('./events.js');
+var databaseHelper = require('./databaseHelper.js');
 
 /*
   Init Firebase
@@ -85,7 +85,8 @@ $(document).ready(function() {
             });
             $('#btn-excuses').on('click', function() {
                 $.each($('.selected'), function() {
-                    setExcuse(currentUser.uid, $(this).get(0).id, $('#radio-excuses-wrapper input:checked').get(0).value);
+                    console.log($('#excuse-selection').get(0).value);
+                    setExcuse(currentUser.uid, $(this).get(0).id, $('#excuse-selection').get(0).value);
                 });
             });
             $('#btn-unsetexcuses').on('click', function() {
@@ -108,15 +109,19 @@ $(document).ready(function() {
                 if (missingTimeDate !== "" && missingTimeDuration !== "") {
                     console.log("Missing Time Date: ", missingTimeDate);
                     console.log("Missing Time Duration: ", missingTimeDuration);
+                    var timeHash = generateHash(missingTimeDate);
+                    var durationHash = generateHash(missingTimeDuration);
+                    var UID = timeHash + durationHash;
+                    console.log(UID);
+                    var __tmp = databaseHelper.write(database,refDebug + '/' + currentUser.uid + '/fehlzeiten/' + UID + '/',{
+                        date: missingTimeDate,
+                        lesson: 'Gibt noch kein Auswahlfeld',
+                        duration: missingTimeDuration,
+                        status: 'pending'
+                    });
+                    console.log(__tmp);
                 } else {
-                    $('#modal-headline').get(0).innerText = "Ein Fehler ist aufgetreten!";
-                    $('#modal-text').get(0).innerText = "Es werden ein Datum und eine Zeitangabe benötigt";
-                    $('#universal-modal').removeClass('success');
-                    $('#universal-modal').removeClass('hint');
-                    $('#universal-modal').removeClass('error');
-                    $('#universal-modal').addClass('error');
-                    $('#universal-modal').fadeIn('fast');
-                    $('.page-overlay').fadeIn('fast');
+                    displayModal('error', 'Ein Fehler ist aufgetreten', 'Es werden ein Datum und eine Zeitangabe benötigt');
                 }
             });
             $('#close-modal').on('click', function() {
@@ -125,6 +130,7 @@ $(document).ready(function() {
             });
 
             toggleLoading();
+
         } else {
             window.location.href = "/unauthorized.html";
         }
@@ -237,39 +243,39 @@ function getStudentPromise(userUID) {
     });
 }
 
-/**
- * Lookup all Students
- * @return {promise} All Students in the DB
- */
-function getAllStudentsPromise() {
-    var ref = database.ref(refStudent);
-    // TODO: Error handling
-    return ref.once("value").then(function(data) {
-        return data.val();
-    });
-}
+// /**
+//  * Lookup all Students
+//  * @return {promise} All Students in the DB
+//  */
+// function getAllStudentsPromise() {
+//     var ref = database.ref(refStudent);
+//     // TODO: Error handling
+//     return ref.once("value").then(function(data) {
+//         return data.val();
+//     });
+// }
 
 /**
  * Retrive the timetable
  * @return {promise} A certain timetable as promise
  */
-function getTimetablePromise() {
-    var ref = database.ref(refDebug + "/stundenplan");
-    return ref.once("value").then(function(data) {
-        return data.val();
-    });
-}
+// function getTimetablePromise() {
+//     var ref = database.ref(refDebug + "/stundenplan");
+//     return ref.once("value").then(function(data) {
+//         return data.val();
+//     });
+// }
 
 /**
  * Retrive all classes
  * @return {promise} A list of all classes
  */
-function getClasslistPromise() {
-    var ref = database.ref(refClass);
-    return ref.once("value").then(function(data) {
-        return data.val();
-    });
-}
+// function getClasslistPromise() {
+//     var ref = database.ref(refClass);
+//     return ref.once("value").then(function(data) {
+//         return data.val();
+//     });
+// }
 
 /**
  * Get all students from the provided classname
@@ -277,7 +283,7 @@ function getClasslistPromise() {
  * @return {array}           All Students that are in the provided class
  */
 function filterStudentsByClass(className) {
-    return getAllStudentsPromise().then(function(data) {
+    return databaseHelper.getAllStudentsPromise(database, refClasslist).then(function(data) {
         var studentsInClass = [];
         $.each(data, function(studentUID, studentSettings) {
             if (studentSettings.class === className) {
@@ -374,6 +380,39 @@ function updateClassList(eventInfo) {
             $('#select_student_list').append('<option>' + data[index].name + '</option>');
         });
     });
+}
+
+/**
+ * Display notification with state and tetx
+ * @param  {string} state error,hint,success
+ * @param  {string} title Large message to display
+ * @param  {string} text  Further information
+ * @return {null}       Nothing to return
+ */
+function displayModal(state, title, text) {
+    $('#modal-headline').get(0).innerText = title;
+    $('#modal-text').get(0).innerText = text;
+    // Remove exsisting classes
+    $('#universal-modal').removeClass('success');
+    $('#universal-modal').removeClass('hint');
+    $('#universal-modal').removeClass('error');
+    // Set modal color based on notification type
+    $('#universal-modal').addClass(state);
+    // Display modal and background
+    $('#universal-modal').fadeIn('fast');
+    $('.page-overlay').fadeIn('fast');
+}
+
+/**
+ * Used to define ID's for missing times entries
+ * @param  {string} s Input
+ * @return {string}   Output
+ */
+function generateHash(s) {
+    return s.split("").reduce(function(a, b) {
+        a = ((a << 5) - a) + b.charCodeAt(0);
+        return a & a
+    }, 0);
 }
 
 

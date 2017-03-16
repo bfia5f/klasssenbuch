@@ -2,251 +2,241 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Dashboard</title>
-    <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
-    <script src="build/done_dashboard.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="build/main.css">
+  <meta charset="utf-8">
+  <title>Dashboard</title>
+  <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
+  <script src="build/done_dashboard.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="build/main.css">
 </head>
 
 <body>
-    <div class="container-fluid container-floating loading" id="loadingCircle">
-        <div class="row">
-            <div class="col-xs-5 col-xs-offset-4">
-                <div class="sk-circle">
-                    <div class="sk-circle1 sk-child"></div>
-                    <div class="sk-circle2 sk-child"></div>
-                    <div class="sk-circle3 sk-child"></div>
-                    <div class="sk-circle4 sk-child"></div>
-                    <div class="sk-circle5 sk-child"></div>
-                    <div class="sk-circle6 sk-child"></div>
-                    <div class="sk-circle7 sk-child"></div>
-                    <div class="sk-circle8 sk-child"></div>
-                    <div class="sk-circle9 sk-child"></div>
-                    <div class="sk-circle10 sk-child"></div>
-                    <div class="sk-circle11 sk-child"></div>
-                    <div class="sk-circle12 sk-child"></div>
-                </div>
-            </div>
+  <div class="container-fluid container-floating loading" id="loadingCircle">
+    <div class="row">
+      <div class="col-xs-5 col-xs-offset-4">
+        <div class="sk-circle">
+          <div class="sk-circle1 sk-child"></div>
+          <div class="sk-circle2 sk-child"></div>
+          <div class="sk-circle3 sk-child"></div>
+          <div class="sk-circle4 sk-child"></div>
+          <div class="sk-circle5 sk-child"></div>
+          <div class="sk-circle6 sk-child"></div>
+          <div class="sk-circle7 sk-child"></div>
+          <div class="sk-circle8 sk-child"></div>
+          <div class="sk-circle9 sk-child"></div>
+          <div class="sk-circle10 sk-child"></div>
+          <div class="sk-circle11 sk-child"></div>
+          <div class="sk-circle12 sk-child"></div>
         </div>
-        <div class="row">
-            <div class="col-xs-5 col-xs-offset-6">
-                <h2>Loading</h2>
-            </div>
-        </div>
+      </div>
     </div>
-    <!-- END Loading -->
-    <!-- START NAVI -->
-    <nav class="navbar navbar-klassenbuch">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navi-main" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">DKB</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navi-main">
-                <ul class="nav navbar-nav">
-                    <li class="active nav-item">
-                        <a href="#start" data-toggle="tab">Start</a>
-                    </li>
-                    <li class="nav-item"><a href="#stundenplan" data-toggle="tab">Stundenplan</a>
-                    </li>
-                    <li class="nav-item"><a href="#fehlzeiten" data-toggle="tab">Fehlzeiten</a>
-                    </li>
-                    <li class="nav-item"><a href="#einstellungen" data-toggle="tab">Einstellungen</a>
-                    </li>
-                </ul>
-            </div>
-    </nav>
-    <!-- END NAVI -->
-    <!-- START CONTENT -->
+    <div class="row">
+      <div class="col-xs-5 col-xs-offset-6">
+        <h2>Loading</h2>
+      </div>
+    </div>
+  </div>
+  <!-- END Loading -->
+  <!-- START NAVI -->
+  <nav class="navbar navbar-klassenbuch">
     <div class="container-fluid">
-        <div class="row color-light-orange center-text">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navi-main" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">DKB</a>
+      </div>
+      <div class="collapse navbar-collapse" id="navi-main">
+        <ul class="nav navbar-nav">
+          <li class="active nav-item">
+            <a href="#start" data-toggle="tab">Start</a>
+          </li>
+          <li class="nav-item"><a href="#stundenplan" data-toggle="tab">Stundenplan</a>
+          </li>
+          <li class="nav-item"><a href="#fehlzeiten" data-toggle="tab">Fehlzeiten</a>
+          </li>
+          <li class="nav-item"><a href="#einstellungen" data-toggle="tab">Einstellungen</a>
+          </li>
+        </ul>
+      </div>
+  </nav>
+  <!-- END NAVI -->
+  <!-- START CONTENT -->
+  <div class="container-fluid">
+    <div class="row color-light-orange center-text">
+      <div class="col-xs-12 center-text">
+        <h1>Digitales Klassenbuch 2017</h1>
+        <div class="user-info">
+          <img class="img-responsive" id="ph-profilepicture" src="">
+          <p>Angemeldet als: <span id="ph-username"></span></p>
+          <p>E-Mail: <span id="ph-email"></span></p>
+        </div>
+      </div>
+    </div>
+    <div class="row tab-content clearfix color-orange">
+      <div class="tab-pane active" id="start">
+        <div class="container-fluid">
+          <div class="row">
             <div class="col-xs-12 center-text">
-                <h1>Digitales Klassenbuch 2017</h1>
-                <div class="user-info">
-                    <img class="img-responsive" id="ph-profilepicture" src="">
-                    <p>Angemeldet als: <span id="ph-username"></span></p>
-                    <p>E-Mail: <span id="ph-email"></span></p>
-                </div>
+              <h1>Übersicht</h1>
+              <button type="button" id="debug_sendToDb" class="btn btn-default">
+                SEND
+              </button>
             </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-md-4">
+              <h3>Fehlzeiten: </h3>
+              <ul class="max-height-list list-unstyled" id="missing-times-list">
+              </ul>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <h3>Events:</h3>
+              <ul class="max-height-list list-unstyled" id="next-events-list">
+              </ul>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <h3>Nächsten Stunden:</h3>
+              <ul class="max-height-list next-lectures-list list-unstyled">
+                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="row tab-content clearfix color-orange">
-            <div class="tab-pane active" id="start">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xs-12 center-text">
-                            <h1>Übersicht</h1>
-                            <button type="button" id="debug_sendToDb" class="btn btn-default">
-                                SEND
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-md-4">
-                            <h3>Fehlzeiten: </h3>
-                            <ul class="max-height-list list-unstyled" id="missing-times-list">
-                            </ul>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <h3>Events:</h3>
-                            <ul class="max-height-list list-unstyled" id="next-events-list">
-                            </ul>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <h3>Nächsten Stunden:</h3>
-                            <ul class="max-height-list next-lectures-list list-unstyled">
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                                <li class="next-lectures-item">LF 9 | Hr. Weng | D216</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane" id="stundenplan">
-                <h3>STUNDENPLAN</h3>
-                <div id="timetable-wrapper">
-                    <p>dasdasd</p>
-                </div>
-            </div>
-            <div class="tab-pane" id="fehlzeiten">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6">
-                            <h2>Fehlstunden</h2>
-                            <ul class="max-height-list list-unstyled" id="missing-times-list-large">
-                            </ul>
-                            <h2>Neue Fehlzeit anlegen</h2>
-                            <div class="input-wrapper">
-                                <input type="date" id="missing-time-date" class="datepicker" data-provider="datepicker" name="">
-                                <input type="number" id="missing-time-duration" min="1" max="12" name="" placeholder="1">
-                                <input type="button" id="create-new-missing-time" class="btn btn-primary" value="Anlegen" name="">
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            <h2>Fehlstunden Verwaltung</h2>
-                            <div class="excuses-wrapper">
-                                <h3>Wähle eine Entschuldigung</h3>
-                                <select class="select-excuses full-width hidden-sm hidden-md hidden-lg" name="excuses-selction">
-                                    <option value="1">Wecker nicht geklingelt</option>
-                                    <option value="2">Bahn hat verspätung</option>
-                                    <option value="3">Bus der Hurensohn</option>
-                                    <option value="4">Metoritenschauer am Wohnort</option>
-                                    <option value="5">Piraten haben Schwester geklaut</option>
-                                </select>
-                                <div class="hidden-xs" id="radio-excuses-wrapper">
-                                    <div class="radio-excuses">
-                                        <label>
-                                            <input type="radio" name="optradio" value="verschlafen">Verschlafen</label>
-                                    </div>
-                                    <div class="radio-excuses">
-                                        <label>
-                                            <input type="radio" name="optradio" value="bahn">Bahn</label>
-                                    </div>
-                                    <div class="radio-excuses">
-                                        <label>
-                                            <input type="radio" name="optradio" value="bus">Bus</label>
-                                    </div>
-                                </div>
-                                <button type="button" name="button-excuses" id="btn-excuses" class="btn btn-primary full-width">Senden</button>
-                                <button type="button" name="button-unsetexcuses" id="btn-unsetexcuses" class="btn btn-primary full-width">Unentschuldigen</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane" id="einstellungen">
-                <h3>EINSTELLUNGEN</h3>
-                <div class="container-fluid color-selection-wrapper">
-                    <h3>Seitenleiste Hintergrundfarbe</h3>
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <ul class="remove-left-padding">
-                                <li>
-                                    <div class="color-item color-red color-sidebar">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-blue color-sidebar">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-green color-sidebar">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-4">
-                            <ul class="remove-left-padding">
-                                <li>
-                                    <div class="color-item color-yellow color-sidebar">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-gray color-sidebar">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-orange color-sidebar">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-4">
-                            <ul class="remove-left-padding">
-                                <li>
-                                    <div class="color-item color-pink color-sidebar">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-lila color-sidebar">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="color-item color-random color-sidebar">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="tab-pane" id="stundenplan">
+        <h3>STUNDENPLAN</h3>
+        <div id="timetable-wrapper">
+          <p>dasdasd</p>
         </div>
+      </div>
+      <div class="tab-pane" id="fehlzeiten">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <h2>Fehlstunden</h2>
+              <ul class="max-height-list list-unstyled" id="missing-times-list-large">
+              </ul>
+              <h2>Neue Fehlzeit anlegen</h2>
+              <div class="form-group">
+                <label for="missing-time-date">Datum</label>
+                <input type="date" id="missing-time-date" class="form-control" data-provider="datepicker">
+                <label for="missing-time-duration">Dauer</label>
+                <input type="number" id="missing-time-duration" class="form-control" min="1" max="12" placeholder="1">
+                <label for="fehlzeit-einheit">Stunden/Minuten</label>
+                <select class="form-control">
+                  <option>Stunden</option>
+                  <option>Minuten</option>
+                </select>
+                <input type="button" id="create-new-missing-time" class="btn btn-primary" value="Anlegen" name="">
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <h2>Fehlstunden Verwaltung</h2>
+              <div class="excuses-wrapper form-group">
+                <h3>Wähle eine Entschuldigung</h3>
+                <select id="excuse-selection" class="form-control">
+                  <option>Bus</option>
+                  <option>Bahn</option>
+                  <option>Auto</option>
+                </select>
+                <button type="button" name="button-excuses" id="btn-excuses" class="btn btn-primary full-width">Senden</button>
+                <button type="button" name="button-unsetexcuses" id="btn-unsetexcuses" class="btn btn-primary full-width">Unentschuldigen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="einstellungen">
+        <h3>EINSTELLUNGEN</h3>
+        <div class="container-fluid color-selection-wrapper">
+          <h3>Seitenleiste Hintergrundfarbe</h3>
+          <div class="row">
+            <div class="col-xs-4">
+              <ul class="remove-left-padding">
+                <li>
+                  <div class="color-item color-red color-sidebar">
+                  </div>
+                </li>
+                <li>
+                  <div class="color-item color-blue color-sidebar">
+                  </div>
+                </li>
+                <li>
+                  <div class="color-item color-green color-sidebar">
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="col-xs-4">
+              <ul class="remove-left-padding">
+                <li>
+                  <div class="color-item color-yellow color-sidebar">
+                  </div>
+                </li>
+                <li>
+                  <div class="color-item color-gray color-sidebar">
+                  </div>
+                </li>
+                <li>
+                  <div class="color-item color-orange color-sidebar">
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="col-xs-4">
+              <ul class="remove-left-padding">
+                <li>
+                  <div class="color-item color-pink color-sidebar">
+                  </div>
+                </li>
+                <li>
+                  <div class="color-item color-lila color-sidebar">
+                  </div>
+                </li>
+                <li>
+                  <div class="color-item color-random color-sidebar">
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- END CONTENT -->
-    <!-- START MODAL -->
-    <div class="page-overlay error">
-        
+  </div>
+  <!-- END CONTENT -->
+  <!-- START MODAL -->
+  <div class="page-overlay error" style="display: none;">
+  </div>
+  <div id="universal-modal" class="container" style="display: none;">
+    <div class="row">
+      <div class="col-xs-12">
+        <i id="close-modal" class="fa fa-times fa-large pull-right" aria-hidden="true"></i>
+      </div>
     </div>
-    <div id="universal-modal" class="container">
-        <div class="row">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="container">
+          <div class="row">
             <div class="col-xs-12">
-                <i id="close-modal" class="fa fa-times fa-large pull-right" aria-hidden="true"></i>
+              <h2 id="modal-headline"></h2>
+              <p id="modal-text"></p>
             </div>
+          </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <h2 id="modal-headline"></h2>
-                            <p id="modal-text"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-    <!-- END MODAL -->
+  </div>
+  <!-- END MODAL -->
 </body>
 
 </html>
