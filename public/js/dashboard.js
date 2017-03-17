@@ -64,19 +64,24 @@ $(document).ready(function() {
 
             // Passed to function
             // database Path, ID of list to update, options
-            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list', {
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', $('.list-missing-times-small'), {
                 showDescription: false,
                 addEventlistener: false,
                 className: 'missing-times-item'
             });
-            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', '#missing-times-list-large', {
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', $('.list-missing-times-large'), {
                 showDescription: true,
                 addEventlistener: true,
                 className: 'missing-times-item'
             });
-            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', '#next-events-list', {
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', $('.list-events-small'), {
                 showDescription: false,
                 addEventlistener: false,
+                className: 'next-event-item'
+            });
+            updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', $('.list-events-large'), {
+                showDescription: true,
+                addEventlistener: true,
                 className: 'next-event-item'
             });
 
@@ -85,7 +90,6 @@ $(document).ready(function() {
             });
             $('#btn-excuses').on('click', function() {
                 $.each($('.selected'), function() {
-                    console.log($('#missing-time-excuse').get(0).value);
                     setExcuse(currentUser.uid, $(this).get(0).id, $('#missing-time-excuse').get(0).value);
                 });
             });
@@ -95,7 +99,6 @@ $(document).ready(function() {
                 });
             });
             $('.color-sidebar').on('click', function() {
-                console.log("CLicked sidebar color");
                 sidebarColorClass = $(this).get(0).classList[1];
                 updateHTML_sidebarColor(sidebarColorClass);
             });
@@ -108,12 +111,13 @@ $(document).ready(function() {
                 var missingTimeDuration = $('#missing-time-duration').get(0).value;
                 var missingTimeDescription = $('#missing-time-excuse').get(0).value;
                 var missingTimeLesson = $('#missing-time-lesson').get(0).value;
+                missingTimeDuration = missingTimeDuration +' '+ $('#missing-time-duration-format').get(0).value;
                 if (missingTimeDate !== "" && missingTimeDuration !== "") {
-                    var UID = new Date.now();
+                    var UID = Date.now();
                     var tmpRef = refDebug + '/' + currentUser.uid + '/fehlzeiten/' + UID + '/'
                     databaseHelper.write(database,tmpRef,{
                         date: missingTimeDate,
-                        lesson: missingTimeLesson,
+                        lesson: "Stunde: " + missingTimeLesson,
                         duration: missingTimeDuration,
                         status: 'pending',
                         description: missingTimeDescription
@@ -135,14 +139,17 @@ $(document).ready(function() {
     }); // AUTH END
 }); // DOCUMENT READY END
 
-function updateListOnValueChange(refPath, listID, options) {
+function updateListOnValueChange(refPath, listObject, options) {
     database.ref(refPath).on('value', function(snapShot) {
-        $(listID).children().remove();
-        $.each(snapShot.val(), function(key, value) {
-            htmlHelper.updateList(value, options.className, listID, {
-                showDescription: options.showDescription,
-                addEventlistener: options.addEventlistener,
-                appendID: key
+        $.each(listObject, function(counter, list){
+            console.log($(list));
+            $(list).children().remove();
+            $.each(snapShot.val(), function(key, value) {
+                htmlHelper.updateList(value, options.className, $(list), {
+                    showDescription: options.showDescription,
+                    addEventlistener: options.addEventlistener,
+                    appendID: key
+                });
             });
         });
     });
@@ -329,13 +336,11 @@ function displayProfileName(userName) {
  * @return {null}           Nothing
  */
 function displayProfileEmail(userEmail) {
-    console.log("Set Email", userEmail);
     $('#placeholder_email')[0].innerText = userEmail;
 }
 
 function displayProfileClass() {
     getStudentPromise().then(function(data) {
-        console.log(data);
     });
 }
 

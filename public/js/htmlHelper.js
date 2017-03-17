@@ -1,8 +1,5 @@
 let $ = global.jQuery = require('jquery');
 module.exports = {
-    test: function() {
-        console.log('HTML HELPER INIT');
-    },
     updateText: function(elementSelector, value) {
         $(elementSelector).innerText = value;
     },
@@ -26,7 +23,6 @@ module.exports = {
  * @return {null} Element will be appendet directly
  */
 function createItemlist(itemInformation, itemClass, parentElement, options) {
-    console.log(itemInformation);
     let newListItem = document.createElement('li');
     $(newListItem).addClass(itemClass);
 
