@@ -159,7 +159,7 @@ function checkCookieForKey(searchedValue) {
     var foundValue = null;
     var cookieSplit = document.cookie.split(";");
     $.each(cookieSplit, function(key, value) {
-        if (cookieSplit[key].indexOf(searchedValue) > 0) {
+        if (cookieSplit[key].indexOf(searchedValue) >= 0) {
             foundValue = cookieSplit[key].split("=")[1];
         }
     });
