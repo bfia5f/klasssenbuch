@@ -53,6 +53,7 @@ $(document).ready(function() {
             // Restore set sidebar color
             var sidebarColorClass = checkCookieForKey("sidebarColor");
             if (sidebarColorClass) {
+                console.log("Update color");
                 updateHTML_sidebarColor(sidebarColorClass);
             }
             // Restore content background color
@@ -473,3 +474,6 @@ function forceWriteOfUserData(currentUser) {
         timestamp: Date()
     });
 }
+
+
+////////////////// FANCY SHIT //////////////////
