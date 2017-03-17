@@ -4,6 +4,7 @@
 var $ = global.jQuery = require('jquery');
 var bootstrap = require('bootstrap-sass');
 var firebase = require('firebase');
+var dateformat = require('dateformat');
 var htmlHelper = require('./htmlHelper.js');
 var databaseHelper = require('./databaseHelper.js');
 
@@ -11,8 +12,6 @@ var databaseHelper = require('./databaseHelper.js');
   Init Firebase
  */
 
-// console.log(eventLogik.test());
-// console.log(htmlHelper.test());
 var config = {
     apiKey: "AIzaSyDtQiCxcoTg6C4sk_rDwutRtfCXeSQMSHA",
     authDomain: "klassenbuch-92827.firebaseapp.com",
@@ -108,13 +107,15 @@ $(document).ready(function() {
             });
             $('#create-new-missing-time').on('click', function() {
                 var missingTimeDate = $('#missing-time-date').get(0).value;
+                missingTimeDate = dateformat(missingTimeDate, 'dd.mmm.yyyy');
+                console.log(missingTimeDate);
                 var missingTimeDuration = $('#missing-time-duration').get(0).value;
                 var missingTimeDescription = $('#missing-time-excuse').get(0).value;
                 var missingTimeLesson = $('#missing-time-lesson').get(0).value;
                 missingTimeDuration = missingTimeDuration +' '+ $('#missing-time-duration-format').get(0).value;
                 if (missingTimeDate !== "" && missingTimeDuration !== "") {
                     var UID = Date.now();
-                    var tmpRef = refDebug + '/' + currentUser.uid + '/fehlzeiten/' + UID + '/'
+                    var tmpRef = refDebug + '/' + currentUser.uid + '/fehlzeiten/' + UID + '/';
                     databaseHelper.write(database,tmpRef,{
                         date: missingTimeDate,
                         lesson: "Stunde: " + missingTimeLesson,
@@ -142,7 +143,6 @@ $(document).ready(function() {
 function updateListOnValueChange(refPath, listObject, options) {
     database.ref(refPath).on('value', function(snapShot) {
         $.each(listObject, function(counter, list){
-            console.log($(list));
             $(list).children().remove();
             $.each(snapShot.val(), function(key, value) {
                 htmlHelper.updateList(value, options.className, $(list), {
