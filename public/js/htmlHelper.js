@@ -1,17 +1,20 @@
 let $ = global.jQuery = require('jquery');
 module.exports = {
-    updateText: function(elementSelector, value) {
-        $(elementSelector).innerText = value;
-    },
-    updateImage: function(elementSelector, value) {
-        $(elementSelector).get(0).src = value;
-    },
-    updateList: function(itemInformation, itemClass, parentElement, options) {
-        createItemlist(itemInformation, itemClass, parentElement, options);
-    },
-    updateColor: function(elementSelector, value) {
+  updateText: function(elementSelector, value) {
+    $(elementSelector).innerText = value;
+  },
+  updateImage: function(elementSelector, value) {
+    $(elementSelector).get(0).src = value;
+  },
+  updateList: function(itemInformation, itemClass, parentElement, options) {
+    createItemlist(itemInformation, itemClass, parentElement, options);
+  },
+  searchList: function(itemInformation, itemClass, parentElement, options){
+    createSearchList(itemInformation, itemClass, parentElement, options);
+  },
+  updateColor: function(elementSelector, value) {
 
-    },
+  },
 };
 
 
@@ -23,30 +26,66 @@ module.exports = {
  * @return {null} Element will be appendet directly
  */
 function createItemlist(itemInformation, itemClass, parentElement, options) {
-    let newListItem = document.createElement('li');
-    $(newListItem).addClass(itemClass);
+  let newListItem = document.createElement('li');
+  $(newListItem).addClass(itemClass);
 
-    if (options.appendID) {
-        $(newListItem).attr('id', options.appendID);
-    }
-    if (options.addEventlistener) {
-        appendEventListenerToListitem(newListItem, 'click');
-        appendEventListenerToListitem(newListItem, 'mouse');
-    }
+  if (options.appendID) {
+    $(newListItem).attr('id', options.appendID);
+  }
+  if (options.addEventlistener) {
+    appendEventListenerToListitem(newListItem, 'click');
+    appendEventListenerToListitem(newListItem, 'mouse');
+  }
 
-    $.each(itemInformation, function(key, value) {
-        if (value == 'pending') {
-            $(newListItem).addClass('pending');
-        } else if (value == 'approved') {
-            $(newListItem).addClass('approved');
-        }
-        if (options.showDescription && key == 'description' || key != 'description' && key != 'status') {
-            let tempText = document.createElement('p');
-            tempText.innerText = value;
-            $(newListItem).append(tempText);
-        }
-    });
-    $(parentElement).append(newListItem);
+  $.each(itemInformation, function(key, value) {
+    if (value == 'pending') {
+      $(newListItem).addClass('pending');
+    } else if (value == 'approved') {
+      $(newListItem).addClass('approved');
+    }
+    if (options.showDescription && key == 'description' || key != 'description' && key != 'status') {
+      let tempText = document.createElement('p');
+      tempText.innerText = value;
+      $(newListItem).append(tempText);
+    }
+  });
+  $(parentElement).append(newListItem);
+}
+
+function createSearchList(itemInformation, itemClass, parentElement, options) {
+  /*
+  <li class="list-item" data-search-on-list="list-item">
+    <a href="" class="list-item-link">Ali <span class="item-list-subtext">Smith</span></a>
+  </li>
+   */
+
+  var newListItem = document.createElement('li');
+  $(newListItem).addClass('list-item');
+  $(newListItem).attr('data-search-on-list', 'list-item');
+
+  if (options && options.appendID) {
+    $(newListItem).attr('id', options.appendID);
+  }
+  if (options && options.appendID) {
+    // appendEventListenerToListitem(newListItem, 'click');
+  }
+
+  $.each(itemInformation, function(key, value) {
+    var innerItem = document.createElement('a');
+    var innerItemSubtext = document.createElement('span');
+
+    $(innerItem).addClass('list-item-link');
+    $(innerItem).append(document.createTextNode(value));
+    
+    $(innerItemSubtext).addClass('item-list-subtext');
+    $(innerItemSubtext).append(document.createTextNode(key));
+
+    $(innerItem).append(innerItemSubtext);
+    $(newListItem).append(innerItem);
+  });
+  console.log(parentElement);
+  $(parentElement).append(newListItem);
+
 }
 
 /**
@@ -55,26 +94,26 @@ function createItemlist(itemInformation, itemClass, parentElement, options) {
  * @return {null}
  */
 function appendEventListenerToListitem(item, listener) {
-    switch (listener) {
-        case 'mouse':
-            $(item)
-                .mouseenter(function() {
-                    $(item).addClass('hover');
-                }).mouseleave(function() {
-                    $(item).removeClass('hover');
-                });
-            break;
-        case 'click':
-            $(item).on('click', function() {
-                $(item).toggleClass('selected');
-                $.each($('.can-disable'), function(key, element){
-                    $(element).attr('disabled', function(key, attribute){
-                        return attribute ? false : true;
-                    });
-                });
-            });            
-            break;
-        default:
+  switch (listener) {
+    case 'mouse':
+      $(item)
+        .mouseenter(function() {
+          $(item).addClass('hover');
+        }).mouseleave(function() {
+          $(item).removeClass('hover');
+        });
+      break;
+    case 'click':
+      $(item).on('click', function() {
+        $(item).toggleClass('selected');
+        $.each($('.can-disable'), function(key, element) {
+          $(element).attr('disabled', function(key, attribute) {
+            return attribute ? false : true;
+          });
+        });
+      });
+      break;
+    default:
 
-    }
+  }
 }
