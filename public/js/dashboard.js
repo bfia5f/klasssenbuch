@@ -136,12 +136,12 @@ $(document).ready(function() {
 
       databaseHelper.getStudentPromise(database, 'user/student/').then(function(students) {
         $.each(students, function(userID, userInformations) {
-            console.log("Creating list");
           htmlHelper.searchList({
             [userInformations.class]: userInformations.name
-          }, 'test', $('#search-list-student'));
+          }, 'test', $('#search-list-student'),{
+            addEventlistener: true
+          });
         });
-        console.log("Init search");
         search();
         SearchOnList.init($('[data-behaviour=search-on-list]'));
       });

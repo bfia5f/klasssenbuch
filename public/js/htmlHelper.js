@@ -15,6 +15,13 @@ module.exports = {
   updateColor: function(elementSelector, value) {
 
   },
+  displaySingleStudent: function(studentObject){
+    // Create DOM Elements
+    var headline = document.createElement('h2');
+    var headlineText = document.createTextNode(studentObject.name);
+    $(headline).append(headlineText);
+    $('#stundent-infos').append(headline);
+  }
 };
 
 
@@ -66,8 +73,8 @@ function createSearchList(itemInformation, itemClass, parentElement, options) {
   if (options && options.appendID) {
     $(newListItem).attr('id', options.appendID);
   }
-  if (options && options.appendID) {
-    // appendEventListenerToListitem(newListItem, 'click');
+  if (options && options.addEventlistener) {
+    appendEventListenerToListitem(newListItem, 'click-search');
   }
 
   $.each(itemInformation, function(key, value) {
@@ -111,6 +118,12 @@ function appendEventListenerToListitem(item, listener) {
             return attribute ? false : true;
           });
         });
+      });
+      break;
+      case 'click-search':
+      $(item).on('click', function() {
+        $(item).toggleClass('selected');
+        
       });
       break;
     default:
