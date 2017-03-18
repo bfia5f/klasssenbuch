@@ -54,7 +54,6 @@ $(document).ready(function() {
       // Restore set sidebar color
       var sidebarColorClass = checkCookieForKey("sidebarColor");
       if (sidebarColorClass) {
-        console.log("Update color");
         updateHTML_sidebarColor(sidebarColorClass);
       }
       // Restore content background color
@@ -110,7 +109,6 @@ $(document).ready(function() {
       $('#create-new-missing-time').on('click', function() {
         var missingTimeDate = $('#missing-time-date').get(0).value;
         missingTimeDate = dateformat(missingTimeDate, 'dd.mmm.yyyy');
-        console.log(missingTimeDate);
         var missingTimeDuration = $('#missing-time-duration').get(0).value;
         var missingTimeDescription = $('#missing-time-excuse').get(0).value;
         var missingTimeLesson = $('#missing-time-lesson').get(0).value;

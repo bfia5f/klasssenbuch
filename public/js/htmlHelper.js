@@ -9,13 +9,13 @@ module.exports = {
   updateList: function(itemInformation, itemClass, parentElement, options) {
     createItemlist(itemInformation, itemClass, parentElement, options);
   },
-  searchList: function(itemInformation, itemClass, parentElement, options){
+  searchList: function(itemInformation, itemClass, parentElement, options) {
     createSearchList(itemInformation, itemClass, parentElement, options);
   },
   updateColor: function(elementSelector, value) {
 
   },
-  displaySingleStudent: function(studentObject){
+  displaySingleStudent: function(studentObject) {
     // Create DOM Elements
     var headline = document.createElement('h2');
     var headlineText = document.createTextNode(studentObject.name);
@@ -73,25 +73,27 @@ function createSearchList(itemInformation, itemClass, parentElement, options) {
   if (options && options.appendID) {
     $(newListItem).attr('id', options.appendID);
   }
-  if (options && options.addEventlistener) {
-    appendEventListenerToListitem(newListItem, 'click-search');
-  }
 
   $.each(itemInformation, function(key, value) {
     var innerItem = document.createElement('a');
     var innerItemSubtext = document.createElement('span');
 
+    // if (options && options.addEventlistener) {
+    //   appendEventListenerToListitem($(innerItem), 'click-search');
+    // }
+
     $(innerItem).addClass('list-item-link');
     $(innerItem).append(document.createTextNode(value));
-    
+
     $(innerItemSubtext).addClass('item-list-subtext');
     $(innerItemSubtext).append(document.createTextNode(key));
 
     $(innerItem).append(innerItemSubtext);
     $(newListItem).append(innerItem);
   });
-  console.log(parentElement);
   $(parentElement).append(newListItem);
+  appendEventListenerToListitem($newListItem, 'click-search')
+
 
 }
 
@@ -120,10 +122,10 @@ function appendEventListenerToListitem(item, listener) {
         });
       });
       break;
-      case 'click-search':
-      $(item).on('click', function() {
-        $(item).toggleClass('selected');
-        
+    case 'click-search':
+      console.log('Append listener: ', $(item));
+      $(item).on('click', function(eventInfo) {
+        console.log(eventInfo);
       });
       break;
     default:
