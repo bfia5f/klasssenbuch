@@ -68,6 +68,7 @@ function createSearchList(itemInformation, itemClass, parentElement, options) {
 
   var newListItem = document.createElement('li');
   $(newListItem).addClass('list-item');
+  $(newListItem).addClass(itemClass);
   $(newListItem).attr('data-search-on-list', 'list-item');
 
   if (options && options.appendID) {
@@ -76,25 +77,26 @@ function createSearchList(itemInformation, itemClass, parentElement, options) {
 
   $.each(itemInformation, function(key, value) {
     var innerItem = document.createElement('a');
-    var innerItemSubtext = document.createElement('span');
-
-    // if (options && options.addEventlistener) {
-    //   appendEventListenerToListitem($(innerItem), 'click-search');
-    // }
-
     $(innerItem).addClass('list-item-link');
-    $(innerItem).append(document.createTextNode(value));
+    
+    var subInnerItem = document.createElement('span');
+    $(subInnerItem).addClass('item-list-subtext');
 
-    $(innerItemSubtext).addClass('item-list-subtext');
-    $(innerItemSubtext).append(document.createTextNode(key));
+    var innerItemText = document.createElement('p');
+    $(innerItemText).addClass('username');
 
-    $(innerItem).append(innerItemSubtext);
+    var subInnerItemText = document.createElement('p');
+    $(subInnerItemText).addClass('classname');
+
+    $(subInnerItemText).append(document.createTextNode(key));
+    $(subInnerItem).append($(subInnerItemText));
+
+    $(innerItemText).append(document.createTextNode(value));
+    $(innerItem).append($(innerItemText));
+    $(innerItem).append(subInnerItem);
     $(newListItem).append(innerItem);
   });
-  $(parentElement).append(newListItem);
-  appendEventListenerToListitem($newListItem, 'click-search')
-
-
+  $(parentElement).append($(newListItem));  
 }
 
 /**
@@ -122,13 +124,7 @@ function appendEventListenerToListitem(item, listener) {
         });
       });
       break;
-    case 'click-search':
-      console.log('Append listener: ', $(item));
-      $(item).on('click', function(eventInfo) {
-        console.log(eventInfo);
-      });
-      break;
     default:
-
+    break;
   }
 }

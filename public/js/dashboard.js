@@ -8,6 +8,9 @@ var dateformat = require('dateformat');
 var htmlHelper = require('./htmlHelper.js');
 var databaseHelper = require('./databaseHelper.js');
 
+
+var student = require('./student.js');
+
 /*
   Init Firebase
  */
@@ -37,122 +40,144 @@ var refTimetable = "Timetable/teachers/";
 
 var cUser = null;
 
-$(document).ready(function() {
+// $(document).ready(function() {
+//   firebase.auth().onAuthStateChanged(function(currentUser) {
+//     if (currentUser.uid !== null && currentUser.uid !== '' && currentUser.uid !== 'undefined') {
+//       this.user = new student();
+//       this.user.setAttribute('name', currentUser.displayName);
+//       this.user.setAttribute('uid', currentUser.uid);
+//       this.user.setAttribute('email', currentUser.email);
+//       this.user.setAttribute('profilepicture', currentUser.photoURL);
 
-  firebase.auth().onAuthStateChanged(function(currentUser) {
-    if (currentUser) {
-      /*
-      Code that sits in here will run when the user is
-      successfully logged in.
-      In This scope we will have the user object available
-      */
-      htmlUpdate_user_username(currentUser.displayName);
-      htmlUpdate_user_email(currentUser.email);
-      htmlUpdate_user_profilePicture(currentUser.photoURL);
-      htmlUpdate_timetable();
+//       htmlUpdate_user_username(currentUser.displayName);
+//       htmlUpdate_user_email(currentUser.email);
+//       htmlUpdate_user_profilePicture(currentUser.photoURL);
+//       htmlUpdate_timetable();
 
-      // Restore set sidebar color
-      var sidebarColorClass = checkCookieForKey("sidebarColor");
-      if (sidebarColorClass) {
-        updateHTML_sidebarColor(sidebarColorClass);
-      }
-      // Restore content background color
-      var contentColorClass = checkCookieForKey("contentColor");
-      if (contentColorClass) {
-        updateHTML_contentColor(contentColorClass);
-      }
+//       // Restore set sidebar color
+//       var sidebarColorClass = checkCookieForKey("sidebarColor");
+//       if (sidebarColorClass) {
+//         updateHTML_sidebarColor(sidebarColorClass);
+//       }
+//       // Restore content background color
+//       var contentColorClass = checkCookieForKey("contentColor");
+//       if (contentColorClass) {
+//         updateHTML_contentColor(contentColorClass);
+//       }
 
-      // Passed to function
-      // database Path, ID of list to update, options
-      updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', $('.list-missing-times-small'), {
-        showDescription: false,
-        addEventlistener: false,
-        className: 'missing-times-item'
-      });
-      updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', $('.list-missing-times-large'), {
-        showDescription: true,
-        addEventlistener: true,
-        className: 'missing-times-item'
-      });
-      updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', $('.list-events-small'), {
-        showDescription: false,
-        addEventlistener: false,
-        className: 'next-event-item'
-      });
-      updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', $('.list-events-large'), {
-        showDescription: true,
-        addEventlistener: true,
-        className: 'next-event-item'
-      });
+//       // Passed to function
+//       // database Path, ID of list to update, options
+//       updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', $('.list-missing-times-small'), {
+//         showDescription: false,
+//         addEventlistener: false,
+//         className: 'missing-times-item'
+//       });
+//       updateListOnValueChange(refDebug + '/' + currentUser.uid + '/fehlzeiten', $('.list-missing-times-large'), {
+//         showDescription: true,
+//         addEventlistener: true,
+//         className: 'missing-times-item'
+//       });
+//       updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', $('.list-events-small'), {
+//         showDescription: false,
+//         addEventlistener: false,
+//         className: 'next-event-item'
+//       });
+//       updateListOnValueChange(refDebug + '/' + currentUser.uid + '/personalevent', $('.list-events-large'), {
+//         showDescription: true,
+//         addEventlistener: true,
+//         className: 'next-event-item'
+//       });
 
-      $('#debug_sendToDb').on('click', function() {
-        forceWriteOfUserData(currentUser);
-      });
-      $('#btn-excuses').on('click', function() {
-        $.each($('.selected'), function() {
-          setExcuse(currentUser.uid, $(this).get(0).id, $('#missing-time-excuse').get(0).value);
-        });
-      });
-      $('#btn-unsetexcuses').on('click', function() {
-        $.each($('.selected'), function() {
-          unsetExcuse(currentUser.uid, $(this).get(0).id);
-        });
-      });
-      $('.color-sidebar').on('click', function() {
-        sidebarColorClass = $(this).get(0).classList[1];
-        updateHTML_sidebarColor(sidebarColorClass);
-      });
-      $('.color-content').on('click', function() {
-        contentColorClass = $(this).get(0).classList[1];
-        updateHTML_contentColor(contentColorClass);
-      });
-      $('#create-new-missing-time').on('click', function() {
-        var missingTimeDate = $('#missing-time-date').get(0).value;
-        missingTimeDate = dateformat(missingTimeDate, 'dd.mmm.yyyy');
-        var missingTimeDuration = $('#missing-time-duration').get(0).value;
-        var missingTimeDescription = $('#missing-time-excuse').get(0).value;
-        var missingTimeLesson = $('#missing-time-lesson').get(0).value;
-        missingTimeDuration = missingTimeDuration + ' ' + $('#missing-time-duration-format').get(0).value;
-        if (missingTimeDate !== "" && missingTimeDuration !== "") {
-          var UID = Date.now();
-          var tmpRef = refDebug + '/' + currentUser.uid + '/fehlzeiten/' + UID + '/';
-          databaseHelper.write(database, tmpRef, {
-            date: missingTimeDate,
-            lesson: "Stunde: " + missingTimeLesson,
-            duration: missingTimeDuration,
-            status: 'pending',
-            description: missingTimeDescription
-          });
-        } else {
-          displayModal('error', 'Ein Fehler ist aufgetreten', 'Es werden ein Datum und eine Zeitangabe benötigt');
-        }
-      });
-      $('#close-modal').on('click', function() {
-        $('#universal-modal').fadeOut('fast');
-        $('.page-overlay').fadeOut('fast');
-      });
+//       $('#debug_sendToDb').on('click', function() {
+//         forceWriteOfUserData(currentUser);
+//       });
+//       $('#btn-excuses').on('click', function() {
+//         $.each($('.selected'), function() {
+//           setExcuse(currentUser.uid, $(this).get(0).id, $('#missing-time-excuse').get(0).value);
+//         });
+//       });
+//       $('#btn-unsetexcuses').on('click', function() {
+//         $.each($('.selected'), function() {
+//           unsetExcuse(currentUser.uid, $(this).get(0).id);
+//         });
+//       });
+//       $('.color-sidebar').on('click', function() {
+//         sidebarColorClass = $(this).get(0).classList[1];
+//         updateHTML_sidebarColor(sidebarColorClass);
+//       });
+//       $('.color-content').on('click', function() {
+//         contentColorClass = $(this).get(0).classList[1];
+//         updateHTML_contentColor(contentColorClass);
+//       });
+//       $('#create-new-missing-time').on('click', function() {
+//         var missingTimeDate = $('#missing-time-date').get(0).value;
+//         missingTimeDate = dateformat(missingTimeDate, 'dd.mmm.yyyy');
+//         var missingTimeDuration = $('#missing-time-duration').get(0).value;
+//         var missingTimeDescription = $('#missing-time-excuse').get(0).value;
+//         var missingTimeLesson = $('#missing-time-lesson').get(0).value;
+//         missingTimeDuration = missingTimeDuration + ' ' + $('#missing-time-duration-format').get(0).value;
+//         if (missingTimeDate !== "" && missingTimeDuration !== "") {
+//           var UID = Date.now();
+//           var tmpRef = refDebug + '/' + currentUser.uid + '/fehlzeiten/' + UID + '/';
+//           databaseHelper.write(database, tmpRef, {
+//             date: missingTimeDate,
+//             lesson: "Stunde: " + missingTimeLesson,
+//             duration: missingTimeDuration,
+//             status: 'pending',
+//             description: missingTimeDescription
+//           });
+//         } else {
+//           displayModal('error', 'Ein Fehler ist aufgetreten', 'Es werden ein Datum und eine Zeitangabe benötigt');
+//         }
+//       });
+//       $('#close-modal').on('click', function() {
+//         $('#universal-modal').fadeOut('fast');
+//         $('.page-overlay').fadeOut('fast');
+//       });
 
-      databaseHelper.getStudentPromise(database, 'user/student/').then(function(students) {
-        $.each(students, function(userID, userInformations) {
-          htmlHelper.searchList({
-            [userInformations.class]: userInformations.name
-          }, 'test', $('#search-list-student'),{
-            addEventlistener: true
-          });
-        });
-        search();
-        SearchOnList.init($('[data-behaviour=search-on-list]'));
-      });
+//       databaseHelper.getStudentPromise(database, 'user/student/').then(function(students) {
+//         $.each(students, function(userID, userInformations) {
+//           htmlHelper.searchList({
+//               [userInformations.class]: userInformations.name
+//             },
+//             'test',
+//             $('#search-list-student'), {
+//               addEventlistener: true,
+//               appendID: userID
+//             });
 
-      toggleLoading();
+//         });
+//         search(students);
+//         SearchOnList.init($('[data-behaviour=search-on-list]'));
+//       });
+//       toggleLoading();
+//     } else {
+//       window.location.href = "/unauthorized.html";
+//     }
+//   }); // AUTH END
+// }); // DOCUMENT READY END
 
 
+var provider = new firebase.auth.GoogleAuthProvider();
+provider.addScope('profile');
+provider.addScope('email');
 
-    } else {
-      window.location.href = "/unauthorized.html";
-    }
-  }); // AUTH END
-}); // DOCUMENT READY END
+$(document).ready(function($) {
+toggleLoading();
+  $('#debug_sendToDb').on('click', function(){
+    singin();
+  });
+});
+
+function singin(){
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+   // This gives you a Google Access Token.
+   var token = result.credential.accessToken;
+   // The signed-in user info.
+   console.log(result.user);
+   return result.user;
+  });
+}
 
 function updateListOnValueChange(refPath, listObject, options) {
   database.ref(refPath).on('value', function(snapShot) {
@@ -261,40 +286,6 @@ function getStudentPromise(userUID) {
     return data.val();
   });
 }
-
-// /**
-//  * Lookup all Students
-//  * @return {promise} All Students in the DB
-//  */
-// function getAllStudentsPromise() {
-//     var ref = database.ref(refStudent);
-//     // TODO: Error handling
-//     return ref.once("value").then(function(data) {
-//         return data.val();
-//     });
-// }
-
-/**
- * Retrive the timetable
- * @return {promise} A certain timetable as promise
- */
-// function getTimetablePromise() {
-//     var ref = database.ref(refDebug + "/stundenplan");
-//     return ref.once("value").then(function(data) {
-//         return data.val();
-//     });
-// }
-
-/**
- * Retrive all classes
- * @return {promise} A list of all classes
- */
-// function getClasslistPromise() {
-//     var ref = database.ref(refClass);
-//     return ref.once("value").then(function(data) {
-//         return data.val();
-//     });
-// }
 
 /**
  * Get all students from the provided classname
@@ -492,7 +483,7 @@ function forceWriteOfUserData(currentUser) {
 
 ////// Credit goes to:
 ////// https://codepen.io/davilious/pen/YqdoyP?editors=1010
-function search() {
+function search(students) {
   // TODO: be more elegant here
   function format(text) {
     return text.replace(/ /g, '').replace(/(<([^>]+)>)/ig, '').toLowerCase();
@@ -521,6 +512,7 @@ function search() {
       this._updateCounter();
       this._handleResults();
       this._setEventListeners();
+
     },
 
     _setEventListeners: function() {
@@ -528,7 +520,7 @@ function search() {
         .on('keyup', $.proxy(this._onKeyup, this))
         .on('query:changed', $.proxy(this._handleQueryChanged, this))
         .on('query:results:some', $.proxy(this._handleResults, this))
-        .on('query:results:none', $.proxy(this._handleNoResults, this))
+        .on('query:results:none', $.proxy(this._handleNoResults, this));
     },
 
     _onKeyup: function() {
@@ -575,7 +567,11 @@ function search() {
     },
 
     _handleResults: function() {
-      this.$list.empty().append(this._renderItemsVisible())
+      this.$list.empty().append(this._renderItemsVisible());
+      $('.list-item').on('click', function(eventInfo) {
+        $('.list .list-item').removeClass('selected');
+        $(this).addClass('selected');
+      });
     },
 
     _someItemsVisible: function() {
@@ -597,6 +593,7 @@ function search() {
     },
 
     _getAllItems: function() {
+      this._prefill(students);
       var $items = this.$list.find(this.$LIST_ITEM);
 
       return $items.map(function() {
@@ -607,6 +604,10 @@ function search() {
           visible: true
         };
       }).toArray();
+    },
+
+    _prefill: function(students) {
+      $.each(students, function(key, value) {});
     },
 
     _renderItemsVisible: function() {
@@ -622,7 +623,7 @@ function search() {
         }
         return items;
       }, []);
-    }
+    },
   };
 
   window.SearchOnList = SearchOnList;
