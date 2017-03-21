@@ -1,4 +1,8 @@
-function student(){
+function student(uid,name,email,picture){
+  this.uid = uid;
+  this.name = name;
+  this.email = email;
+  this.picture = picture;
 }
 
 student.prototype.getName = function (){
