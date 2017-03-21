@@ -9,7 +9,8 @@ var htmlHelper = require('./htmlHelper.js');
 var databaseHelper = require('./databaseHelper.js');
 
 
-var student = require('./student.js');
+var Student = require('./student.js');
+var Intellilist = require('./intelliList.js');
 
 /*
   Init Firebase
@@ -162,13 +163,34 @@ var provider = new firebase.auth.GoogleAuthProvider();
 provider.addScope('profile');
 provider.addScope('email');
 
+firebase.auth().onAuthStateChanged(function (currentUser) {
+  if (currentUser) {
+    $('#login').prop('disabled', true);
+    $('#logout').prop('disabled', false);
+  } else {
+    $('#login').prop('disabled', false);
+    $('#logout').prop('disabled', true);
+  }
+});
+
+
 $(document).ready(function ($) {
   toggleLoading();
-  $('#debug_sendToDb').on('click', function () {
-    singin().then(function(user){
-      displayModal('success', 'Erfolgreich angemeldet', 'Sie haben sich soeben erfolgreich angemeldet');
-      $('#debug_sendToDb').css('display', 'none');
-    })
+  $('#login').on('click', function () {
+    // singin().then(function (user) {
+      // displayModal('success', 'Erfolgreich angemeldet', 'Sie haben sich soeben erfolgreich angemeldet');
+      var student = new Student('uid', 'name', 'mail', 'image');
+      var list = new Intellilist('default');
+      list.storeList(document.getElementById('login'), 'login');
+      list.getStoredList();
+    // });
+  });
+  $('#logout').on('click', function () {
+    firebase.auth().signOut().then(function () {
+      console.log("User logged out");
+    }, function (error) {
+      console.log(error);
+    });
   });
   /**
    * Register onclick events
@@ -185,6 +207,10 @@ function singin() {
   }).catch(function (error) {
     displayModal('error', 'Ein Fehler ist aufgetreten', error.message);
   });
+}
+
+function globalStudent() {
+  console.log(this);
 }
 
 function updateListOnValueChange(refPath, listObject, options) {
