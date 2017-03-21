@@ -162,28 +162,36 @@ var provider = new firebase.auth.GoogleAuthProvider();
 provider.addScope('profile');
 provider.addScope('email');
 
-$(document).ready(function($) {
-toggleLoading();
-  $('#debug_sendToDb').on('click', function(){
-    singin();
+$(document).ready(function ($) {
+  toggleLoading();
+  $('#debug_sendToDb').on('click', function () {
+    singin().then(function(user){
+      displayModal('success', 'Erfolgreich angemeldet', 'Sie haben sich soeben erfolgreich angemeldet');
+      $('#debug_sendToDb').css('display', 'none');
+    })
+  });
+  /**
+   * Register onclick events
+   */
+  $('#close-modal').on('click', function () {
+    $('#universal-modal').fadeOut('fast');
+    $('.page-overlay').fadeOut('fast');
   });
 });
 
-function singin(){
-  firebase.auth().signInWithPopup(provider).then(function(result) {
-   // This gives you a Google Access Token.
-   var token = result.credential.accessToken;
-   // The signed-in user info.
-   console.log(result.user);
-   return result.user;
+function singin() {
+  return firebase.auth().signInWithPopup(provider).then(function (result) {
+    return result.user;
+  }).catch(function (error) {
+    displayModal('error', 'Ein Fehler ist aufgetreten', error.message);
   });
 }
 
 function updateListOnValueChange(refPath, listObject, options) {
-  database.ref(refPath).on('value', function(snapShot) {
-    $.each(listObject, function(counter, list) {
+  database.ref(refPath).on('value', function (snapShot) {
+    $.each(listObject, function (counter, list) {
       $(list).children().remove();
-      $.each(snapShot.val(), function(key, value) {
+      $.each(snapShot.val(), function (key, value) {
         htmlHelper.updateList(value, options.className, $(list), {
           showDescription: options.showDescription,
           addEventlistener: options.addEventlistener,
@@ -197,7 +205,7 @@ function updateListOnValueChange(refPath, listObject, options) {
 function checkCookieForKey(searchedValue) {
   var foundValue = null;
   var cookieSplit = document.cookie.split(";");
-  $.each(cookieSplit, function(key, value) {
+  $.each(cookieSplit, function (key, value) {
     if (cookieSplit[key].indexOf(searchedValue) >= 0) {
       foundValue = cookieSplit[key].split("=")[1];
     }
@@ -219,7 +227,7 @@ function htmlUpdate_user_profilePicture(userProfileImageURL) {
 // #### FILL DASHBOARD ELEMENTS ####
 function updateHTML_sidebarColor(colorclass) {
   $('.tab-content').attr('class',
-    function(i, c) {
+    function (i, c) {
       return c.replace(/(^|\s)color-\S+/g, ' ' + colorclass);
     });
   document.cookie = "sidebarColor=" + colorclass;
@@ -227,14 +235,14 @@ function updateHTML_sidebarColor(colorclass) {
 
 function updateHTML_contentColor(colorclass) {
   $('.content-wrapper').attr('class',
-    function(i, c) {
+    function (i, c) {
       return c.replace(/(^|\s)color-\S+/g, ' ' + colorclass);
     });
   document.cookie = "contentColor=" + colorclass;
 }
 
 function htmlUpdate_timetable() {
-  databaseHelper.getTimetablePromise(database, refTimetable).then(function(timetable) {
+  databaseHelper.getTimetablePromise(database, refTimetable).then(function (timetable) {
     $('#timetable-wrapper').html(timetable);
   });
 }
@@ -270,7 +278,7 @@ function getStudentPromise(userUID) {
 
   var ref = database.ref(refStudent + "/" + userUID);
   // TODO: Error handling
-  return ref.once("value").then(function(data) {
+  return ref.once("value").then(function (data) {
     return data.val();
   });
 }
@@ -282,7 +290,7 @@ function getStudentPromise(userUID) {
 function getStudentPromise(userUID) {
   var ref = database.ref(refDebug + "/" + userUID);
   // TODO: Error handling
-  return ref.once("value").then(function(data) {
+  return ref.once("value").then(function (data) {
     return data.val();
   });
 }
@@ -293,9 +301,9 @@ function getStudentPromise(userUID) {
  * @return {array}           All Students that are in the provided class
  */
 function filterStudentsByClass(className) {
-  return databaseHelper.getAllStudentsPromise(database, refClasslist).then(function(data) {
+  return databaseHelper.getAllStudentsPromise(database, refClasslist).then(function (data) {
     var studentsInClass = [];
-    $.each(data, function(studentUID, studentSettings) {
+    $.each(data, function (studentUID, studentSettings) {
       if (studentSettings.class === className) {
         studentsInClass.push(this);
       }
@@ -313,7 +321,7 @@ function filterStudentsByClass(className) {
  */
 function createClassDropdown(name, id, classList) {
   var dropdown_classList = $("<select></select>").attr("id", id).attr("classList_" + "name", name);
-  $.each(classList, function(i, el) {
+  $.each(classList, function (i, el) {
     dropdown_classList.append("<option>" + el + "</option>");
   });
   $("#setStudentClass").append(dropdown_classList);
@@ -345,19 +353,19 @@ function displayProfileEmail(userEmail) {
 }
 
 function displayProfileClass() {
-  getStudentPromise().then(function(data) {});
+  getStudentPromise().then(function (data) {});
 }
 
 
 
 function updateHTML(userEmail, userName, userProfileImageURL) {
-  getClasslistPromise().then(function(data) {
-    $.each(Object.keys(data), function(counter) {
+  getClasslistPromise().then(function (data) {
+    $.each(Object.keys(data), function (counter) {
       $("#select_class_list").append("<option>" + Object.keys(data)[counter] + "</option>");
     });
   });
 
-  filterStudentsByClass("11FI5FFFFF").then(function(data) {});
+  filterStudentsByClass("11FI5FFFFF").then(function (data) {});
 }
 
 /**
@@ -367,12 +375,12 @@ function updateHTML(userEmail, userName, userProfileImageURL) {
  * @return {null}       Nothing gets returned
  */
 function updateProfileInfo(key, value) {
-  $('.profile-input').each(function(index) {
+  $('.profile-input').each(function (index) {
     switch ($(this)[0].id) {
       case 'profile-picture-url':
         cUser.updateProfile({
           photoURL: $(this)[0].value
-        }).then(function() {}, function(error) {});
+        }).then(function () {}, function (error) {});
         break;
       default:
     }
@@ -382,8 +390,8 @@ function updateProfileInfo(key, value) {
 
 function updateClassList(eventInfo) {
   $('#select_student_list').empty();
-  filterStudentsByClass(eventInfo.target.value).then(function(data) {
-    $.each(data, function(index) {
+  filterStudentsByClass(eventInfo.target.value).then(function (data) {
+    $.each(data, function (index) {
       $('#select_student_list').append('<option>' + data[index].name + '</option>');
     });
   });
@@ -412,9 +420,9 @@ function displayModal(state, title, text) {
 
 
 function logout() {
-  firebase.auth().signOut().then(function() {
+  firebase.auth().signOut().then(function () {
     window.location.href = "/logout-success.html";
-  }, function(error) {
+  }, function (error) {
     // An error happened.
   });
 }
@@ -497,7 +505,7 @@ function search(students) {
     TEMPLATE_EMTPY: '<li class="list-item list-item--disable">No results found</li>',
 
 
-    init: function($element) {
+    init: function ($element) {
       this.items = [];
       this.itemsMatched = [];
 
@@ -515,7 +523,7 @@ function search(students) {
 
     },
 
-    _setEventListeners: function() {
+    _setEventListeners: function () {
       this.$search
         .on('keyup', $.proxy(this._onKeyup, this))
         .on('query:changed', $.proxy(this._handleQueryChanged, this))
@@ -523,7 +531,7 @@ function search(students) {
         .on('query:results:none', $.proxy(this._handleNoResults, this));
     },
 
-    _onKeyup: function() {
+    _onKeyup: function () {
       var query = this.$search.val(),
         previousQuery = this.$search.data('previousQuery', query);
 
@@ -536,7 +544,7 @@ function search(students) {
       }
     },
 
-    _queryChanged: function() {
+    _queryChanged: function () {
       var query = this.$search.val();
       if ($.trim(query).length === 0 && this.$search.data('previousQuery') === undefined) {
         return false;
@@ -544,8 +552,8 @@ function search(students) {
       return true;
     },
 
-    _handleQueryChanged: function(e, data) {
-      this.itemsMatched = this.items.map(function(item) {
+    _handleQueryChanged: function (e, data) {
+      this.itemsMatched = this.items.map(function (item) {
         if (format(item.name).match(format(data.query))) {
           return {
             name: item.name,
@@ -562,41 +570,41 @@ function search(students) {
       this._updateCounter();
     },
 
-    _handleNoResults: function() {
+    _handleNoResults: function () {
       this.$list.html(this.TEMPLATE_EMTPY);
     },
 
-    _handleResults: function() {
+    _handleResults: function () {
       this.$list.empty().append(this._renderItemsVisible());
-      $('.list-item').on('click', function(eventInfo) {
+      $('.list-item').on('click', function (eventInfo) {
         $('.list .list-item').removeClass('selected');
         $(this).addClass('selected');
       });
     },
 
-    _someItemsVisible: function() {
-      return this.itemsMatched.some(function(item) {
+    _someItemsVisible: function () {
+      return this.itemsMatched.some(function (item) {
         return item.visible;
       });
     },
 
-    _render: function() {
+    _render: function () {
       (this._someItemsVisible()) ?
       this.$search.trigger('query:results:some'):
         this.$search.trigger('query:results:none');
     },
 
-    _updateCounter: function() {
+    _updateCounter: function () {
       (this._someItemsVisible()) ?
       this.$counter.text(this._renderItemsVisible().length):
         this.$counter.text('');
     },
 
-    _getAllItems: function() {
+    _getAllItems: function () {
       this._prefill(students);
       var $items = this.$list.find(this.$LIST_ITEM);
 
-      return $items.map(function() {
+      return $items.map(function () {
         var $item = $(this);
 
         return {
@@ -606,17 +614,17 @@ function search(students) {
       }).toArray();
     },
 
-    _prefill: function(students) {
-      $.each(students, function(key, value) {});
+    _prefill: function (students) {
+      $.each(students, function (key, value) {});
     },
 
-    _renderItemsVisible: function() {
+    _renderItemsVisible: function () {
       var itemInTemplate;
-      return this.itemsMatched.sort(function(a, b) {
+      return this.itemsMatched.sort(function (a, b) {
         if (a.name < b.name) return -1
         if (a.name > b.name) return 1;
         return 0;
-      }).reduce(function(items, item) {
+      }).reduce(function (items, item) {
         itemInTemplate = '<li class="list-item" data-search-on-list="list-item">' + item.name + '</li>';
         if (item.visible) {
           items.push(itemInTemplate);
